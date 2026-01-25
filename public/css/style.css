@@ -94,3 +94,12 @@ body {
     font-size: 1rem;
     transition: all 0.3s;
 }
+
+.btn-setting {
+    background-color: white;
+    color: black !important;
+    border-radius: 100px;
+    padding: 5px 20px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
