@@ -21,6 +21,18 @@ app.get('/homepage', (req, res) => {
   res.render('homepage.ejs');
 });
 
+app.get('/checkorder', (req, res) => {
+  res.render('checkorder.ejs');
+});
+
+app.get('/createplan', (req, res) => {
+  res.render('createplan.ejs');
+});
+
+app.get('/makeplan', (req, res) => {
+  res.render('makeplan.ejs');
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
