@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "sync": "browser-sync start --proxy \"localhost:3000\" --files \"views/**/*.ejs,public/**/*.*\""
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
     "express": "^5.2.1",
     "nodemon": "^3.1.11"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
+  }
 }
