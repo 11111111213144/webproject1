@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+.text-node { background-clip: text !important; -webkit-background-clip: text !important; }
+
+/* Rectangle */
+.rectangle-5809d34a4882 {
+  position: absolute;
+  left: 0px;
+  top: 344px;
+  width: 1820px;
+  height: 576px;
+  background: #8ce0cbFF;
+  border: 1px solid #000000FF;
+  border-start-start-radius: 50px;
+  border-start-end-radius: 50px;
+  border-end-start-radius: 50px;
+  border-end-end-radius: 50px;
+  box-shadow: 4px -2px 4px 0px #00000033;
+}
