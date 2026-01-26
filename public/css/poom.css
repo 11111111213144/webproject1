@@ -128,7 +128,7 @@ body {
     width: 50%;
     background: #c5fbee;
     border: 5px solid #000;
-    border-radius: 0;
+    border-radius: 50px;
     overflow: hidden;
 }
 
@@ -136,7 +136,7 @@ body {
     width: 50%;
     background: #c5fbee;
     border: 5px solid #000;
-    border-radius: 0;
+    border-radius: 50px;
     overflow: hidden;
 }
 
