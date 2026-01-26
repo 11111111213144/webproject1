@@ -103,3 +103,14 @@ body {
     border: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.btn-info {
+    background-color: white;
+    color: black !important;
+    border: none;
+    border-radius: 100px;
+    padding: 5px 20px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
