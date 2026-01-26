@@ -11,10 +11,6 @@
 
 }
 
-html {
-    height: 100%;
-}
-
 body {
     font-family: 'Sarabun', sans-serif;
     background: #eceff2;
@@ -48,9 +44,11 @@ body {
 
 /* กล่องใหญ่ */
 .container {
+    max-width: 1920px;
     margin: 0 auto;
     padding:0;
     position: relative;
+
 }
 
 /* จัดแนว นอน*/
@@ -109,7 +107,7 @@ body {
     z-index: 5;
     background: #8ce0cb;
     border-radius: 50px;
-    padding: 50px;
+    padding: 20px;
     box-shadow: 4px -2px 4px rgba(0, 0, 0, 0.2);    
     border: 2px solid #000;
     margin: 0;
