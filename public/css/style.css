@@ -1,3 +1,7 @@
+/* 
+login page
+tab bar
+*/
 body {
     background-color: #f4f6f9;
     font-family: 'Kanit', sans-serif;
@@ -16,12 +20,14 @@ body {
     left: 0;
 }
 
+/* login page */
 .login-container {
     flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 
 .custom-card {
     background-color: #c0fce8;
@@ -58,6 +64,8 @@ body {
 .btn-login:hover {
     background-color: #00b886;
 }
+
+/* tab bar */
 
 .mb-custom {
     margin-bottom: 25px;

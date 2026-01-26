@@ -1,16 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-
-.text-node { background-clip: text !important; -webkit-background-clip: text !important; }
-
-/* Rectangle */
-.rectangle-5809d34a4882 {
+.recbox {
   position: absolute;
   left: 0px;
   top: 344px;
-  width: 1820px;
-  height: 576px;
+  width: 1920px;
+  height: 736px;
   background: #8ce0cbFF;
   border: 1px solid #000000FF;
   border-start-start-radius: 50px;
