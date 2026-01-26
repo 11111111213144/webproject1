@@ -29,6 +29,14 @@ app.get('/createplan', (req, res) => {
   res.render('createplan.ejs');
 });
 
+app.get('/createplan/mouth', (req, res) => {
+  res.render('createplan_mouth.ejs');
+});
+
+app.get('/createplan/outplan', (req, res) => {
+  res.render('createplan_outplan.ejs');
+});
+
 app.get('/makeplan', (req, res) => {
   res.render('makeplan.ejs');
 });
