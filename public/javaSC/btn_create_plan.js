@@ -166,3 +166,36 @@ let tempItems = []; // เก็บรายการชั่วคราว
             renderTemp();
             alert('บันทึกแผนเรียบร้อยแล้ว');
         }
+        function filterYear(year) {
+            // 1. เปลี่ยนข้อความบนปุ่ม
+            const btn = document.getElementById('yearBtn');
+            if(btn) {
+                if (year === 'all') {
+                    btn.innerText = 'เลือกปี (ทั้งหมด)';
+                } else {
+                    btn.innerText = year;
+                }
+            }
+
+            // 2. กรองข้อมูลในตาราง
+            const table = document.getElementById('mainTable');
+            if (!table) return; // ถ้าหาตารางไม่เจอให้จบการทำงาน
+
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                // ดึงข้อมูลช่อง "ปี" (ซึ่งเป็น td ตัวแรก เพราะช่องแรกสุดคือ th)
+                const yearCell = rows[i].getElementsByTagName('td')[0]; 
+                
+                if (yearCell) {
+                    const txtValue = yearCell.textContent || yearCell.innerText;
+                    // ถ้าเลือก 'all' หรือ ปีตรงกัน ให้แสดง
+                    if (year === 'all' || txtValue.trim() === year) {
+                        rows[i].style.display = "";
+                    } else {
+                        // ถ้าไม่ตรง ให้ซ่อน
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        }
