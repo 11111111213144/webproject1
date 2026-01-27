@@ -2,7 +2,7 @@
 let tempItems = []; // เก็บรายการชั่วคราว
         let mainTableItems = [{
                 year: "2567",
-                material: "วัสดุก่อสร้าง (Construction)",
+                material: "วัสดุก่อสร้าง",
                 items: [
                     { name: "ปูนซีเมนต์", qty: 50, price: 145.50, total: 7275 },
                     { name: "เหล็กเส้น 3 หุน", qty: 100, price: 220, total: 22000 },
