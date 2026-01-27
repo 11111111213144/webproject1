@@ -1,12 +1,7 @@
 # HOW TO SET UP PROJECT
 
 npm i express ejs nodemon 
-
-//to start
-npm run dev 
-test test 
-
-nanananan
-
+# Start project
+npm run dev
 # โปรดช่วยกัน 
 ฉันไหว้
