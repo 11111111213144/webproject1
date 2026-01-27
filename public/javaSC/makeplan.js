@@ -492,4 +492,41 @@ function addItemToList() {
 }
 
 // แสดงรายการสินค้าใน Modal 2
+// ในไฟล์ makeplan.js
+
+function filterYear(selectedYear) {
+    // 1. เปลี่ยนชื่อปุ่ม
+    const btn = document.getElementById('dropdownYearBtn');
+    if (!btn) return; // ป้องกัน error ถ้าหาปุ่มไม่เจอ
+
+    if (selectedYear === 'all') {
+        btn.innerText = 'ดูทั้งหมด';
+    } else {
+        btn.innerText = selectedYear;
+    }
+
+    // 2. ดึงตารางมาเช็ค
+    const tableBody = document.getElementById('materialTableBody');
+    if (!tableBody) return;
+
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].children; 
+        
+        // *** จุดที่ต่างจากไฟล์แรก: ต้องเช็คช่องที่ 6 (Index 5) ***
+        // [0]checkbox, [1]ลำดับ, [2]เลขที่, [3]วันที่, [4]เดือน, [5]ปี
+        if (cells.length >= 6) {
+            
+            // เปลี่ยนจาก cells[2] เป็น cells[5]
+            const yearText = cells[5].innerText.trim(); 
+
+            if (selectedYear === 'all' || yearText === selectedYear) {
+                rows[i].style.display = ''; 
+            } else {
+                rows[i].style.display = 'none'; 
+            }
+        }
+    }
+}
 

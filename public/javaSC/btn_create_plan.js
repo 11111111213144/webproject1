@@ -173,49 +173,33 @@ function confirmToMain() {
     renderTemp();
     alert('บันทึกแผนเรียบร้อยแล้ว');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-function filterYear(year) {
-    // 1. เปลี่ยนข้อความบนปุ่ม
-    const btn = document.getElementById('yearBtn');
-    if (btn) {
-        if (year === 'all') {
-            btn.innerText = 'เลือกปี (ทั้งหมด)';
+function filterYear(selectedYear) {
+        // ส่วนที่ 1: สั่งเปลี่ยนข้อความบนปุ่ม
+        const btn = document.getElementById('dropdownYearBtn');
+        if (selectedYear === 'all') {
+            btn.innerText = 'ดูทั้งหมด';
         } else {
-            btn.innerText = year;
+            btn.innerText = selectedYear;
         }
-    }
 
-    // 2. กรองข้อมูลในตาราง
-    const table = document.getElementById('mainTable');
-    if (!table) return; // ถ้าหาตารางไม่เจอให้จบการทำงาน
+        // ส่วนที่ 2: วนลูปเช็คตารางเพื่อซ่อน/แสดง
+        const tableBody = document.getElementById('materialTableBody');
+        const rows = tableBody.getElementsByTagName('tr');
 
-    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].children; 
+            
+            // ตรวจสอบข้อมูลใน "คอลัมน์ที่ 3" (Index 2)
+            if (cells.length >= 3) {
+                const yearText = cells[2].innerText.trim(); // ดึงเลขปี
 
-    for (let i = 0; i < rows.length; i++) {
-        // ดึงข้อมูลช่อง "ปี" (ซึ่งเป็น td ตัวแรก เพราะช่องแรกสุดคือ th)
-        const yearCell = rows[i].getElementsByTagName('td')[0];
-
-        if (yearCell) {
-            const txtValue = yearCell.textContent || yearCell.innerText;
-            // ถ้าเลือก 'all' หรือ ปีตรงกัน ให้แสดง
-            if (year === 'all' || txtValue.trim() === year) {
-                rows[i].style.display = "";
-            } else {
-                // ถ้าไม่ตรง ให้ซ่อน
-                rows[i].style.display = "none";
+                // ถ้าเลือก all หรือ ปีตรงกัน -> แสดง
+                if (selectedYear === 'all' || yearText === selectedYear) {
+                    rows[i].style.display = ''; 
+                } else {
+                    // ถ้าไม่ตรง -> ซ่อน
+                    rows[i].style.display = 'none'; 
+                }
             }
         }
     }
-}
