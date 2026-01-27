@@ -388,7 +388,7 @@ function createProductModal() {
                         </div>
                         <div class="col-md-2">
                             <label class="small">จำนวน</label>
-                            <input type="number" class="form-control form-control-sm" id="prodQty">
+                            <input type="number" class="form-control form-control-sm" id="prodQty" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
                         </div>
                         <div class="col-md-2">
                             <label class="small">หน่วย</label>
@@ -396,7 +396,7 @@ function createProductModal() {
                         </div>
                         <div class="col-md-2">
                             <label class="small">ราคา/หน่วย</label>
-                            <input type="number" class="form-control form-control-sm" id="prodPrice">
+                            <input type="number" class="form-control form-control-sm" id="prodPrice" min="0" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
                         </div>
                         <div class="col-md-2">
                             <button class="btn btn-success btn-sm w-100" onclick="addItemToList()">+ เพิ่ม</button>
@@ -404,7 +404,7 @@ function createProductModal() {
                     </div>
 
                     <h6>รายการสั่งซื้อ</h6>
-                    <table class="table table-bordered table-sm">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>รายการ</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>รวม</th><th>ลบ</th>
