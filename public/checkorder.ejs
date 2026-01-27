@@ -4,21 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบการจัดซื้อจัดจ้าง</title>
-   
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-   
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
- 
     <link rel="stylesheet" href="../css/style.css">
 
     <style>
-        /* ส่วนที่เพิ่ม: กำหนดขอบดำสนิทให้กับช่องที่ให้พิมพ์ตามคำขอ */
         .form-control {
             border: 1px solid #000000 !important;
             border-radius: 4px;
         }
 
-        /* ตกแต่งปุ่มบันทึกข้อมูลให้เป็นสีเขียวตามรูปภาพ [1] */
         .btn-save-custom {
             background-color: #198754;
             color: white;
@@ -27,7 +23,6 @@
             border-radius: 6px;
         }
 
-        /* ตกแต่งปุ่มยกเลิกให้เป็นสีเทาตามรูปภาพ [1] */
         .btn-cancel-custom {
             background-color: #6c757d;
             color: white;
@@ -35,6 +30,27 @@
             padding: 8px 16px;
             border-radius: 6px;
         }
+
+        /* --- แก้ไข 1: เปลี่ยนมาใช้ display: none เพื่อซ่อนคอลัมน์แบบสมบูรณ์ --- */
+        .checkbox-col {
+            display: none; /* ซ่อนพื้นที่และการคำนวณเส้นขอบทั้งหมด */
+        }
+        
+        .checkbox-col.active {
+            display: table-cell; /* แสดงผลเมื่อกดปุ่มลบ */
+            width: 50px;
+            padding: 8px !important;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* --- แก้ไข 2: สร้างเส้นแบ่งตาราง (Divider) ที่หัวตารางแทน --- */
+        thead.table-white {
+            border-bottom: 2px solid #000 !important; /* เส้นสีดำหนา แบ่งหัวกับตัว */
+        }
+
+        tr:hover { background-color: #f8f9fa; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -42,11 +58,9 @@
     <nav class="navbar navbar-expand-lg bg-custom-mint">
         <div class="container-fluid">
             <a class="navbar-brand ps-3" href="/homepage">home</a>
- 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
- 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto center-menu">
                     <li class="nav-item"><a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a></li>
@@ -67,57 +81,77 @@
     <div class="container mb-3">
         <div class="row flex-column flex-lg-row">
             <div class="col-12 col-lg-auto ms-lg-auto">
-                <div class="d-flex flex-column flex-lg-row gap-2">
-                    <!-- เพิ่มคำสั่งเปิด Modal ที่ปุ่มเพิ่มรายการ -->
-                    <button type="button" class="btn-setting btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">เพิ่มรายการ</button>
-                    <button type="button" class="btn-setting btn-primary" onclick="deleteLastRow()">ลบรายการ</button>
+                <div class="d-flex flex-column flex-lg-row gap-2 justify-content-end">
+                    
+                    <div id="default-buttons" class="d-flex gap-2">
+                        <button type="button" class="btn-setting btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">เพิ่มรายการ</button>
+                        <button type="button" class="btn-setting btn-primary" onclick="toggleDeleteMode(true)">ลบรายการ</button>
+                    </div>
+
+                    <div id="delete-buttons" class="d-none align-items-center gap-2">
+                        <span class="me-2" id="selected-count">เลือก 0 รายการ</span>
+                        <button type="button" class="btn-setting" onclick="toggleDeleteMode(false)">ยกเลิก</button>
+                        <button type="button" class="btn-setting" onclick="confirmDelete()">ยืนยันการลบ</button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-   
+    
     <div class="container text-center mb-5">
         <table class="table table-striped table-hover">
-        <thead class="table-white">
-            <tr>
-                <th scope="col">ลำดับ</th>
-                <th scope="col">รายการ</th>
-                <th scope="col">วัสดุคงเหลือ</th>
-                <th scope="col">ราคา</th>
-                <th scope="col">หน่วยนับ</th>
-                <th scope="col">ราคารวม</th>
-            </tr>
-        </thead>
-         <tbody id="materialTableBody" class="table-group-divider">
-            <tr>
-                <th scope="row">1</th>
-                <td>กระดาษ A4</td>
-                <td>500</td>
-                <td>200</td>
-                <td>รีม</td>
-                <td>100,000</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>ปากกาเจล</td>
-                <td>300</td>
-                <td>50</td>
-                <td>ด้าม</td>
-                <td>15,000</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>แฟ้มเอกสาร</td>
-                <td>150</td>
-                <td>80</td>
-                <td>เล่ม</td>
-                <td>12,000</td>
-            </tr>
-         </tbody>
+            <thead class="table-white">
+                <tr>
+                    <th scope="col" class="checkbox-col">
+                        <input type="checkbox" class="form-check-input" onchange="toggleAll(this)">
+                    </th>
+                    <th scope="col">ลำดับ</th>
+                    <th scope="col">รายการ</th>
+                    <th scope="col">วัสดุคงเหลือ</th>
+                    <th scope="col">ราคา</th>
+                    <th scope="col">หน่วยนับ</th>
+                    <th scope="col">ราคารวม</th>
+                </tr>
+            </thead>
+            <tbody id="materialTableBody">
+                <tr>
+                    <td class="checkbox-col">
+                        <input type="checkbox" class="delete-checkbox form-check-input">
+                    </td>
+                    <th scope="row">1</th>
+                    <td>กระดาษ A4</td>
+                    <td>500</td>
+                    <td>200</td>
+                    <td>รีม</td>
+                    <td>100,000</td>
+                </tr>
+                <tr>
+                    <td class="checkbox-col">
+                        <input type="checkbox" class="delete-checkbox form-check-input">
+                    </td>
+                    <th scope="row">2</th>
+                    <td>ปากกาเจล</td>
+                    <td>300</td>
+                    <td>50</td>
+                    <td>ด้าม</td>
+                    <td>15,000</td>
+                </tr>
+                <tr>
+                    <td class="checkbox-col">
+                        <input type="checkbox" class="delete-checkbox form-check-input">
+                    </td>
+                    <th scope="row">3</th>
+                    <td>แฟ้มเอกสาร</td>
+                    <td>150</td>
+                    <td>80</td>
+                    <td>เล่ม</td>
+                    <td>12,000</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
-    <!-- ส่วนที่เพิ่มใหม่: หน้าต่าง Modal สำหรับเพิ่มข้อมูลตามรูป [1] -->
     <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -156,7 +190,58 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ฟังก์ชันบันทึกข้อมูลและเพิ่มแถวใหม่ลงในตาราง
+        let isDeleteMode = false;
+
+        function toggleDeleteMode(active) {
+            isDeleteMode = active;
+            
+            const defaultBtns = document.getElementById('default-buttons');
+            const deleteBtns = document.getElementById('delete-buttons');
+            const checkboxCols = document.querySelectorAll('.checkbox-col');
+            const checkboxes = document.querySelectorAll('.delete-checkbox');
+
+            if (active) {
+                defaultBtns.classList.remove('d-flex');
+                defaultBtns.classList.add('d-none');
+                
+                deleteBtns.classList.remove('d-none');
+                deleteBtns.classList.add('d-flex');
+                
+                checkboxCols.forEach(col => col.classList.add('active'));
+            } else {
+                defaultBtns.classList.remove('d-none');
+                defaultBtns.classList.add('d-flex');
+                
+                deleteBtns.classList.remove('d-flex');
+                deleteBtns.classList.add('d-none');
+                
+                checkboxCols.forEach(col => col.classList.remove('active'));
+                checkboxes.forEach(cb => cb.checked = false);
+                
+                const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
+                if(headerCheckbox) headerCheckbox.checked = false;
+                
+                updateCount();
+            }
+        }
+
+        function confirmDelete() {
+            const checkedBoxes = document.querySelectorAll('.delete-checkbox:checked');
+            
+            if (checkedBoxes.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (confirm(`คุณต้องการลบ ${checkedBoxes.length} รายการที่เลือกใช่หรือไม่?`)) {
+                checkedBoxes.forEach(cb => {
+                    cb.closest('tr').remove();
+                });
+                toggleDeleteMode(false);
+                reIndexRows();
+            }
+        }
+
         function saveNewItem() {
             const name = document.getElementById('itemName').value;
             const stock = document.getElementById('itemStock').value;
@@ -165,11 +250,14 @@
 
             if (name && stock && price && unit) {
                 const tbody = document.getElementById('materialTableBody');
-                const nextNo = tbody.rows.length + 1; // คำนวณลำดับถัดไป [2]
-                const total = parseFloat(stock) * parseFloat(price); // คำนวณราคารวมอัตโนมัติ [2]
+                const nextNo = tbody.rows.length + 1;
+                const total = parseFloat(stock) * parseFloat(price);
 
                 const newRow = `
                     <tr>
+                        <td class="checkbox-col ${isDeleteMode ? 'active' : ''}">
+                            <input type="checkbox" class="delete-checkbox form-check-input" onchange="updateCount()">
+                        </td>
                         <th scope="row">${nextNo}</th>
                         <td>${name}</td>
                         <td>${stock}</td>
@@ -181,7 +269,6 @@
                 
                 tbody.insertAdjacentHTML('beforeend', newRow);
 
-                // ล้างข้อมูลและปิด Modal
                 document.getElementById('materialForm').reset();
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addItemModal'));
                 modal.hide();
@@ -190,13 +277,30 @@
             }
         }
 
-        // ฟังก์ชันลบรายการล่าสุด
-        function deleteLastRow() {
-            const tbody = document.getElementById('materialTableBody');
-            if (tbody.rows.length > 0) {
-                tbody.deleteRow(tbody.rows.length - 1);
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('.delete-checkbox');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+            updateCount();
+        }
+
+        function updateCount() {
+            const count = document.querySelectorAll('.delete-checkbox:checked').length;
+            document.getElementById('selected-count').innerText = `เลือก ${count} รายการ`;
+        }
+        
+        document.addEventListener('change', function(e) {
+            if(e.target.classList.contains('delete-checkbox')) {
+                updateCount();
             }
+        });
+
+        function reIndexRows() {
+            const rows = document.querySelectorAll('#materialTableBody tr');
+            rows.forEach((row, index) => {
+                row.cells[1].innerText = index + 1;
+            });
         }
     </script>
+
 </body>
 </html>
