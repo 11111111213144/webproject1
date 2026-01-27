@@ -4,7 +4,7 @@ let tempItems = []; // เก็บรายการชั่วคราว
                 year: "2567",
                 material: "วัสดุก่อสร้าง (Construction)",
                 items: [
-                { name: "ปูนซีเมนต์", qty: 50, price: 145.50, total: 7275 },
+                    { name: "ปูนซีเมนต์", qty: 50, price: 145.50, total: 7275 },
                     { name: "เหล็กเส้น 3 หุน", qty: 100, price: 220, total: 22000 },
                     { name: "อิฐมอญ", qty: 1000, price: 2.5, total: 2500 }
                 ]
