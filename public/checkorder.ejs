@@ -4,56 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบการจัดซื้อจัดจ้าง</title>
-    
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+   
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+ 
+    <link rel="stylesheet" href="../css/style.css">
 
-     <link rel="stylesheet" href="../css/style.css"> 
+    <style>
+        /* ส่วนที่เพิ่ม: กำหนดขอบดำสนิทให้กับช่องที่ให้พิมพ์ตามคำขอ */
+        .form-control {
+            border: 1px solid #000000 !important;
+            border-radius: 4px;
+        }
+
+        /* ตกแต่งปุ่มบันทึกข้อมูลให้เป็นสีเขียวตามรูปภาพ [1] */
+        .btn-save-custom {
+            background-color: #198754;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        /* ตกแต่งปุ่มยกเลิกให้เป็นสีเทาตามรูปภาพ [1] */
+        .btn-cancel-custom {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+    </style>
 </head>
 <body>
-
+ 
     <nav class="navbar navbar-expand-lg bg-custom-mint">
         <div class="container-fluid">
             <a class="navbar-brand ps-3" href="/homepage">home</a>
-
+ 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                
-                <ul class="navbar-nav mx-auto center-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/createplan">ทำแผนจัดซื้อ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/makeplan">ทำใบสั่งซื้อ</a>
-                    </li>
-                </ul>
  
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto center-menu">
+                    <li class="nav-item"><a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/createplan">ทำแผนจัดซื้อ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/makeplan">ทำใบสั่งซื้อ</a></li>
+                </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item pe-3">
-                        <a class="nav-link bth-logout" href="/login">ออกจากระบบ</a>
-                    </li>
+                    <li class="nav-item pe-3"><a class="nav-link bth-logout" href="/login">ออกจากระบบ</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
+ 
     <div class="container text-left">
         <h1 class="welcome-text">รายการวัสดุ</h1>
     </div>
-
+ 
     <div class="container mb-3">
         <div class="row flex-column flex-lg-row">
             <div class="col-12 col-lg-auto ms-lg-auto">
                 <div class="d-flex flex-column flex-lg-row gap-2">
-                    <button type="button" class="btn-setting btn-primary">เพิ่มรายการ</button>
-                    <button type="button" class="btn-setting btn-primary">ลบรายการ</button>
+                    <!-- เพิ่มคำสั่งเปิด Modal ที่ปุ่มเพิ่มรายการ -->
+                    <button type="button" class="btn-setting btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">เพิ่มรายการ</button>
+                    <button type="button" class="btn-setting btn-primary" onclick="deleteLastRow()">ลบรายการ</button>
                 </div>
             </div>
         </div>
@@ -71,7 +88,7 @@
                 <th scope="col">ราคารวม</th>
             </tr>
         </thead>
-         <tbody class="table-group-divider">
+         <tbody id="materialTableBody" class="table-group-divider">
             <tr>
                 <th scope="row">1</th>
                 <td>กระดาษ A4</td>
@@ -97,8 +114,89 @@
                 <td>12,000</td>
             </tr>
          </tbody>
+        </table>
     </div>
 
+    <!-- ส่วนที่เพิ่มใหม่: หน้าต่าง Modal สำหรับเพิ่มข้อมูลตามรูป [1] -->
+    <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="addItemModalLabel"><b>เพิ่มข้อมูลรายการวัสดุ</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <form id="materialForm">
+                        <div class="mb-3">
+                            <label class="form-label"><b>ชื่อรายการ</b></label>
+                            <input type="text" class="form-control" id="itemName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>วัสดุคงเหลือ (จำนวน)</b></label>
+                            <input type="number" class="form-control" id="itemStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>ราคาต่อหน่วย</b></label>
+                            <input type="number" class="form-control" id="itemPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>หน่วยนับ</b></label>
+                            <input type="text" class="form-control" id="itemUnit" placeholder="เช่น รีม, อัน, แท่ง" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn-cancel-custom" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn-save-custom" onclick="saveNewItem()">บันทึกข้อมูล</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ฟังก์ชันบันทึกข้อมูลและเพิ่มแถวใหม่ลงในตาราง
+        function saveNewItem() {
+            const name = document.getElementById('itemName').value;
+            const stock = document.getElementById('itemStock').value;
+            const price = document.getElementById('itemPrice').value;
+            const unit = document.getElementById('itemUnit').value;
+
+            if (name && stock && price && unit) {
+                const tbody = document.getElementById('materialTableBody');
+                const nextNo = tbody.rows.length + 1; // คำนวณลำดับถัดไป [2]
+                const total = parseFloat(stock) * parseFloat(price); // คำนวณราคารวมอัตโนมัติ [2]
+
+                const newRow = `
+                    <tr>
+                        <th scope="row">${nextNo}</th>
+                        <td>${name}</td>
+                        <td>${stock}</td>
+                        <td>${price}</td>
+                        <td>${unit}</td>
+                        <td>${total.toLocaleString()}</td>
+                    </tr>
+                `;
+                
+                tbody.insertAdjacentHTML('beforeend', newRow);
+
+                // ล้างข้อมูลและปิด Modal
+                document.getElementById('materialForm').reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addItemModal'));
+                modal.hide();
+            } else {
+                alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+            }
+        }
+
+        // ฟังก์ชันลบรายการล่าสุด
+        function deleteLastRow() {
+            const tbody = document.getElementById('materialTableBody');
+            if (tbody.rows.length > 0) {
+                tbody.deleteRow(tbody.rows.length - 1);
+            }
+        }
+    </script>
 </body>
 </html>
