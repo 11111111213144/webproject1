@@ -6,10 +6,10 @@
     <title>ระบบการจัดซื้อจัดจ้าง</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
 
      <link rel="stylesheet" href="../css/style.css"> 
+     <link rel="stylesheet" href="../css/delbtn.css">
 </head>
 <body>
 
@@ -59,9 +59,19 @@
                 </ul>
             </div>
             <div class="col-12 col-lg-auto ms-lg-auto">
-                <div class="d-flex flex-column flex-lg-row gap-2">
-                    <button type="button" class="btn-setting btn-primary" onclick="openAddModal()">เพิ่มรายการ</button>
-                    <button type="button" class="btn-setting btn-primary">ลบรายการ</button>
+                <div class="d-flex flex-column flex-lg-row gap-2 justify-content-end">
+                    
+                    <div id="default-buttons" class="d-flex gap-2">
+                        <button type="button" class="btn-setting btn-primary" onclick="openAddModal()">เพิ่มรายการ</button>
+                        <button type="button" class="btn-setting btn-primary" onclick="toggleDeleteMode(true)">ลบรายการ</button>
+                    </div>
+
+                    <div id="delete-buttons" class="d-none align-items-center gap-2">
+                        <span class="me-2" id="selected-count">เลือก 0 รายการ</span>
+                        <button type="button" class="btn-setting" onclick="toggleDeleteMode(false)">ยกเลิก</button>
+                        <button type="button" class="btn-setting" onclick="confirmDelete()">ยืนยันการลบ</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -71,6 +81,9 @@
         <table class="table table-striped table-hover">
         <thead class="table-white">
             <tr>
+                <th scope="col" class="checkbox-col">
+                    <input type="checkbox" class="form-check-input" onchange="toggleAll(this)">
+                </th>
                 <th scope="col">ลำดับ</th>
                 <th scope="col">หมายเลขใบสั่งซื้อ</th>
                 <th scope="col">วันที่</th>
@@ -80,8 +93,11 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-         <tbody class="table-group-divider">
+         <tbody id="materialTableBody">
             <tr>
+                <td class="checkbox-col">
+                    <input type="checkbox" class="delete-checkbox form-check-input">
+                </td>
                 <th scope="row">1</th>
                 <td>0001</td>
                 <td>15</td>
@@ -91,6 +107,9 @@
                 <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(0)">รายละเอียด</button></td>
             </tr>
             <tr>
+                <td class="checkbox-col">
+                    <input type="checkbox" class="delete-checkbox form-check-input">
+                </td>
                 <th scope="row">2</th>
                 <td>0002</td>
                 <td>20</td>
@@ -100,6 +119,9 @@
                 <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(1)">รายละเอียด</button></td>
             </tr>
             <tr>
+                <td class="checkbox-col">
+                    <input type="checkbox" class="delete-checkbox form-check-input">
+                </td>
                 <th scope="row">3</th>
                 <td>0003</td>
                 <td>25</td>
@@ -107,11 +129,14 @@
                 <td>2567</td>
                 <td>ล่าช้า</td>
                 <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(2)">รายละเอียด</button></td>
+            </tr>
          </tbody>
+    </table>
     </div>
 
     <script src="../javaSC/makeplan.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <script src="../javaSC/deletebtn.js"></script>
+    
 </body>
 </html>
