@@ -6,44 +6,51 @@
     <title>ระบบการจัดซื้อจัดจ้าง</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css"> 
 
-    <style>
-        body { font-family: 'Kanit', sans-serif; }
-        /* สไตล์เพิ่มเติมเพื่อให้การกรอกวันที่ดูง่ายขึ้น */
-        .date-input-group input { width: 60px; text-align: center; }
-        .date-input-group input.year { width: 90px; }
-    </style>
+     <link rel="stylesheet" href="../css/style.css"> 
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg bg-custom-mint">
         <div class="container-fluid">
             <a class="navbar-brand ps-3" href="/homepage">home</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
+                
                 <ul class="navbar-nav mx-auto center-menu">
-                    <li class="nav-item"><a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/createplan">ทำแผนจัดซื้อ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/makeplan">ทำใบสั่งซื้อ</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/createplan">ทำแผนจัดซื้อ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/makeplan">ทำใบสั่งซื้อ</a>
+                    </li>
                 </ul>
+
                 <ul class="navbar-nav">
-                    <li class="nav-item pe-3"><a class="nav-link bth-logout" href="/login">ออกจากระบบ</a></li>
+                    <li class="nav-item pe-3">
+                        <a class="nav-link bth-logout" href="/login">ออกจากระบบ</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container text-left mb-4 mt-3">
+    <div class="container text-left mb-4">
         <button type="button" class="welcome-text btn-setting btn-secondary btn-lg dropdown-toggle" data-bs-toggle="dropdown">ทำแผนจัดซื้อรายปี</button>
-        <ul class="dd-menu dropdown-menu">
-            <li><a class="dd-menu dropdown-item" href="/createplan">รายปี</a></li>
-            <li><a class="dd-menu dropdown-item" href="/createplan/mouth">รายเดือน</a></li>
-            <li><a class="dd-menu dropdown-item" href="/createplan/outplan">นอกแผน</a></li>
-        </ul>
+                <ul class="dd-menu dropdown-menu">
+                    <li><a class="dd-menu dropdown-item" href="/createplan">รายปี</a></li>
+                    <li><a class="dd-menu dropdown-item" href="/createplan/mouth">รายเดือน</a></li>
+                    <li><a class="dd-menu dropdown-item" href="/createplan/outplan">นอกแผน</a></li>
+                </ul>
     </div>
 
     <div class="container mb-3">
@@ -53,11 +60,12 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">2567</a></li>
                     <li><a class="dropdown-item" href="#">2566</a></li>
+                    <li><a class="dropdown-item" href="#">2565</a></li>
                 </ul>
             </div>
             <div class="col-12 col-lg-auto ms-lg-auto">
                 <div class="d-flex flex-column flex-lg-row gap-2">
-                    <button type="button" class="btn-setting btn-primary" onclick="openPlanModal()">เพิ่มรายการ</button>
+                    <button type="button" class="btn-setting btn-primary">เพิ่มรายการ</button>
                     <button type="button" class="btn-setting btn-primary">ลบรายการ</button>
                 </div>
             </div>
@@ -65,291 +73,36 @@
     </div>
 
     <div class="container text-center mb-5">
-        <table class="table table-striped table-hover" id="mainTable">
-            <thead class="table-white">
-                <tr>
-                    <th scope="col">ลำดับ</th>
-                    <th scope="col">ปี</th>
-                    <th scope="col">ประเภท</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
+        <table class="table table-striped table-hover">
+        <thead class="table-white">
+            <tr>
+                <th scope="col">ลำดับ</th>
+                <th scope="col">ปี</th>
+                <th scope="col">ประเภท</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
             <tbody class="table-group-divider">
                 <tr>
                     <th scope="row">1</th>
                     <td>2566</td>
                     <td>วัสดุสำนักงาน</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" >รายละเอียด</button></td>
+                    <td><button type="button" class="btn-info">รายละเอียด</button></td>
                 </tr>
-<<<<<<< HEAD
-            </tbody>
-        </table>
-    </div>
-
-    <div class="modal fade" id="planModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">การทำแผน</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">ประเภทแผน</label>
-                        <select class="form-select" id="selPlan">
-                            <option>รายปี</option>
-                            <option>รายเดือน</option>
-                            <option>นอกแผน</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">วัน / เดือน / ปี (พุทธศักราช)</label>
-                        <div class="d-flex gap-2 date-input-group">
-                            <input type="text" class="form-control" id="inDay" placeholder="วัน" maxlength="2">
-                            <input type="text" class="form-control" id="inMonth" placeholder="เดือน" maxlength="2">
-                            <input type="text" class="form-control year" id="inYear" placeholder="ปี พ.ศ." maxlength="4">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">ประเภทวัสดุ</label>
-                        <select class="form-select" id="selMat">
-                            <option>วัสดุสำนักงาน</option>
-                            <option>วัสดุคอมพิวเตอร์</option>
-                            <option>วัสดุไฟฟ้า</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary w-100" onclick="goToItems()">เลือกรายการถัดไป</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="itemModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">เพิ่มข้อมูลรายการ</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-2 mb-3 align-items-end">
-                        <div class="col-md-5">
-                            <label class="small">ชื่อรายการ</label>
-                            <input type="text" class="form-control" id="addItemName">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small">จำนวน</label>
-                            <input type="number" class="form-control" id="addItemQty" value="1" oninput="autoSum()">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small">ราคา/หน่วย</label>
-                            <input type="number" class="form-control" id="addItemPrice" oninput="autoSum()">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small">รวมเงิน</label>
-                            <input type="text" class="form-control bg-light" id="addItemTotal" readonly>
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-warning w-100 text-white" onclick="addItemToTemp()">เพิ่ม</button>
-                        </div>
-                    </div>
-
-                    <table class="table table-bordered text-center" id="tempTable">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ลำดับ</th>
-                                <th>รายการ</th>
-                                <th>จำนวน</th>
-                                <th>ราคา/หน่วย</th>
-                                <th>ราคารวม</th>
-                                <th>จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="backToPlan()">ย้อนกลับ</button>
-                    <button type="button" class="btn btn-success px-5" onclick="confirmToMain()">ตกลงและบันทึก</button>
-=======
                 <tr>
                     <th scope="row">2</th>
                     <td>2566</td>
                     <td>วัสดุคอมพิวเตอร์</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal">รายละเอียด</button></td>
+                    <td><button type="button" class="btn-info">รายละเอียด</button></td>
                 </tr>
                 <tr>
                     <th scope="row">3</th>
                     <td>2566</td>
                     <td>วัสดุไฟฟ้า</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal">รายละเอียด</button></td>
+                    <td><button type="button" class="btn-info">รายละเอียด</button></td>
                 </tr>
-                </tbody> </table> </div>
-    </div>
-
-     <!-- Modal -->
-    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailsModalLabel">รายละเอียด</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-white">
-                                <tr>
-                                    <th scope="col">ลำดับที่</th>
-                                    <th scope="col">รายการ</th>
-                                    <th scope="col">เฉลี่ยใช้ต่อเดือน</th>
-                                    <th scope="col">สำรอง ๒ เดือน</th>
-                                    <th scope="col">อัตราคงคลัง</th>
-                                    <th scope="col">ปริมาณการจัดซื้อ</th>
-                                    <th scope="col">หน่วยนับ</th>
-                                    <th scope="col">ราคาต่อหน่วย</th>
-                                    <th scope="col">รวมเงิน</th>
-                                    <th scope="col">บริษัท</th>
-                                    <th scope="col">ประเภทงบประมาณ</th>
-                                    <th scope="col">ใช้ประจำที่</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <tr>
-                                    <td>1</td>
-                                    <td>กระดาษ A4</td>
-                                    <td>10</td>
-                                    <td>20</td>
-                                    <td>50</td>
-                                    <td>120</td>
-                                    <td>รีม</td>
-                                    <td>150</td>
-                                    <td>18,000</td>
-                                    <td>บริษัท ABC</td>
-                                    <td>สำนักงาน</td>
-                                    <td>ส่วนปฏิบัติการ</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>ปากกาแบบปลาย ดำ</td>
-                                    <td>5</td>
-                                    <td>10</td>
-                                    <td>20</td>
-                                    <td>60</td>
-                                    <td>ด้าม</td>
-                                    <td>8</td>
-                                    <td>480</td>
-                                    <td>บริษัท XYZ</td>
-                                    <td>สำนักงาน</td>
-                                    <td>ส่วนปฏิบัติการ</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-               
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <!-- <button type="button" class="btn btn-primary">บันทึก</button> -->
->>>>>>> a47e336d96301b69c4212ce80f282a5c0f56d3c5
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let tempItems = []; // เก็บรายการชั่วคราว
-        const m1 = new bootstrap.Modal(document.getElementById('planModal'));
-        const m2 = new bootstrap.Modal(document.getElementById('itemModal'));
-
-        // เปิดหน้าแรก
-        function openPlanModal() { m1.show(); }
-
-        // ย้อนกลับ
-        function backToPlan() { m2.hide(); m1.show(); }
-
-        // ไปหน้าสอง
-        function goToItems() {
-            if(!document.getElementById('inYear').value) return alert('กรุณาระบุปี พ.ศ.');
-            m1.hide(); m2.show();
-        }
-
-        // คำนวณราคารวมอัตโนมัติขณะพิมพ์
-        function autoSum() {
-            const q = document.getElementById('addItemQty').value || 0;
-            const p = document.getElementById('addItemPrice').value || 0;
-            document.getElementById('addItemTotal').value = (q * p).toLocaleString();
-        }
-
-        // เพิ่มรายการลงตารางตรวจสอบ (ตารางชั่วคราว)
-        function addItemToTemp() {
-            const name = document.getElementById('addItemName').value;
-            const qty = document.getElementById('addItemQty').value;
-            const price = document.getElementById('addItemPrice').value;
-
-            if(!name || !price) return alert('กรุณากรอกข้อมูลให้ครบ');
-
-            tempItems.push({ name, qty, price, total: qty * price });
-            renderTemp();
-
-            // ล้างช่องกรอก
-            document.getElementById('addItemName').value = '';
-            document.getElementById('addItemPrice').value = '';
-            document.getElementById('addItemTotal').value = '';
-        }
-
-        // วาดตารางชั่วคราว
-        function renderTemp() {
-            const tbody = document.querySelector('#tempTable tbody');
-            tbody.innerHTML = tempItems.map((item, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="text-start">${item.name}</td>
-                    <td>${item.qty}</td>
-                    <td>${Number(item.price).toLocaleString()}</td>
-                    <td>${item.total.toLocaleString()}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="removeTemp(${index})">ลบ</button></td>
-                </tr>
-            `).join('');
-        }
-
-        // ลบรายการออกจากตารางชั่วคราว
-        function removeTemp(idx) {
-            if(confirm('ยืนยันการลบรายการนี้?')) {
-                tempItems.splice(idx, 1);
-                renderTemp();
-            }
-        }
-
-        // ตกลงยืนยัน -> ข้อมูลเด้งไปตารางหลัก
-        function confirmToMain() {
-            if(tempItems.length === 0) return alert('ยังไม่มีรายการสินค้า');
-            
-            const mainTbody = document.querySelector('#mainTable tbody');
-            const rowCount = mainTbody.rows.length + 1;
-            const year = document.getElementById('inYear').value;
-            const mat = document.getElementById('selMat').value;
-
-            const newRow = `
-                <tr>
-                    <th scope="row">${rowCount}</th>
-                    <td>${year}</td>
-                    <td>${mat}</td>
-                    <td><button type="button" class="btn-info">รายละเอียด</button></td>
-                </tr>
-            `;
-
-            mainTbody.insertAdjacentHTML('beforeend', newRow);
-            
-            // ปิด Modal และรีเซ็ตค่า
-            m2.hide();
-            tempItems = [];
-            renderTemp();
-            alert('บันทึกแผนเรียบร้อยแล้ว');
-        }
-    </script>
 </body>
 </html>
