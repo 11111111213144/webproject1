@@ -63,6 +63,8 @@
                         <input type="checkbox" class="form-check-input" onchange="toggleAll(this)">
                     </th>
                     <th scope="col">ลำดับ</th>
+                    <th scope="col">รหัสวัสดุ</th>
+                    <th scope="col">ประเภทวัสดุ</th>
                     <th scope="col">รายการ</th>
                     <th scope="col">วัสดุคงเหลือ</th>
                     <th scope="col">ราคา</th>
@@ -76,9 +78,11 @@
                         <input type="checkbox" class="delete-checkbox form-check-input">
                     </td>
                     <th scope="row">1</th>
+                    <th scope="row">M001</th>
+                    <td>วัสดุสำนักงาน</td>
                     <td>กระดาษ A4</td>
                     <td>500</td>
-                    <td>200</td>
+                    <td>200</td>    
                     <td>รีม</td>
                     <td>100,000</td>
                 </tr>
@@ -87,6 +91,8 @@
                         <input type="checkbox" class="delete-checkbox form-check-input">
                     </td>
                     <th scope="row">2</th>
+                    <th scope="row">M002</th>
+                    <td>วัสดุสำนักงาน</td>
                     <td>ปากกาเจล</td>
                     <td>300</td>
                     <td>50</td>
@@ -98,6 +104,8 @@
                         <input type="checkbox" class="delete-checkbox form-check-input">
                     </td>
                     <th scope="row">3</th>
+                    <th scope="row">M003</th>
+                    <td>วัสดุสำนักงาน</td>
                     <td>แฟ้มเอกสาร</td>
                     <td>150</td>
                     <td>80</td>
@@ -120,6 +128,14 @@
                         <div class="mb-3">
                             <label class="form-label"><b>ชื่อรายการ</b></label>
                             <input type="text" class="form-control" id="itemName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>รหัสวัสดุ</b></label>
+                            <input type="text" class="form-control" id="itemCode" placeholder="เช่น M001, M002" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>ประเภทวัสดุ</b></label>
+                            <input type="text" class="form-control" id="itemType" placeholder="เช่น วัสดุสำนักงาน, วัสดุคอมพิวเตอร์" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label"><b>วัสดุคงเหลือ (จำนวน)</b></label>

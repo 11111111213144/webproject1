@@ -1,0 +1,195 @@
+const express = require('express');
+require('dotenv').config();
+const router = express.Router();
+
+const bodyParser = require('body-parser');
+const path = require('path')
+const pool = require('../database/mysqlpool');
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const cookie = require('cookie-parser');
+
+router.use(cookie());
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+router.get('/login', (req, res) => {
+    const msg = req.query.msg
+    const username = req.cookies.username;
+    if (username)
+        res.redirect('/homepage')
+    else
+        res.render('member/login', { registerStatus: msg })
+});
+
+router.get('/register', (req, res) => {
+    res.render('member/register')
+})
+
+router.post('/register', (req, res) => {
+    const { username, password } = req.body
+    const sql = "INSERT INTO user (userName, userPass) VALUES (?, ?)"
+
+    bcrypt.hash(password, 12, (err, hash) => {
+        if (err) {
+            console.log(err)
+            res.render('member/register', { msg: 'Something went wrong, please contact admin' })
+        } else {
+            pool.query(sql, [username, hash], (err, results) => {
+                if (err) {
+                    console.log(err)
+                    res.render('member/register', { msg: 'Something went wrong, please contact admin' })
+                } else {
+                    res.redirect('/?msg=Register Success')
+                }
+            })
+        }
+    })
+})
+
+router.post('/register-api', (req, res) => {
+    const { username, password } = req.body
+    const sql = "INSERT INTO user (userName, userPass) VALUES (?, ?)"
+
+    console.log(username, password)
+
+    if (username == '' || password == '') {
+        res.json({ 'msg': 'failed' })
+        return
+    }
+
+    if (!username || !password) {
+        res.json({ 'msg': 'failed' })
+        return
+    }
+
+    if (username.includes(' ') || password.includes(' ')) {
+        res.json({ 'msg': 'failed' })
+        return
+    }
+
+    if (username.length < 4 || password.length < 4) {
+        res.json({ 'msg': 'failed' })
+        return
+    }
+
+    bcrypt.hash(password, 12, (err, hash) => {
+        if (err) {
+            console.log(err)
+            res.json({ 'msg': 'error' })
+        } else {
+            pool.query(sql, [username, hash], (err, results) => {
+                if (err) {
+                    console.log(err)
+                    res.json({ 'msg': 'failed' })
+                } else {
+                    res.json({ 'msg': 'success' })
+                }
+            })
+        }
+    })
+})
+
+router.post('/verify-api', (req, res) => {
+    const { username, password } = req.body
+    const sql = "SELECT * FROM user WHERE userName = ?"
+
+    pool.query(sql, [username], (err, results) => {
+        if (err) {
+            console.log(err)
+            res.json({ 'msg': 'failed' })
+        } else {
+            if (results.length == 0)
+                res.json({ 'msg': 'failed' })
+            else {
+                // Check if userPass matches (handling both bcrypt and plain text)
+                const dbPass = results[0].userPass;
+                let match = false;
+                try {
+                    match = bcrypt.compareSync(password, dbPass);
+                } catch (e) {
+                    match = (password === dbPass);
+                }
+
+                if (!match) {
+                    res.json({ 'msg': 'failed' })
+                    return
+                }
+                res.json({ 'msg': 'success' })
+            }
+
+        }
+    })
+})
+
+
+router.post('/verify', (req, res) => {
+    const { username, password } = req.body;
+    const sql = "SELECT * FROM user WHERE userName = ?";
+
+    pool.query(sql, [username], (err, results) => {
+        if (err) {
+            console.log(err);
+            res.render('member/login', { username: username, msg: 'Something went wrong, please contact admin' });
+        } else {
+            if (results.length == 0) {
+                res.render('member/login', { msg: 'Wrong Username or Password' });
+            } else {
+                const dbUser = results[0];
+                console.log('Login attempt:', { username, hasPassword: !!password });
+                console.log('DB User:', dbUser);
+
+                if (!password || !dbUser.userPass) {
+                    console.error('Missing password for comparison');
+                    return res.render('member/login', { msg: 'System Error: Credentials missing' });
+                }
+
+                // Try comparison (supporting both hash and plain text)
+                let match = false;
+                try {
+                    match = bcrypt.compareSync(password, dbUser.userPass);
+                } catch (e) {
+                    console.log('Bcrypt threw error:', e.message);
+                }
+
+                // Fallback to plain text if bcrypt failed (returned false OR threw error)
+                if (!match && password === dbUser.userPass) {
+                    console.log('Plain text password match');
+                    match = true;
+                }
+
+                if (!match) {
+                    console.log('Password mismatch');
+                    res.render('member/login', { username: username, msg: 'Wrong Username or Password' });
+                    return;
+                }
+
+                const token = jwt.sign({ username: username }, process.env.secret);
+                res.cookie('username', username, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.redirect('/homepage');
+            }
+        }
+    });
+});
+
+router.get('/member', (req, res) => {
+    const userName = req.cookies.username;
+    if (userName)
+        res.render('member/member', { username: userName })
+    else
+        res.redirect('member/login')
+});
+
+router.get('/logout', (req, res) => {
+    const userName = req.cookies.username;
+    if (userName)
+        res.clearCookie('token')
+    res.clearCookie('username')
+
+    res.redirect('/login')
+});
+
+
+module.exports = router;
