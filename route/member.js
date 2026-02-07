@@ -18,7 +18,7 @@ router.get('/login', (req, res) => {
     const msg = req.query.msg
     const username = req.cookies.username;
     if (username)
-        res.redirect('/homepage')
+        res.redirect('/login')
     else
         res.render('member/login', { registerStatus: msg })
 });
