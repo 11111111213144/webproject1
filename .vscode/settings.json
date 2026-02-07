@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.ejs": "ejs"
+    },
+    "emmet.includeLanguages": {
+        "ejs": "ejs"
+    },
+    "javascript.validate.enable": true,
+    "js/ts.implicitProjectConfig.checkJs": false
+}

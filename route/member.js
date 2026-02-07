@@ -28,18 +28,39 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-    const { username, password } = req.body
-    const sql = "INSERT INTO user (userName, userPass) VALUES (?, ?)"
+    const { username, password, fullname, lastname, email, phone } = req.body
+    const sql = "INSERT INTO user (userName, userPass, Fname, Lname, email, phone) VALUES (?, ?, ?, ?, ?, ?)"
 
     bcrypt.hash(password, 12, (err, hash) => {
         if (err) {
             console.log(err)
             res.render('member/register', { msg: 'Something went wrong, please contact admin' })
         } else {
-            pool.query(sql, [username, hash], (err, results) => {
+            pool.query(sql, [username, hash, fullname, lastname, email, phone], (err, results) => {
                 if (err) {
                     console.log(err)
-                    res.render('member/register', { msg: 'Something went wrong, please contact admin' })
+
+                    // ตรวจสอบว่าเป็น error จากข้อมูลซ้ำหรือไม่
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        let msg = 'ข้อมูลนี้มีอยู่ในระบบแล้ว'
+
+                        // ตรวจสอบว่า field ไหนซ้ำ
+                        if (err.message.includes('unique_userName')) {
+                            msg = 'ชื่อผู้ใช้นี้มีอยู่ในระบบแล้ว'
+                        } else if (err.message.includes('unique_Fname')) {
+                            msg = 'ชื่อจริงนี้มีอยู่ในระบบแล้ว'
+                        } else if (err.message.includes('unique_Lname')) {
+                            msg = 'นามสกุลนี้มีอยู่ในระบบแล้ว'
+                        } else if (err.message.includes('unique_phone')) {
+                            msg = 'เบอร์โทรศัพท์นี้มีอยู่ในระบบแล้ว'
+                        } else if (err.message.includes('unique_email')) {
+                            msg = 'อีเมลนี้มีอยู่ในระบบแล้ว'
+                        }
+
+                        res.render('member/register', { msg: msg })
+                    } else {
+                        res.render('member/register', { msg: 'Something went wrong, please contact admin' })
+                    }
                 } else {
                     res.redirect('/?msg=Register Success')
                 }
@@ -49,12 +70,12 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/register-api', (req, res) => {
-    const { username, password } = req.body
-    const sql = "INSERT INTO user (userName, userPass) VALUES (?, ?)"
+    const { username, password, fullname, lastname, email, phone } = req.body
+    const sql = "INSERT INTO user (userName, userPass, Fname, Lname, email, phone) VALUES (?, ?, ?, ?, ?, ?)"
 
-    console.log(username, password)
+    console.log(username, password, fullname, lastname, email, phone)
 
-    if (username == '' || password == '') {
+    if (username == '' || password == '' || fullname == '' || lastname == '' || email == '' || phone == '') {
         res.json({ 'msg': 'failed' })
         return
     }
@@ -79,10 +100,31 @@ router.post('/register-api', (req, res) => {
             console.log(err)
             res.json({ 'msg': 'error' })
         } else {
-            pool.query(sql, [username, hash], (err, results) => {
+            pool.query(sql, [username, hash, fullname, lastname, email, phone], (err, results) => {
                 if (err) {
                     console.log(err)
-                    res.json({ 'msg': 'failed' })
+
+                    // ตรวจสอบว่าเป็น error จากข้อมูลซ้ำหรือไม่
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        let error = 'ข้อมูลนี้มีอยู่ในระบบแล้ว'
+
+                        // ตรวจสอบว่า field ไหนซ้ำ
+                        if (err.message.includes('unique_userName')) {
+                            error = 'Username already exists'
+                        } else if (err.message.includes('unique_Fname')) {
+                            error = 'First name already exists'
+                        } else if (err.message.includes('unique_Lname')) {
+                            error = 'Last name already exists'
+                        } else if (err.message.includes('unique_phone')) {
+                            error = 'Phone number already exists'
+                        } else if (err.message.includes('unique_email')) {
+                            error = 'Email already exists'
+                        }
+
+                        res.json({ 'msg': 'duplicate', 'error': error })
+                    } else {
+                        res.json({ 'msg': 'failed', 'error': 'Database error' })
+                    }
                 } else {
                     res.json({ 'msg': 'success' })
                 }
@@ -168,7 +210,7 @@ router.post('/verify', (req, res) => {
                 const token = jwt.sign({ username: username }, process.env.secret);
                 res.cookie('username', username, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-                res.redirect('/homepage');
+                res.redirect('/homepage?msg=Login Success');
             }
         }
     });

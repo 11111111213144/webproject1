@@ -19,25 +19,22 @@
 CREATE DATABASE IF NOT EXISTS `procurement_management_system` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
 USE `procurement_management_system`;
 
--- Dumping structure for table procurement_management_system.privillege
-CREATE TABLE IF NOT EXISTS `privillege` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `value` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- Data exporting was unselected.
-
 -- Dumping structure for table procurement_management_system.user
 CREATE TABLE IF NOT EXISTS `user` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `userName` varchar(100) NOT NULL DEFAULT '0',
   `userPass` varchar(100) NOT NULL DEFAULT '0',
-  `privilege_id` int(11) DEFAULT 2,
+  `Fname` varchar(100) DEFAULT NULL,
+  `Lname` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(100) DEFAULT NULL,
+  `role` enum('admin','member') DEFAULT 'member',
   PRIMARY KEY (`userId`),
-  KEY `FK1_privillege_id` (`privilege_id`),
-  CONSTRAINT `FK1_privillege_id` FOREIGN KEY (`privilege_id`) REFERENCES `privillege` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  UNIQUE KEY `userName` (`userName`,`Fname`),
+  UNIQUE KEY `Lname` (`Lname`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `phone` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Data exporting was unselected.
 
