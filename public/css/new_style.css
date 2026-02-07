@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kanit', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #c5fbee;
+}
+
+.form-register {
+    width:500px;
+    background: #ffffff;
+    color: #0d7d6f;
+    border-radius: 20px;
+    border: solid 2px #4dd0c1;
+    box-shadow: 0 4px 6px rgba(77, 208, 193, 0.1);
+}
+
+.form-register h1{
+    text-align: center;
+    font-size: 36px;
+    color: #000000;
+}
+
+.form-register .input-box {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: solid 2px #a8e6cf;
+    display: block;
+    margin: 0 auto;
+    background-color: #f0fdf4;
+    color: #064e3b;
+}
+
+.form-register .form-group {
+    margin: 30px;
+}
+
+.form-group .text-label {
+    font-size: 16px;
+    margin: 0;
+}
+
+.confirm-btn{
+    width: 40%;
+    font-size: 16px;
+    display: block;
+    padding: 13px;
+    margin: 0px auto;
+    margin-bottom: 20px;
+    background: #10b981;
+    color: #ffffff;
+    border-radius: 20px;
+    border: solid 2px #0d7d6f;
+    cursor: pointer;
+}
+
+.login-link{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #065f46;
+}
+
+.login-link a {
+    color: #10b981;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    color: #0d7d6f;
+    text-decoration: underline;
+}
