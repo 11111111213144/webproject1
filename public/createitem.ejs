@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
+
 </head>
 
 <body>
@@ -23,7 +29,7 @@
     <main>
         <h1>เพิ่มรายการวัสดุ</h1>
         <div class="form-box">
-            <form action="/dash_board_test/createitem" method="post">
+            <form action="/createitem" method="post">
 
                 <label for="item_name">ชื่อวัสดุ :</label>
                 <input type="text" id="item_name" name="item_name"><br><br>

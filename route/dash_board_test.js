@@ -157,18 +157,6 @@ router.get('/po_detail_test/:po_Id', (req, res) => {
     });
 });
 
-// router.post('/createitem', (req, res) => {
-//     const { item_name, item_type, unit, unit_price, remain, Company_shop } = req.body;
-//     const sql = 'INSERT INTO inventory (item_name, item_type, unit, unit_price, remain, Company_shop) VALUES (?, ?, ?, ?, ?, ?)';
-//     pool.query(sql, [item_name, item_type, unit, unit_price, remain, Company_shop], (err, result) => {
-//         if (err) {
-//             console.log(err);
-//             return res.redirect('/createitem');
-//         }
-//         res.redirect('/dash_board_test');
-//     });
-// });
-
 router.post('/create_item', (req, res) => {
     const { item_name, item_type, unit, unit_price, remain, Company_shop } = req.body;
 

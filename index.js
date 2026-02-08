@@ -19,8 +19,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 const memberRouter = require('./route/member');
 app.use('/member', memberRouter);
 
+
 const dash_board_testRouter = require('./route/dash_board_test');
 app.use('/dash_board_test', dash_board_testRouter);
+
+const bthRouter = require('./route/bth');
+app.use('/', bthRouter);
+
 
 app.set('views', `${__dirname}/public`);
 app.set('view engine', 'ejs');
@@ -50,17 +55,6 @@ app.get('/createplan', (req, res) => {
 app.get('/makeplan', (req, res) => {
   res.render('makeplan');
 });
-
-
-app.get('/inventory', (req, res) => {
-  res.render('inventory');
-});
-
-app.get('/createitem', (req, res) => {
-  res.render('createitem');
-});
-
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
