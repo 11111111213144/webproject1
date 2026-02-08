@@ -1,142 +1,14 @@
 <!DOCTYPE html>
-<html lang="th">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบการจัดซื้อจัดจ้าง</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/delbtn.css">
-</head>
-
+    <title>Document</title>
+    
+</head> 
 <body>
-
-    <nav class="navbar navbar-expand-lg bg-custom-mint">
-        <div class="container-fluid">
-            <a class="navbar-brand ps-3" href="/homepage">home</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-
-                <ul class="navbar-nav mx-auto center-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/checkorder">ตรวจสอบรายการ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/createplan">ทำแผนจัดซื้อ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/makeplan">ทำใบสั่งซื้อ</a>
-                    </li>
-                </ul>
-
-                <ul class="navbar-nav">
-                    <li class="nav-item pe-3">
-                        <a class="nav-link bth-logout" href="/login">ออกจากระบบ</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container text-left">
-        <h1 class="welcome-text">ใบสั่งซื้อ</h1>
-    </div>
-
-    <div class="container mb-3">
-        <div class="row flex-column flex-lg-row">
-            <div class="col-12 col-lg-auto mb-2 mb-lg-0">
-                <button type="button" id="dropdownYearBtn" class="btn-setting btn-primary dropdown-toggle w-100 w-lg-auto" data-bs-toggle="dropdown">เลือกปี</button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" onclick="filterYear('2568')">2568</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterYear('2567')">2567</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterYear('2566')">2566</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterYear('all')">ดูทั้งหมด</a></li>
-                </ul>
-            </div>
-            <div class="col-12 col-lg-auto ms-lg-auto">
-                <div class="d-flex flex-column flex-lg-row gap-2 justify-content-end">
-
-                    <div id="default-buttons" class="d-flex gap-2">
-                        <button type="button" class="btn-setting btn-primary" onclick="openAddModal()">เพิ่มรายการ</button>
-                        <button type="button" class="btn-setting btn-primary" onclick="toggleDeleteMode(true)">ลบรายการ</button>
-                    </div>
-
-                    <div id="delete-buttons" class="d-none align-items-center gap-2">
-                        <span class="me-2" id="selected-count">เลือก 0 รายการ</span>
-                        <button type="button" class="btn-setting" onclick="toggleDeleteMode(false)">ยกเลิก</button>
-                        <button type="button" class="btn-setting" onclick="confirmDelete()">ยืนยันการลบ</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container text-center mb-5">
-        <table class="table table-striped table-hover">
-            <thead class="table-white">
-                <tr>
-                    <th scope="col" class="checkbox-col">
-                        <input type="checkbox" class="form-check-input" onchange="toggleAll(this)">
-                    </th>
-                    <th scope="col">ลำดับ</th>
-                    <th scope="col">หมายเลขใบสั่งซื้อ</th>
-                    <th scope="col">วันที่</th>
-                    <th scope="col">เดือน</th>
-                    <th scope="col">ปี</th> <th scope="col">สถานะ</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody id="materialTableBody">
-                <tr>
-                    <td class="checkbox-col">
-                        <input type="checkbox" class="delete-checkbox form-check-input">
-                    </td>
-                    <th scope="row">1</th>
-                    <td>0001</td>
-                    <td>15</td>
-                    <td>มิถุนายน</td>
-                    <td>2566</td> <td>รอดำเนินการ</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(0)">รายละเอียด</button></td>
-                </tr>
-                <tr>
-                    <td class="checkbox-col">
-                        <input type="checkbox" class="delete-checkbox form-check-input">
-                    </td>
-                    <th scope="row">2</th>
-                    <td>0002</td>
-                    <td>20</td>
-                    <td>มิถุนายน</td>
-                    <td>2567</td> <td>ดำเนินการแล้ว</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(1)">รายละเอียด</button></td>
-                </tr>
-                <tr>
-                    <td class="checkbox-col">
-                        <input type="checkbox" class="delete-checkbox form-check-input">
-                    </td>
-                    <th scope="row">3</th>
-                    <td>0003</td>
-                    <td>25</td>
-                    <td>มิถุนายน</td>
-                    <td>2568</td> <td>ล่าช้า</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(2)">รายละเอียด</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <script src="../javaSC/makeplan.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../javaSC/deletebtn.js"></script>
-
+    <haeder>
+        <%- include('navbar.ejs') %>
+    </haeder>
 </body>
 </html>
