@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/new_style.css">
+</head>
+
+<body>
+    <header>
+        <%- include('navbar.ejs') %>
+    </header>
+
+    <main>
+        <h1>เพิ่มแผนจัดซื้อ</h1>
+
+        <form action="">
+
+            <label for="itemname">ชื่อแผนงาน :</label>
+            <input type="text" name="itemname"><br><br>
+
+            <label for="type">ประเภท :</label>
+            <select name="type">
+                <option>วัสดุ</option>
+                <option>ครุภัณฑ์</option>
+                <option>เวชภัณฑ์</option>
+            </select>
+            <br><br>
+
+            <label for="date" min="today">วันที่ :</label>
+            <input type="date" name="date">
+            <br><br>
+
+            <label for="item-serch">เลือกรายการพัสดุ</label>
+            <input type="search" name="item-serch">
+
+            <label for="amount">เลือกจำนวนรายการพัสดุ</label>
+            <input name="amount" id="">
+
+            <button type="submit" class="submit-btn">บันทึก</button>
+            <button type="submit" class="submit-btn">ลบรายการ</button>
+            
+        </form>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>รหัสแผนงาน</th>
+                    <th>ชื่อแผนงาน</th>
+                    <th>วันที่</th>
+                    <th>ประเภท</th>
+                    <th>สถานะ</th>
+                    <th>ดูรายระเอียด</th>
+                    <th><input type="checkbox" class="checkbox"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <th>sdfsadf</th>
+            </tbody>
+        </table>
+
+    </main>
+</body>
+
+</html>
