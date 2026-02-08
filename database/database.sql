@@ -15,176 +15,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
--- Dumping database structure for information_schema
-
 -- Dumping database structure for procurement_management_system
 CREATE DATABASE IF NOT EXISTS `procurement_management_system` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
 USE `procurement_management_system`;
@@ -199,13 +29,14 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `unit_price` decimal(10,2) DEFAULT NULL,
   `Company_shop` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`item_Id`),
+  UNIQUE KEY `item_Id` (`item_Id`),
   UNIQUE KEY `item_name` (`item_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.inventory: ~10 rows (approximately)
+-- Dumping data for table procurement_management_system.inventory: ~11 rows (approximately)
 DELETE FROM `inventory`;
 INSERT INTO `inventory` (`item_Id`, `item_type`, `item_name`, `unit`, `remain`, `unit_price`, `Company_shop`) VALUES
-	(1, 'วัสดุสำนักงาน', 'กระดาษ A4 Double A (รีม)', 'รีม', 500, 125.00, 'Office Mate'),
+	(1, 'วัสดุ', 'กระดาษ A4 Double A (รีม)', 'รีม', 500, 100.00, 'Office Mate'),
 	(2, 'วัสดุสำนักงาน', 'ปากกาลูกลื่นสีน้ำเงิน (ด้าม)', 'ด้าม', 200, 12.00, 'ร้านสมใจ'),
 	(3, 'วัสดุสำนักงาน', 'แฟ้มเจาะกระดาษ (เล่ม)', 'เล่ม', 100, 45.00, 'Office Mate'),
 	(4, 'วัสดุสำนักงาน', 'คลิปหนีบกระดาษดำ (กล่อง)', 'กล่อง', 300, 25.00, 'B2S'),
@@ -214,7 +45,8 @@ INSERT INTO `inventory` (`item_Id`, `item_type`, `item_name`, `unit`, `remain`, 
 	(7, 'วัสดุคอมพิวเตอร์', 'หมึกพิมพ์ HP 680 (ตลับ)', 'ตลับ', 20, 590.00, 'IT City'),
 	(8, 'ครุภัณฑ์', 'เก้าอี้สำนักงานมีล้อ', 'ตัว', 10, 2500.00, 'Index Living Mall'),
 	(9, 'วัสดุทำความสะอาด', 'น้ำยาถูพื้น (แกลลอน)', 'แกลลอน', 40, 180.00, 'Big C'),
-	(10, 'วัสดุทำความสะอาด', 'กระดาษทิชชู่ม้วนใหญ่ (แพ็ค)', 'แพ็ค', 100, 150.00, 'Makro');
+	(10, 'วัสดุทำความสะอาด', 'กระดาษทิชชู่ม้วนใหญ่ (แพ็ค)', 'แพ็ค', 100, 150.00, 'Makro'),
+	(17, 'เวชภัณฑ์', 'ยาบ้า', 'เม็ด', 7, 100.00, 'Thepeekai78');
 
 -- Dumping structure for table procurement_management_system.plan_detail
 CREATE TABLE IF NOT EXISTS `plan_detail` (
@@ -262,22 +94,68 @@ CREATE TABLE IF NOT EXISTS `plan_header` (
   `plan_name` varchar(100) DEFAULT NULL,
   `plan_date` date DEFAULT NULL,
   `plan_status` varchar(50) DEFAULT 'รออนุมัติ',
+  `item_plan` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`plan_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.plan_header: ~10 rows (approximately)
+-- Dumping data for table procurement_management_system.plan_header: ~15 rows (approximately)
 DELETE FROM `plan_header`;
-INSERT INTO `plan_header` (`plan_Id`, `plan_name`, `plan_date`, `plan_status`) VALUES
-	(1, 'แผนจัดซื้อประจำเดือน มกราคม', '2024-01-05', 'อนุมัติแล้ว'),
-	(2, 'แผนจัดซื้อประจำเดือน กุมภาพันธ์', '2024-02-01', 'อนุมัติแล้ว'),
-	(3, 'แผนจัดซื้อด่วน (อุปกรณ์คอมพิวเตอร์)', '2024-02-10', 'อนุมัติแล้ว'),
-	(4, 'แผนจัดซื้อประจำเดือน มีนาคม', '2024-03-01', 'รออนุมัติ'),
-	(5, 'แผนซ่อมบำรุงสำนักงาน', '2024-03-15', 'รอตรวจสอบ'),
-	(6, 'แผนจัดซื้อครุภัณฑ์ประจำปี', '2024-01-15', 'ไม่อนุมัติ'),
-	(7, 'แผนจัดซื้อวัสดุสิ้นเปลือง Q1', '2024-01-20', 'อนุมัติแล้ว'),
-	(8, 'แผนเตรียมงานสัมมนา', '2024-04-01', 'ร่างแผน'),
-	(9, 'แผนจัดซื้อประจำเดือน เมษายน', '2024-04-05', 'ร่างแผน'),
-	(10, 'แผนฉุกเฉิน (น้ำยาทำความสะอาด)', '2024-04-10', 'รออนุมัติ');
+INSERT INTO `plan_header` (`plan_Id`, `plan_name`, `plan_date`, `plan_status`, `item_plan`) VALUES
+	(1, 'แผนจัดซื้อประจำเดือน มกราคม', '2024-01-05', 'ไม่อนุมัติ', NULL),
+	(2, 'แผนจัดซื้อประจำเดือน กุมภาพันธ์', '2024-02-01', 'อนุมัติแล้ว', NULL),
+	(3, 'แผนจัดซื้อด่วน (อุปกรณ์คอมพิวเตอร์)', '2024-02-10', 'อนุมัติแล้ว', NULL),
+	(4, 'แผนจัดซื้อประจำเดือน มีนาคม', '2024-03-01', 'รออนุมัติ', NULL),
+	(5, 'แผนซ่อมบำรุงสำนักงาน', '2024-03-15', 'อนุมัติ', NULL),
+	(6, 'แผนจัดซื้อครุภัณฑ์ประจำปี', '2024-01-15', 'ไม่อนุมัติ', NULL),
+	(7, 'แผนจัดซื้อวัสดุสิ้นเปลือง Q1', '2024-01-20', 'อนุมัติแล้ว', NULL),
+	(8, 'แผนเตรียมงานสัมมนา', '2024-04-01', 'ร่างแผน', NULL),
+	(9, 'แผนจัดซื้อประจำเดือน เมษายน', '2024-04-05', 'ร่างแผน', NULL),
+	(10, 'แผนฉุกเฉิน (น้ำยาทำความสะอาด)', '2024-04-10', 'รออนุมัติ', NULL),
+	(11, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
+	(12, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
+	(13, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-10', 'รออนุมัติ', NULL),
+	(14, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
+	(17, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-04', 'รออนุมัติ', 'วัสดุ');
+
+-- Dumping structure for table procurement_management_system.po_detail
+CREATE TABLE IF NOT EXISTS `po_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `po_Id` int(11) NOT NULL,
+  `item_Id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `agreed_price` decimal(10,2) DEFAULT NULL,
+  `ref_plan_detail_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `po_Id` (`po_Id`),
+  KEY `item_Id` (`item_Id`),
+  CONSTRAINT `1` FOREIGN KEY (`po_Id`) REFERENCES `po_header` (`po_Id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`item_Id`) REFERENCES `inventory` (`item_Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Dumping data for table procurement_management_system.po_detail: ~3 rows (approximately)
+DELETE FROM `po_detail`;
+INSERT INTO `po_detail` (`id`, `po_Id`, `item_Id`, `quantity`, `agreed_price`, `ref_plan_detail_id`) VALUES
+	(1, 1, 1, 50, 120.00, 1),
+	(2, 1, 3, 20, 45.00, 3),
+	(3, 2, 2, 100, 10.00, 2);
+
+-- Dumping structure for table procurement_management_system.po_header
+CREATE TABLE IF NOT EXISTS `po_header` (
+  `po_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `po_number` varchar(50) NOT NULL,
+  `po_date` date NOT NULL,
+  `supplier_name` varchar(100) NOT NULL,
+  `po_status` varchar(50) DEFAULT 'รอส่งใบสั่งซื้อ',
+  PRIMARY KEY (`po_Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Dumping data for table procurement_management_system.po_header: ~4 rows (approximately)
+DELETE FROM `po_header`;
+INSERT INTO `po_header` (`po_Id`, `po_number`, `po_date`, `supplier_name`, `po_status`) VALUES
+	(1, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอรับของ'),
+	(2, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว'),
+	(3, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอรับของ'),
+	(4, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว');
 
 -- Dumping structure for table procurement_management_system.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -296,13 +174,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.user: ~4 rows (approximately)
+-- Dumping data for table procurement_management_system.user: ~3 rows (approximately)
 DELETE FROM `user`;
 INSERT INTO `user` (`userId`, `userName`, `userPass`, `Fname`, `Lname`, `email`, `phone`, `role`) VALUES
-	(1, 'jon', '1234', 'Somluck', 'Jaiyai', 'Kfso@gmail.com', '0864317996', 'member'),
+	(1, '่joe', '1234', 'สฟเเ', 'ฟฟดฟห', 'ovengoodgame@gmail.com', '08646411', 'member'),
 	(2, 'joe2', '1234', 'Suwannapom', 'Jailek', '1234@gmail.com ', '000000000', 'admin'),
-	(17, 'jon', '$2b$12$lCzgBtMcGKPZpnwvpYQequmZTLhUNEbSOP3Qltq.nr8KCnmoIXfAu', 'ศุภากิต ', 'จอมพลัง', 'wachirapatboonmee@gmail.com', '12355', 'member'),
-	(20, 'Thepeekai', '$2b$12$vgG1huEmjwpR3zJ/kVvwkec6LgAWpbTp3l64eNaJ9r9FbtlEit9K.', 'ศุภากิต ', 'กันจอมพลัง', '0864317996@dqwewqw', '123456', 'member');
+	(17, 'jon', '$2b$12$lCzgBtMcGKPZpnwvpYQequmZTLhUNEbSOP3Qltq.nr8KCnmoIXfAu', 'ศุภากิต ', 'จอมพลัง', 'wachirapatboonmee@gmail.com', '12355', 'member');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
