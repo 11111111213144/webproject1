@@ -7,7 +7,7 @@
     font-family: 'Kanit', sans-serif;
 }
 
-body {
+body.auth-page {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,4 +78,108 @@ body {
 .login-link a:hover {
     color: #0d7d6f;
     text-decoration: underline;
+}
+
+/* NAVBAR CSS */
+body{
+    margin: 0px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kanit', sans-serif;
+    background-color: #f0fdf4;
+}
+
+.navbar{
+    background-color: #a8e6cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.navbar ul{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.navbar a{
+    text-decoration: none;
+    padding: 15px 20px;
+    display: block;
+    color: rgb(0, 0, 0);
+}
+
+.navbar a:hover{
+    background-color: #000000;
+}
+
+
+/* item page */
+.filter-box {
+    display: flex;
+    justify-content: bet;
+    align-items: center;
+    background-color: #a8e6cf;
+    padding: 15px;
+    border-radius: 5px 5px 0 0;
+    gap: 10px;
+}
+
+.filter-box label {
+    display: grid;
+    align-items: center;
+    gap: 8px;
+    color: #000000;
+}
+
+.filter-box input {
+    padding: 8px 12px;
+    border: 1px solid #50cf89;
+    border-radius: 4px;
+}
+
+.checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.table-box {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+}
+
+.table-box thead tr{
+    background-color: #50cf89;
+    color: #000000;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: #000000 2px solid;
+}
+
+.table-box th, .table-box td {
+    padding: 12px 15px;
+}
+
+.table-box tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.table-box tbody tr:nth-of-type(odd) {
+    background-color: #f3f3f3;
+}
+
+.table-box tbody tr:last-of-type {
+    border-bottom: 2px solid #50cf89;
+}
+
+main{
+    display: grid;
+    padding: 50px;
 }
