@@ -19,6 +19,11 @@
             margin-top: 50px;
         }
     </style>
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
 </head>
 
 <body>

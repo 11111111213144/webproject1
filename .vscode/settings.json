@@ -1,9 +1,9 @@
 {
     "files.associations": {
-        "*.ejs": "ejs"
+        "*.ejs": "html"
     },
     "emmet.includeLanguages": {
-        "ejs": "ejs"
+        "ejs": "html"
     },
     "javascript.validate.enable": true,
     "js/ts.implicitProjectConfig.checkJs": false

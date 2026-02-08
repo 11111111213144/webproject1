@@ -53,12 +53,16 @@
     <div class="container mb-3">
         <div class="row flex-column flex-lg-row">
             <div class="col-12 col-lg-auto mb-2 mb-lg-0">
-                <button type="button" id="dropdownYearBtn" class="btn-setting btn-primary dropdown-toggle w-100 w-lg-auto" data-bs-toggle="dropdown">เลือกปี</button>
+                <button type="button" id="dropdownYearBtn"
+                    class="btn-setting btn-primary dropdown-toggle w-100 w-lg-auto"
+                    data-bs-toggle="dropdown">เลือกปี</button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" onclick="filterYear('2568')">2568</a></li>
                     <li><a class="dropdown-item" href="#" onclick="filterYear('2567')">2567</a></li>
                     <li><a class="dropdown-item" href="#" onclick="filterYear('2566')">2566</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
                     <li><a class="dropdown-item" href="#" onclick="filterYear('all')">ดูทั้งหมด</a></li>
                 </ul>
             </div>
@@ -66,8 +70,10 @@
                 <div class="d-flex flex-column flex-lg-row gap-2 justify-content-end">
 
                     <div id="default-buttons" class="d-flex gap-2">
-                        <button type="button" class="btn-setting btn-primary" onclick="openAddModal()">เพิ่มรายการ</button>
-                        <button type="button" class="btn-setting btn-primary" onclick="toggleDeleteMode(true)">ลบรายการ</button>
+                        <button type="button" class="btn-setting btn-primary"
+                            onclick="openAddModal()">เพิ่มรายการ</button>
+                        <button type="button" class="btn-setting btn-primary"
+                            onclick="toggleDeleteMode(true)">ลบรายการ</button>
                     </div>
 
                     <div id="delete-buttons" class="d-none align-items-center gap-2">
@@ -92,7 +98,8 @@
                     <th scope="col">หมายเลขใบสั่งซื้อ</th>
                     <th scope="col">วันที่</th>
                     <th scope="col">เดือน</th>
-                    <th scope="col">ปี</th> <th scope="col">สถานะ</th>
+                    <th scope="col">ปี</th>
+                    <th scope="col">สถานะ</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -105,8 +112,10 @@
                     <td>0001</td>
                     <td>15</td>
                     <td>มิถุนายน</td>
-                    <td>2566</td> <td>รอดำเนินการ</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(0)">รายละเอียด</button></td>
+                    <td>2566</td>
+                    <td>รอดำเนินการ</td>
+                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                            onclick="showDetails(0)">รายละเอียด</button></td>
                 </tr>
                 <tr>
                     <td class="checkbox-col">
@@ -116,8 +125,10 @@
                     <td>0002</td>
                     <td>20</td>
                     <td>มิถุนายน</td>
-                    <td>2567</td> <td>ดำเนินการแล้ว</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(1)">รายละเอียด</button></td>
+                    <td>2567</td>
+                    <td>ดำเนินการแล้ว</td>
+                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                            onclick="showDetails(1)">รายละเอียด</button></td>
                 </tr>
                 <tr>
                     <td class="checkbox-col">
@@ -127,8 +138,10 @@
                     <td>0003</td>
                     <td>25</td>
                     <td>มิถุนายน</td>
-                    <td>2568</td> <td>ล่าช้า</td>
-                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="showDetails(2)">รายละเอียด</button></td>
+                    <td>2568</td>
+                    <td>ล่าช้า</td>
+                    <td><button type="button" class="btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                            onclick="showDetails(2)">รายละเอียด</button></td>
                 </tr>
             </tbody>
         </table>
@@ -139,4 +152,5 @@
     <script src="../javaSC/deletebtn.js"></script>
 
 </body>
+
 </html>

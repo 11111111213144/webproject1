@@ -60,54 +60,7 @@ app.get('/createitem', (req, res) => {
   res.render('createitem');
 });
 
-<<<<<<< HEAD
-app.get('/dash_board_test', (req, res) => {
-  res.redirect('/dash_board_test');
-=======
-app.get('/checkorder', (req, res) => {
-  res.render('inventory');
-});
 
-app.get('/create_plan', (req, res) => {
-  res.render('create_plan');
-});
-
-app.get('/dash_board', (req, res) => {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.redirect('/login?msg=Please login first');
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.secret);
-    const username = decoded.username;
-
-    pool.query('SELECT role FROM user WHERE userName = ?', [username], (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.redirect('/homepage');
-      }
-
-      if (results.length > 0 && results[0].role === 'admin') {
-        // User is admin, fetch all users for dashboard
-        pool.query('SELECT * FROM user', (err, allUsers) => {
-          if (err) throw err;
-          res.render('dash_board_test', { user: allUsers });
-        });
-      } else {
-        // User is not admin
-        console.log('Access denied: User is not admin');
-        res.redirect('/homepage?msg=Access Denied');
-      }
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.redirect('/login');
-  }
->>>>>>> b37290a71df5d036e5db50de3d38398db5f87384
-});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

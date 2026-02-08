@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียด PO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4 text-center">รายละเอียด PO</h1>
+        <div class="card">
+            <div class="card-body">
+                <% if (poDetail.length> 0) { %>
+                    <h3>PO: <%= poDetail[0].po_id %>
+                    </h3>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-white">
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>รหัสสั่งซื้อ</th>
+                                <th>บริษัท/ร้านค้า</th>
+                                <th>วันที่สั่งซื้อ</th>
+                                <th>รายการสินค้า</th>
+                                <th>จำนวน</th>
+                                <th>หน่วยนับ</th>
+                                <th>ราคาต่อหน่วย</th>
+                                <th>ราคารวม</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% poDetail.forEach((poDetail, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.po_number %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.supplier_name %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.po_date %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.item_name %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.quantity %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.unit %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.unit_price %>
+                                    </td>
+                                    <td>
+                                        <%= poDetail.total_price %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <div class="alert alert-warning text-center">ไม่พบข้อมูลรายละเอียดของ PO นี้</div>
+                        <% } %>
+                            <div class="text-center mt-4">
+                                <a href="/dash_board_test" class="btn btn-secondary">กลับหน้า Dashboard</a>
+                            </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
