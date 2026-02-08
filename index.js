@@ -19,6 +19,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 const memberRouter = require('./route/member');
 app.use('/member', memberRouter);
 
+const dash_board_testRouter = require('./route/dash_board_test');
+app.use('/dash_board_test', dash_board_testRouter);
+
 app.set('views', `${__dirname}/public`);
 app.set('view engine', 'ejs');
 
@@ -36,8 +39,8 @@ app.get('/homepage', (req, res) => {
   res.render('homepage');
 });
 
-app.get('/inventory', (req, res) => {
-  res.render('inventory');
+app.get('/checkorder', (req, res) => {
+  res.render('checkorder');
 });
 
 app.get('/createplan', (req, res) => {
@@ -48,48 +51,17 @@ app.get('/makeplan', (req, res) => {
   res.render('makeplan');
 });
 
+
+app.get('/inventory', (req, res) => {
+  res.render('inventory');
+});
+
 app.get('/createitem', (req, res) => {
   res.render('createitem');
 });
 
-app.get('/checkorder', (req, res) => {
-  res.render('inventory');
-});
-
-app.get('/dash_board', (req, res) => {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.redirect('/login?msg=Please login first');
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.secret);
-    const username = decoded.username;
-
-    pool.query('SELECT role FROM user WHERE userName = ?', [username], (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.redirect('/homepage');
-      }
-
-      if (results.length > 0 && results[0].role === 'admin') {
-        // User is admin, fetch all users for dashboard
-        pool.query('SELECT * FROM user', (err, allUsers) => {
-          if (err) throw err;
-          res.render('dash_board_test', { user: allUsers });
-        });
-      } else {
-        // User is not admin
-        console.log('Access denied: User is not admin');
-        res.redirect('/homepage?msg=Access Denied');
-      }
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.redirect('/login');
-  }
+app.get('/dash_board_test', (req, res) => {
+  res.redirect('/dash_board_test');
 });
 
 app.listen(port, () => {
