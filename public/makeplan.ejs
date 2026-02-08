@@ -4,11 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+    <link rel="stylesheet" href="css/new_style.css">
 </head> 
 <body>
     <haeder>
         <%- include('navbar.ejs') %>
     </haeder>
+    <main>
+        <h1>ใบสั่งซื้อ</h1>
+
+        <div class="filter-box">
+            <select class="add-btn name=" type">
+                <option>วัสดุ</option>
+                <option>ครุภัณฑ์</option>
+                <option>เวชภัณฑ์</option>
+            </select>
+            <button type="submit" class="add-btn"><a href="po_add">เพิ่มรายการ</a></button>
+            <button type="submit" class="add-btn">ลบรายการ</button>
+
+        </div>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>เลขใบสั่งซื้อ</th>
+                    <th>วันที่</th>
+                    <th>บริษัท/ร้านค้า</th>
+                    <th>สถานะ</th>
+                    <th><input type="checkbox" class="checkbox"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td><span class="material-symbols-outlined">edit</span></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td>Lorem, ipsum.</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
 </body>
 </html>

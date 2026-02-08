@@ -149,6 +149,8 @@ body{
     margin: 0 auto;
 }
 
+/* table  */
+
 .table-box {
     border-collapse: collapse;
     font-size: 0.9em;
@@ -170,6 +172,7 @@ body{
 
 .table-box tbody tr {
     border-bottom: 1px solid #dddddd;
+    text-align: center;
 }
 
 .table-box tbody tr:nth-of-type(odd) {
