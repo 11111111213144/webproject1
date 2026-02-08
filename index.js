@@ -56,6 +56,10 @@ app.get('/checkorder', (req, res) => {
   res.render('inventory');
 });
 
+app.get('/create_plan', (req, res) => {
+  res.render('create_plan');
+});
+
 app.get('/dash_board', (req, res) => {
   const token = req.cookies.token;
 
