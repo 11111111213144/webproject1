@@ -16,15 +16,7 @@
 
 <body>
     <header>
-        <nav class="navbar">
-            <ul>
-                <li><a href="">Lorem, ipsum.</a></li>
-                <li><a href="createplan">Lorem, ipsum.</a></li>
-                <li><a href="makeplan">Lorem, ipsum.</a></li>
-                <li><a href="">Lorem, ipsum.</a></li>
-                <li><a href="member/logout">Lorem, ipsum.</a></li>
-            </ul>
-        </nav>
+        <%- include('navbar.ejs') %>
     </header>
     <main>
         <h1>เพิ่มรายการวัสดุ</h1>
@@ -33,6 +25,7 @@
 
                 <label for="item_name">ชื่อวัสดุ :</label>
                 <input type="text" id="item_name" name="item_name"><br><br>
+                
                 <label for="item_type">ประเภท :</label>
                 <input type="text" id="item_type" name="item_type"><br><br>
 

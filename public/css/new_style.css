@@ -193,3 +193,17 @@ main{
     display: grid;
     padding: 50px;
 }
+
+
+/* btn */
+.edit-btn{
+
+
+}
+
+/* edit-item Page*/
+.item-edit-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>แก้ไขข้อมูลสินค้า</title>
+    <link rel="stylesheet" href="css/new_style.css">
+
+</head>
+
+<body>
+    <header>
+        <%- include('navbar.ejs') %>
+    </header>
+    <main class="item-edit-container">
+        <div class="form-box edit-box">
+            <form action="/dash_board_test/createitem" method="post">
+
+                <label for="item_name">ชื่อวัสดุ :</label>
+                <input type="text" id="item_name" name="item_name"><br><br>
+
+                <select class="add-btn name=" type">
+                    <option>วัสดุ</option>
+                    <option>ครุภัณฑ์</option>
+                    <option>เวชภัณฑ์</option>
+                </select>
+
+                <label for="unit_price">ราคา :</label>
+                <input type="text" id="unit_price" name="unit_price"><br><br>
+
+                <label for="unit">หน่วยนับ :</label>
+                <input type="text" id="unit" name="unit"><br><br>
+
+                <label for="remain">จำนวนคงเหลือ :</label>
+                <input type="text" id="remain" name="remain"><br><br>
+
+                <label for="Company_shop">บริษัท/ร้านค้า :</label>
+                <input type="text" id="Company_shop" name="Company_shop"><br><br>
+
+                <button type="submit" class="submit-btn">บันทึก</button>
+                
+            </form>
+        </div>
+        <footer >
+            <button type="submit" class="submit-btn">ย้อนกลับ</button>
+        </footer>
+    </main>
+</body>
+
+</html>
