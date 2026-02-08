@@ -36,8 +36,8 @@ app.get('/homepage', (req, res) => {
   res.render('homepage');
 });
 
-app.get('/checkorder', (req, res) => {
-  res.render('checkorder');
+app.get('/inventory', (req, res) => {
+  res.render('inventory');
 });
 
 app.get('/createplan', (req, res) => {
@@ -46,6 +46,14 @@ app.get('/createplan', (req, res) => {
 
 app.get('/makeplan', (req, res) => {
   res.render('makeplan');
+});
+
+app.get('/createitem', (req, res) => {
+  res.render('createitem');
+});
+
+app.get('/checkorder', (req, res) => {
+  res.render('inventory');
 });
 
 app.get('/dash_board', (req, res) => {

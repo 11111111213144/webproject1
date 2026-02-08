@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<!-- ทดสอบไม่ใช้ของจริง -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดแผนงาน</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4 text-center">รายละเอียดแผนงาน</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <% if (planDetail.length> 0) { %>
+                    <h3 class="card-title">แผนงาน: <%= planDetail[0].plan_name %>
+                    </h3>
+                    <hr>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>รายการสินค้า</th>
+                                <th>จำนวน</th>
+                                <th>หน่วยนับ</th>
+                                <th>ราคาต่อหน่วย</th>
+                                <th>ราคารวม</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% planDetail.forEach((item, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= item.item_name %>
+                                    </td>
+                                    <td>
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit_price.toLocaleString() %>
+                                    </td>
+                                    <td>
+                                        <%= item.total_price.toLocaleString() %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <div class="alert alert-warning text-center">ไม่พบข้อมูลรายละเอียดของแผนงานนี้</div>
+                        <% } %>
+
+                            <div class="text-center mt-4">
+                                <a href="/dash_board_test" class="btn btn-secondary">กลับหน้า Dashboard</a>
+                            </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
