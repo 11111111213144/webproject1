@@ -112,3 +112,11 @@ app.get('/dash_board', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+app.get('/po_add', (req, res) => {
+  res.render('create_plan');
+});
+
+app.get('/plan_detail', (req, res) => {
+  res.render('plan_detail');
+});
