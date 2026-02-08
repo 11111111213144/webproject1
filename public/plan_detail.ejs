@@ -14,9 +14,12 @@
     </header>
 
     <main>
-        <h1>เพิ่มใบสั่งซื้อ</h1>
+        <h1>เพิ่มแผนจัดซื้อ</h1>
 
         <form action="">
+
+            <label for="itemname">ชื่อแผนงาน :</label>
+            <input type="text" name="itemname"><br><br>
 
             <label for="type">ประเภท :</label>
             <select name="type">
@@ -30,25 +33,27 @@
             <input type="date" name="date">
             <br><br>
 
-            <label for="supplier">บริษัท/ร้านค้า :</label>
-            <input type="text" name="supplier" id="supplier" required>
-            <br><br>
+            <label for="item-serch">เลือกรายการพัสดุ</label>
+            <input type="search" name="item-serch">
 
             <label for="amount">เลือกจำนวนรายการพัสดุ</label>
             <input name="amount" id="">
 
             <button type="submit" class="submit-btn">บันทึก</button>
-            <button type="reset" class="submit-btn">ลบรายการ</button>
+            <button type="submit" class="submit-btn">ลบรายการ</button>
+            
         </form>
 
         <table class="table-box">
             <thead>
                 <tr>
                     <th>ลำดับที่</th>
-                    <th>เลขใบสั่งซื้อ</th>
+                    <th>รหัสแผนงาน</th>
+                    <th>ชื่อแผนงาน</th>
                     <th>วันที่</th>
-                    <th>บริษัท/ร้านค้า</th>
+                    <th>ประเภท</th>
                     <th>สถานะ</th>
+                    <th>ดูรายระเอียด</th>
                     <th><input type="checkbox" class="checkbox"></th>
                 </tr>
             </thead>
