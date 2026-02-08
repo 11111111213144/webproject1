@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 * {
@@ -181,4 +181,18 @@ body{
 main{
     display: grid;
     padding: 50px;
+}
+
+
+/* btn */
+.edit-btn{
+
+
+}
+
+/* edit-item Page*/
+.item-edit-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
