@@ -8,6 +8,7 @@ const pool = require('../database/mysqlpool');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser');
+const { isAuthenticated, isAdmin, isMember } = require('./auth');
 
 router.use(cookie());
 
@@ -15,7 +16,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 
-router.get('/makepo', (req, res) => {
+router.get('/makepo', isAuthenticated, (req, res) => {
     pool.query('SELECT * FROM po_header', (err, results) => {
         if (err) {
             console.error(err);
@@ -26,7 +27,7 @@ router.get('/makepo', (req, res) => {
     });
 });
 
-router.post('/deletepo', (req, res) => {
+router.post('/deletepo', isAuthenticated, isMember, (req, res) => {
     const { ids } = req.body;
     if (!Array.isArray(ids) || ids.length === 0) {
         return res.status(400).json({ success: false, message: 'Invalid or empty IDs array' });
@@ -45,7 +46,7 @@ router.post('/deletepo', (req, res) => {
 });
 
 
-router.get('/po_add', (req, res) => {
+router.get('/po_add', isAuthenticated, isMember, (req, res) => {
     pool.query('SELECT * FROM po_header', (err, results) => {
         if (err) {
             console.error(err);
@@ -56,7 +57,7 @@ router.get('/po_add', (req, res) => {
 });
 
 // Add new PO
-router.post('/addpo', (req, res) => {
+router.post('/addpo', isAuthenticated, isMember, (req, res) => {
     const { po_number, supplier_name, po_date } = req.body;
     const sql = 'INSERT INTO po_header (po_number, supplier_name, po_date) VALUES (?, ?, ?)';
     pool.query(sql, [po_number, supplier_name, po_date], (err, result) => {

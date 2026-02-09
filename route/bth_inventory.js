@@ -8,6 +8,7 @@ const pool = require('../database/mysqlpool');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser');
+const { isAuthenticated, isAdmin, isMember } = require('./auth');
 
 router.use(cookie());
 
@@ -15,8 +16,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 
-
-router.get('/inventory', (req, res) => {
+// ทุกคนที่ login ได้เข้าถึง inventory
+router.get('/inventory', isAuthenticated, (req, res) => {
     const msg = req.query.msg || null;
     const type = req.query.type || 'all';
 
@@ -38,12 +39,13 @@ router.get('/inventory', (req, res) => {
 });
 
 
-router.get('/createitem', (req, res) => {
+// ทุกคนที่ login ได้เพิ่มข้อมูล
+router.get('/createitem', isAuthenticated, isMember, (req, res) => {
     const msg = req.query.msg || null;
     res.render('createitem', { msg: msg });
 });
 
-router.post('/createitem', (req, res) => {
+router.post('/createitem', isAuthenticated, isMember, (req, res) => {
     const { item_name, item_type, unit_price, unit, remain, Company_shop } = req.body;
     pool.query('INSERT INTO inventory (item_name, item_type, unit_price, unit, remain, Company_shop) VALUES (?, ?, ?, ?, ?, ?)', [item_name, item_type, unit_price, unit, remain, Company_shop], (err, result) => {
         if (err) {
@@ -57,7 +59,7 @@ router.post('/createitem', (req, res) => {
     });
 });
 
-router.post('/deleteitem', (req, res) => {
+router.post('/deleteitem', isAuthenticated, isMember, (req, res) => {
     const { ids } = req.body;
     if (!ids || ids.length === 0) {
         return res.redirect('/inventory');
@@ -71,7 +73,7 @@ router.post('/deleteitem', (req, res) => {
     });
 });
 
-router.get('/edititem', (req, res) => {
+router.get('/edititem', isAuthenticated, isMember, (req, res) => {
     const msg = req.query.msg || null;
     const item_Id = req.query.item_Id;
     pool.query('SELECT * FROM inventory WHERE item_Id = ?', [item_Id], (err, result) => {
@@ -83,7 +85,7 @@ router.get('/edititem', (req, res) => {
     });
 });
 
-router.post('/edititem', (req, res) => {
+router.post('/edititem', isAuthenticated, isMember, (req, res) => {
     const { item_Id, item_name, item_type, unit_price, unit, remain, Company_shop } = req.body;
     pool.query('UPDATE inventory SET item_name = ?, item_type = ?, unit_price = ?, unit = ?, remain = ?, Company_shop = ? WHERE item_Id = ?', [item_name, item_type, unit_price, unit, remain, Company_shop, item_Id], (err, result) => {
         if (err) {

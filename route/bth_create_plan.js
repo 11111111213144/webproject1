@@ -9,13 +9,14 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser');
 const { url } = require('inspector');
+const { isAuthenticated, isAdmin, isMember } = require('./auth');
 
 router.use(cookie());
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get('/createplan', (req, res) => {
+router.get('/createplan', isAuthenticated, (req, res) => {
     const msg = req.query.msg || null;
     const sqlPlan = `
         SELECT 
@@ -40,7 +41,7 @@ router.get('/createplan', (req, res) => {
     });
 });
 
-router.get('/plan_detail', (req, res) => {
+router.get('/plan_detail', isAuthenticated, (req, res) => {
     const sql = `
         SELECT 
             h.plan_Id,
@@ -64,7 +65,7 @@ router.get('/plan_detail', (req, res) => {
     });
 });
 
-router.post('/addplan', (req, res) => {
+router.post('/addplan', isAuthenticated, isMember, (req, res) => {
     const { plan_name, plan_date, item_plan } = req.body;
     const sql = 'INSERT INTO plan_header (plan_name, plan_date, item_plan) VALUES (?, ?, ?)';
     pool.query(sql, [plan_name, plan_date, item_plan], (err, result) => {
@@ -76,7 +77,7 @@ router.post('/addplan', (req, res) => {
     });
 })
 
-router.post('/deleteplan', (req, res) => {
+router.post('/deleteplan', isAuthenticated, isMember, (req, res) => {
     const { ids } = req.body;
     if (!ids || ids.length === 0) {
         return res.redirect('/createplan');
