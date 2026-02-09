@@ -23,8 +23,11 @@ app.use('/member', memberRouter);
 const dash_board_testRouter = require('./route/dash_board_test');
 app.use('/dash_board_test', dash_board_testRouter);
 
-const bthRouter = require('./route/bth');
-app.use('/', bthRouter);
+const bth_inventoryRouter = require('./route/bth_inventory');
+app.use('/', bth_inventoryRouter);
+
+const bth_create_planRouter = require('./route/bth_create_plan');
+app.use('/', bth_create_planRouter);
 
 
 app.set('views', `${__dirname}/public`);
@@ -48,12 +51,10 @@ app.get('/checkorder', (req, res) => {
   res.render('checkorder');
 });
 
-app.get('/createplan', (req, res) => {
-  res.render('createplan_main');
-});
 
-app.get('/makeplan', (req, res) => {
-  res.render('makeplan');
+
+app.get('/makepo', (req, res) => {
+  res.render('makepo');
 });
 
 app.listen(port, () => {
@@ -64,6 +65,3 @@ app.get('/po_add', (req, res) => {
   res.render('create_plan');
 });
 
-app.get('/plan_detail', (req, res) => {
-  res.render('plan_detail');
-});

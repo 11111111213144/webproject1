@@ -71,5 +71,28 @@ router.post('/deleteitem', (req, res) => {
     });
 });
 
+router.get('/edititem', (req, res) => {
+    const msg = req.query.msg || null;
+    const item_Id = req.query.item_Id;
+    pool.query('SELECT * FROM inventory WHERE item_Id = ?', [item_Id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/inventory');
+        }
+        res.render('item_edits', { inventory: result[0], msg: msg });
+    });
+});
+
+router.post('/edititem', (req, res) => {
+    const { item_Id, item_name, item_type, unit_price, unit, remain, Company_shop } = req.body;
+    pool.query('UPDATE inventory SET item_name = ?, item_type = ?, unit_price = ?, unit = ?, remain = ?, Company_shop = ? WHERE item_Id = ?', [item_name, item_type, unit_price, unit, remain, Company_shop, item_Id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/inventory');
+        }
+        res.redirect('/inventory');
+    });
+});
+
 
 module.exports = router;
