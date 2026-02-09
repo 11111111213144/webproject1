@@ -140,7 +140,3 @@ npm run sync
 ```
 
 ---
-
-## 📝 License
-
-ISC
