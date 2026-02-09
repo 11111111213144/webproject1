@@ -5,6 +5,8 @@
 นาย	สุวรรณภูมิ	อินต๊ะยศ	รหัสนิสิต 67022401
 นาย	วชิรภัทร	บุญมี	รหัสนิสิต 67024931
 
-npm i express ejs nodemon 
-# Start project
+
+# Set-up project
+Download DATABASE 
+npm i 
 npm run dev
