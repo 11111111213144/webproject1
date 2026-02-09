@@ -4,7 +4,7 @@ const router = express.Router();
 
 const bodyParser = require('body-parser');
 const path = require('path')
-const pool = require('../database/mysqlpool');
+const { pool } = require('../database/mysqlpool');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser');
