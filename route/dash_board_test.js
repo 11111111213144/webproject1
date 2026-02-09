@@ -334,4 +334,18 @@ router.post('/deleteitem_po_detail', (req, res) => {
 
 
 
+router.get('/homepage', (req, res) => {
+    const amount_item = "SELECT COUNT(*) AS total FROM inventory";
+    pool.query(amount_item, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/dash_board_test?status=error&msg=' + encodeURIComponent('เกิดข้อผิดพลาดทางระบบ'));
+        }
+        res.render('homepage', {
+            amt_item: result[0].total
+        });
+    });
+});
+
+
 module.exports = router;
