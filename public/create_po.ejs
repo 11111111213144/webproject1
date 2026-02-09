@@ -4,60 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ใบสั่งซื้อ</title>
+    <title>สร้างใบสั่งซื้อ</title>
     <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+        <% } %>
+    </script>
 </head>
 
 <body>
     <header>
         <%- include('navbar.ejs') %>
     </header>
+
     <main>
-        <h1>ใบสั่งซื้อ</h1>
+        <h1>สร้างใบสั่งซื้อ</h1>
+
+        <!-- Form สำหรับสร้าง PO ใหม่ -->
+        <form action="/addpo" method="post">
+
+            <label for="po_number">เลขที่ใบสั่งซื้อ :</label>
+            <input type="text" name="po_number" required value="PO-"><br><br>
+
+            <label for="supplier_name">บริษัท/ร้านค้า :</label>
+            <input type="text" name="supplier_name" required><br><br>
+
+            <label for="po_type">ประเภท :</label>
+            <select name="po_type">
+                <option value="วัสดุ">วัสดุ</option>
+                <option value="ครุภัณฑ์">ครุภัณฑ์</option>
+                <option value="เวชภัณฑ์">เวชภัณฑ์</option>
+            </select>
+            <br><br>
+
+            <label for="po_date">วันที่สั่งซื้อ :</label>
+            <input type="date" name="po_date" required>
+            <br><br>
+
+            <button type="submit" class="submit-btn">บันทึก</button>
+        </form>
+
+        <br>
 
         <div class="filter-box">
-            <input type="text" id="searchPO" class="search-input" placeholder="🔍 ค้นหาเลขใบสั่งซื้อ..."
-                oninput="searchPO()">
-            <button type="button" class="add-btn"><a href="po_add">เพิ่มรายการ</a></button>
-            <button type="button" class="add-btn" onclick="deleteitem()">ลบรายการ</button>
+            <button type="button" class="add-btn" onclick="deleteitem()">ลบรายการที่เลือก</button>
         </div>
 
+        <!-- ตารางแสดงรายการ PO -->
         <table class="table-box">
             <thead>
                 <tr>
                     <th>ลำดับที่</th>
                     <th>เลขใบสั่งซื้อ</th>
                     <th>บริษัท/ร้านค้า</th>
-                    <th>วันที่สั่งซื้อ</th>
+                    <th>วันที่</th>
                     <th>สถานะ</th>
-                    <th></th>
+                    <th>ดูรายละเอียด</th>
                     <th><input type="checkbox" id="selectAll"></th>
                 </tr>
             </thead>
-            <tbody id="poTableBody">
-                <% po.forEach((po, index)=> { %>
-                    <tr data-po-number="<%= po.po_number %>">
+            <tbody>
+                <% po.forEach((item, index)=> { %>
+                    <tr>
                         <td>
                             <%= index + 1 %>
                         </td>
-                        <td class="po-number">
-                            <%= po.po_number %>
+                        <td>
+                            <%= item.po_number %>
                         </td>
                         <td>
-                            <%= po.supplier_name %>
+                            <%= item.supplier_name %>
                         </td>
                         <td>
-                            <%= po.po_date %>
+                            <%= item.po_date %>
                         </td>
                         <td>
-                            <%= po.po_status %>
+                            <%= item.po_status %>
                         </td>
                         <td>
-                            <a href="/dash_board_test/po_detail_test/<%= po.po_Id %>"
+                            <a href="/dash_board_test/po_detail_test/<%= item.po_Id %>"
                                 class="btn btn-primary">ดูรายละเอียด</a>
                         </td>
                         <td>
-                            <input type="checkbox" class="checkbox" value="<%= po.po_Id %>">
+                            <input type="checkbox" class="checkbox" value="<%= item.po_Id %>">
                         </td>
                     </tr>
                     <% }) %>
@@ -65,21 +95,15 @@
         </table>
 
     </main>
-    <script>
-        // Search PO by po_number
-        function searchPO() {
-            const searchValue = document.getElementById('searchPO').value.toLowerCase();
-            const rows = document.querySelectorAll('#poTableBody tr');
 
-            rows.forEach(row => {
-                const poNumber = row.getAttribute('data-po-number').toLowerCase();
-                if (poNumber.includes(searchValue)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+    <script>
+            // Select All checkbox
+            document.getElementById('selectAll').addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
             });
-        }
 
         // Delete selected items
         function deleteitem() {
@@ -95,7 +119,7 @@
                 return;
             }
 
-            fetch('/deletepo', {
+            fetch('/bth_po/deletepo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -116,14 +140,6 @@
                     alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
                 });
         }
-
-        // Select All checkbox
-        document.getElementById('selectAll').addEventListener('change', function () {
-            const checkboxes = document.querySelectorAll('.checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
-            });
-        });
     </script>
 </body>
 

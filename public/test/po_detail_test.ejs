@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
     <script>
         <% if (locals.msg) { %>
             alert("<%= msg %>");
-            <% } %>
+        <% } %>
     </script>
 </head>
 
@@ -29,67 +29,161 @@
         <h1 class="mb-4 text-center">รายละเอียด PO</h1>
         <div class="card">
             <div class="card-body">
-                <% if (poDetail.length> 0) { %>
-                    <h3>PO: <%= poDetail[0].po_id %>
+                <% if (poHeader) { %>
+                    <h3 class="card-title">PO: <%= poHeader.po_number %>
                     </h3>
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-white">
-                            <tr>
-                                <th>ลำดับ</th>
-                                <th>รหัสสั่งซื้อ</th>
-                                <th>บริษัท/ร้านค้า</th>
-                                <th>วันที่สั่งซื้อ</th>
-                                <th>รายการสินค้า</th>
-                                <th>จำนวน</th>
-                                <th>หน่วยนับ</th>
-                                <th>ราคาต่อหน่วย</th>
-                                <th>ราคารวม</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% poDetail.forEach((poDetail, index)=> { %>
-                                <tr>
-                                    <td>
-                                        <%= index + 1 %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.po_number %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.supplier_name %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.po_date %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.item_name %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.quantity %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.unit %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.unit_price %>
-                                    </td>
-                                    <td>
-                                        <%= poDetail.total_price %>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                    <% } else { %>
-                        <div class="alert alert-warning text-center">ไม่พบข้อมูลรายละเอียดของ PO นี้</div>
-                        <% } %>
-                            <div class="text-center mt-4">
-                                <a href="/dash_board_test" class="btn btn-secondary">กลับหน้า Dashboard</a>
+                    <p class="text-muted">บริษัท: <%= poHeader.supplier_name %> | วันที่: <%= poHeader.po_date %>
+                    </p>
+                    <hr>
+
+                    <!-- Add Item Form -->
+                    <form action="/dash_board_test/add_po_detail" method="post" class="mb-3">
+                        <input type="hidden" name="po_Id" value="<%= po_Id %>">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label">เลือกสินค้า</label>
+                                <select name="item_Id" class="form-select" required>
+                                    <option value="">-- เลือกสินค้า --</option>
+                                    <% inventoryItems.forEach(item=> { %>
+                                        <option value="<%= item.item_Id %>" data-price="<%= item.unit_price %>">
+                                            <%= item.item_name %> (คงเหลือ: <%= item.remain %>
+                                                    <%= item.unit %>)
+                                        </option>
+                                        <% }) %>
+                                </select>
                             </div>
+                            <div class="col-md-2">
+                                <label class="form-label">จำนวน</label>
+                                <input type="number" name="quantity" class="form-control" placeholder="จำนวน" required
+                                    min="1">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">ราคาที่ตกลง</label>
+                                <input type="number" name="agreed_price" id="agreed_price" class="form-control"
+                                    placeholder="ราคา" required min="0" step="0.01">
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-success">เพิ่มรายการ</button>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-danger" onclick="deleteItems()">ลบรายการ</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <% if (poDetails.length> 0) { %>
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>รายการสินค้า</th>
+                                    <th>จำนวน</th>
+                                    <th>หน่วยนับ</th>
+                                    <th>ราคาต่อหน่วย</th>
+                                    <th>ราคาที่ตกลง</th>
+                                    <th>ราคารวม</th>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% poDetails.forEach((item, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= item.item_name %>
+                                        </td>
+                                        <td>
+                                            <%= item.quantity %>
+                                        </td>
+                                        <td>
+                                            <%= item.unit %>
+                                        </td>
+                                        <td>
+                                            <%= item.unit_price ? item.unit_price.toLocaleString() : '-' %>
+                                        </td>
+                                        <td>
+                                            <%= item.agreed_price ? item.agreed_price.toLocaleString() : '-' %>
+                                        </td>
+                                        <td>
+                                            <%= item.total_price ? item.total_price.toLocaleString() : '-' %>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox" value="<%= item.po_detail_Id %>">
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                        <% } else { %>
+                            <div class="alert alert-warning text-center">ยังไม่มีรายการสินค้าใน PO นี้</div>
+                            <% } %>
+                                <% } else { %>
+                                    <div class="alert alert-danger text-center">ไม่พบข้อมูล PO</div>
+                                    <% } %>
+
+                                        <div class="text-center mt-4">
+                                            <a href="/makepo" class="btn btn-secondary">กลับหน้าใบสั่งซื้อ</a>
+                                        </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+            // Auto-fill agreed price when item selected
+            document.querySelector('select[name="item_Id"]').addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                if (price) {
+                    document.getElementById('agreed_price').value = price;
+                }
+            });
+
+        // Select All checkbox
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        // Delete selected items
+        function deleteItems() {
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
+                return;
+            }
+
+            fetch('/dash_board_test/deleteitem_po_detail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('ลบรายการสำเร็จ');
+                        window.location.reload();
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการลบ');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                });
+        }
+    </script>
 </body>
 
 </html>

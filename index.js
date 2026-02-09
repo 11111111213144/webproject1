@@ -29,6 +29,9 @@ app.use('/', bth_inventoryRouter);
 const bth_create_planRouter = require('./route/bth_create_plan');
 app.use('/', bth_create_planRouter);
 
+const bth_poRouter = require('./route/bth_po');
+app.use('/', bth_poRouter);
+
 
 app.set('views', `${__dirname}/public`);
 app.set('view engine', 'ejs');
@@ -51,17 +54,9 @@ app.get('/checkorder', (req, res) => {
   res.render('checkorder');
 });
 
-
-
-app.get('/makepo', (req, res) => {
-  res.render('makepo');
-});
-
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.get('/po_add', (req, res) => {
-  res.render('create_plan');
-});
+
 

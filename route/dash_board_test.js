@@ -210,7 +210,7 @@ router.post('/update_plan_detail', (req, res) => {
 
 
 
-router.post('/deleteitem', (req, res) => {
+router.post('/deleteitem_plan_detail', (req, res) => {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
         return res.json({ success: false, message: 'No items selected' });
@@ -231,5 +231,107 @@ router.post('/deleteitem', (req, res) => {
         res.json({ success: true });
     });
 });
+
+router.get('/po_detail_test/:po_Id', (req, res) => {
+    const po_Id = req.params.po_Id;
+    const sqlDetails = `
+        SELECT 
+            pod.id AS po_detail_Id,
+            ph.po_number,
+            ph.supplier_name,
+            ph.po_date,
+            pod.item_Id,
+            i.item_name,
+            pod.quantity,
+            i.unit,
+            i.unit_price,
+            pod.agreed_price,
+            (pod.quantity * pod.agreed_price) AS total_price,
+            pl.plan_name
+        FROM 
+            PO_Header ph
+        JOIN 
+            PO_Detail pod ON ph.po_Id = pod.po_Id
+        JOIN 
+            Inventory i ON pod.item_Id = i.item_Id
+        LEFT JOIN 
+            Plan_Detail pd ON pod.ref_plan_detail_id = pd.id
+        LEFT JOIN 
+            Plan_Header pl ON pd.plan_Id = pl.plan_Id
+        WHERE 
+            ph.po_Id = ?
+    `;
+    pool.query(sqlDetails, [po_Id], (err, poDetails) => {
+        if (err) {
+            console.log('Error fetching PO details:', err.message);
+            return res.redirect('/dash_board_test');
+        }
+
+        // Fetch PO Header info
+        pool.query('SELECT * FROM PO_Header WHERE po_Id = ?', [po_Id], (err, poHeader) => {
+            if (err) {
+                console.log('Error fetching PO header:', err.message);
+                poHeader = [];
+            }
+
+            // Fetch Inventory for dropdown
+            pool.query('SELECT * FROM Inventory', (err, inventoryItems) => {
+                if (err) {
+                    console.log('Error fetching inventory:', err.message);
+                    inventoryItems = [];
+                }
+
+                // Fetch unique suppliers from PO_Header
+                pool.query('SELECT DISTINCT supplier_name FROM PO_Header', (err, suppliers) => {
+                    if (err) {
+                        console.log('Error fetching suppliers:', err.message);
+                        suppliers = [];
+                    }
+
+                    res.render('test/po_detail_test', {
+                        poDetails: poDetails,
+                        poHeader: poHeader.length > 0 ? poHeader[0] : null,
+                        inventoryItems: inventoryItems,
+                        suppliers: suppliers,
+                        po_Id: po_Id
+                    });
+                });
+            });
+        });
+    });
+});
+
+// Add PO Detail
+router.post('/add_po_detail', (req, res) => {
+    const { po_Id, item_Id, quantity, agreed_price } = req.body;
+    const sql = 'INSERT INTO PO_Detail (po_Id, item_Id, quantity, agreed_price) VALUES (?, ?, ?, ?)';
+    pool.query(sql, [po_Id, item_Id, quantity, agreed_price], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/dash_board_test/po_detail_test/' + po_Id + '?msg=' + encodeURIComponent('Error adding item'));
+        }
+        res.redirect('/dash_board_test/po_detail_test/' + po_Id + '?msg=' + encodeURIComponent('เพิ่มรายการสำเร็จ'));
+    });
+});
+
+// Delete PO Detail items
+router.post('/deleteitem_po_detail', (req, res) => {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.json({ success: false, message: 'No items selected' });
+    }
+
+    const sql = 'DELETE FROM PO_Detail WHERE id IN (?)';
+    pool.query(sql, [ids], (err, result) => {
+        if (err) {
+            console.error('Error deleting PO items:', err);
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+        res.json({ success: true });
+    });
+});
+
+
+
 
 module.exports = router;
