@@ -16,35 +16,28 @@
     <main>
         <h1>เพิ่มแผนจัดซื้อ</h1>
 
-        <form action="">
+        <form action="/addplan" method="post">
 
             <label for="itemname">ชื่อแผนงาน :</label>
-            <input type="text" name="itemname"><br><br>
+            <input type="text" name="plan_name"><br><br>
 
             <label for="type">ประเภท :</label>
-            <select name="type">
-                <option>วัสดุ</option>
-                <option>ครุภัณฑ์</option>
-                <option>เวชภัณฑ์</option>
+            <select name="item_plan">
+                <option value="วัสดุ">วัสดุ</option>
+                <option value="ครุภัณฑ์">ครุภัณฑ์</option>
+                <option value="เวชภัณฑ์">เวชภัณฑ์</option>
             </select>
             <br><br>
 
             <label for="date" min="today">วันที่ :</label>
-            <input type="date" name="date">
+            <input type="date" name="plan_date">
             <br><br>
 
-            <label for="item-serch">เลือกรายการพัสดุ</label>
-            <input type="search" name="item-serch">
-
-            <label for="amount">เลือกจำนวนรายการพัสดุ</label>
-            <input name="amount" id="">
-
             <button type="submit" class="submit-btn">บันทึก</button>
-            <button type="submit" class="submit-btn">ลบรายการ</button>
-
         </form>
 
         <table class="table-box">
+
             <thead>
                 <tr>
                     <th>ลำดับที่</th>
@@ -54,11 +47,39 @@
                     <th>ประเภท</th>
                     <th>สถานะ</th>
                     <th>ดูรายระเอียด</th>
-                    <th><input type="checkbox" class="checkbox"></th>
+                    <th><input type="checkbox" id="selectAll"></th>
                 </tr>
             </thead>
             <tbody>
-                <th></th>
+                <% plan.forEach((plan, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= plan.plan_Id %>
+                        </td>
+                        <td>
+                            <%= plan.plan_name %>
+                        </td>
+                        <td>
+                            <%= plan.plan_date %>
+                        </td>
+                        <td>
+                            <%= plan.item_plan || plan.item_type %>
+                        </td>
+                        <td>
+                            <%= plan.plan_status %>
+                        </td>
+                        <td>
+                            <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>"
+                                class="btn btn-primary">ดูรายละเอียด</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="checkbox" value="<%= plan.plan_Id %>">
+                        </td>
+                    </tr>
+                    <% }) %>
             </tbody>
         </table>
 
