@@ -91,7 +91,37 @@ router.post('/deleteplan', isAuthenticated, isMember, (req, res) => {
     });
 });
 
+router.get('/admin_main', isAuthenticated, isAdmin, (req, res) => {
+    // Query plans
+    pool.query('SELECT * FROM plan_header ORDER BY plan_date DESC', (err, plans) => {
+        if (err) {
+            console.log(err);
+            plans = [];
+        }
+        // Query POs
+        pool.query('SELECT * FROM po_header ORDER BY po_date DESC', (err2, pos) => {
+            if (err2) {
+                console.log(err2);
+                pos = [];
+            }
+            res.render('admin_main', { plans: plans, pos: pos });
+        });
+    });
+});
 
-
+// Update Plan Status (from select dropdown)
+router.post('/updateplanstatus', isAuthenticated, isAdmin, (req, res) => {
+    const { ids, status } = req.body;
+    if (!ids || ids.length === 0 || !status) {
+        return res.redirect('/admin_approve');
+    }
+    pool.query('UPDATE Plan_Header SET plan_status = ? WHERE plan_Id IN (?)', [status, ids], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error updating plan status');
+        }
+        res.json({ success: true });
+    });
+});
 
 module.exports = router;

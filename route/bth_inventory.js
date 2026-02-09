@@ -5,7 +5,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path')
 
-const { pool, total_inventory, total_money , total_plan, total_po} = require('../database/mysqlpool');
+const { pool, total_inventory, total_money, total_plan, total_po, all_user } = require('../database/mysqlpool');
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -17,13 +17,13 @@ router.use(cookie());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get('/homepage', async (req, res) => {
+router.get('/homepage', isAuthenticated, async (req, res) => {
     try {
         const [totalitem] = await total_inventory();
         const [totalmoney] = await total_money();
         const [totalplan] = await total_plan();
         const [totalpo] = await total_po();
-        
+
         res.render('homepage', {
             amt_item: totalitem[0].total || 0,
             total_money: totalmoney[0].total || 0,
@@ -36,7 +36,31 @@ router.get('/homepage', async (req, res) => {
     }
 });
 
-router.get('/inventory', (req, res) => {
+router.get('/dev_mem', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+        const [users] = await all_user();
+        res.render('dev_mem', { all_user: users });
+    } catch (err) {
+        console.error('Dev_mem error:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.post('/deleteuser', isAuthenticated, isAdmin, async (req, res) => {
+    const { ids } = req.body;
+    if (!ids || ids.length === 0) {
+        return res.redirect('/dev_mem');
+    }
+    pool.query('DELETE FROM User WHERE userId IN (?)', [ids], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error deleting users');
+        }
+        res.json({ success: true });
+    });
+});
+
+router.get('/inventory', isAuthenticated, (req, res) => {
     const msg = req.query.msg || null;
     const type = req.query.type || 'all';
 

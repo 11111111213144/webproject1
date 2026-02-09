@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อนุมัติ (Admin)</title>
+    <link rel="stylesheet" href="css/new_style.css">
+    <style>
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background: #ddd;
+            border-radius: 5px;
+        }
+
+        .tab-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .status-approved {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .status-rejected {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .table-box {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <%- include('navbar_admin') %>
+    </header>
+    <main>
+        <h1>อนุมัติ (Admin)</h1>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('plan')">แผนจัดซื้อ</button>
+            <button class="tab-btn" onclick="openTab('po')">ใบสั่งซื้อ</button>
+        </div>
+
+        <!-- Tab: แผนจัดซื้อ -->
+        <div id="plan" class="tab-content active">
+            <h2>แผนจัดซื้อที่รออนุมัติ</h2>
+            <div class="filter-box">
+                <select id="plan_status" name="plan_status">
+                    <option value="">-- เลือกสถานะ --</option>
+                    <option value="อนุมัติแล้ว">อนุมัติ</option>
+                    <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                </select>
+                <button class="add-btn" onclick="updatePlanStatus()">บันทึก</button>
+            </div>
+            <table class="table-box">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>ชื่อแผน</th>
+                        <th>วันที่</th>
+                        <th>สถานะ</th>
+                        <th>รายละเอียด</th>
+                        <th><input type="checkbox" id="selectAllPlan"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (plans && plans.length> 0) { %>
+                        <% plans.forEach((plan, index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= plan.plan_name %>
+                                </td>
+                                <td>
+                                    <%= plan.plan_date ? new Date(plan.plan_date).toLocaleDateString('th-TH') : '-' %>
+                                </td>
+                                <td>
+                                    <span class="status-badge 
+                                    <%= plan.plan_status === 'รออนุมัติ' ? 'status-pending' : '' %>
+                                    <%= plan.plan_status === 'อนุมัติแล้ว' || plan.plan_status === 'approve' ? 'status-approved' : '' %>
+                                    <%= plan.plan_status === 'ไม่อนุมัติ' || plan.plan_status === 'reject' ? 'status-rejected' : '' %>
+                                ">
+                                        <%= plan.plan_status %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>" class="add-btn"
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                </td>
+                                <td><input type="checkbox" name="plan_id" value="<%= plan.plan_Id %>"></td>
+                            </tr>
+                            <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="6">ไม่มีแผนจัดซื้อ</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab: ใบสั่งซื้อ -->
+        <div id="po" class="tab-content">
+            <h2>ใบสั่งซื้อที่รออนุมัติ</h2>
+            <div class="filter-box">
+                <select id="po_status" name="po_status">
+                    <option value="">-- เลือกสถานะ --</option>
+                    <option value="รอส่งใบสั่งซื้อ">รอส่งใบสั่งซื้อ</option>
+                    <option value="รอรับของ">รอรับของ</option>
+                    <option value="รับของแล้ว">รับของแล้ว</option>
+                    <option value="ยกเลิก">ยกเลิก</option>
+                </select>
+                <button class="add-btn" onclick="updatePOStatus()">บันทึก</button>
+            </div>
+            <table class="table-box">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>เลข PO</th>
+                        <th>ร้านค้า</th>
+                        <th>วันที่</th>
+                        <th>สถานะ</th>
+                        <th>รายละเอียด</th>
+                        <th><input type="checkbox" id="selectAllPO"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (pos && pos.length> 0) { %>
+                        <% pos.forEach((po, index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= po.po_number %>
+                                </td>
+                                <td>
+                                    <%= po.supplier_name %>
+                                </td>
+                                <td>
+                                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH') : '-' %>
+                                </td>
+                                <td>
+                                    <span class="status-badge 
+                                    <%= po.po_status === 'รับของแล้ว' ? 'status-approved' : '' %>
+                                    <%= po.po_status === 'รอรับของ' || po.po_status === 'รอส่งใบสั่งซื้อ' ? 'status-pending' : '' %>
+                                    <%= po.po_status === 'ยกเลิก' ? 'status-rejected' : '' %>
+                                ">
+                                        <%= po.po_status %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/dash_board_test/po_detail_test/<%= po.po_Id %>" class="add-btn"
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                </td>
+                                <td><input type="checkbox" name="po_id" value="<%= po.po_Id %>"></td>
+                            </tr>
+                            <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">ไม่มีใบสั่งซื้อ</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer></footer>
+
+    <script>
+        // Tab switching
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Select All - Plan
+        document.getElementById('selectAllPlan').addEventListener('change', function () {
+            document.querySelectorAll('input[name="plan_id"]').forEach(cb => cb.checked = this.checked);
+        });
+
+        // Select All - PO
+        document.getElementById('selectAllPO').addEventListener('change', function () {
+            document.querySelectorAll('input[name="po_id"]').forEach(cb => cb.checked = this.checked);
+        });
+
+        // Update Plan Status
+        function updatePlanStatus() {
+            const status = document.getElementById('plan_status').value;
+            const ids = Array.from(document.querySelectorAll('input[name="plan_id"]:checked')).map(cb => cb.value);
+
+            if (!status) { alert('กรุณาเลือกสถานะ'); return; }
+            if (ids.length === 0) { alert('กรุณาเลือกแผน'); return; }
+            if (!confirm('ต้องการอัปเดตสถานะแผนที่เลือก?')) return;
+
+            fetch('/updateplanstatus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids, status })
+            }).then(res => res.json()).then(data => {
+                if (data.success) { alert('อัปเดตสถานะสำเร็จ'); location.reload(); }
+            }).catch(err => alert('เกิดข้อผิดพลาด'));
+        }
+
+        // Update PO Status
+        function updatePOStatus() {
+            const status = document.getElementById('po_status').value;
+            const ids = Array.from(document.querySelectorAll('input[name="po_id"]:checked')).map(cb => cb.value);
+
+            if (!status) { alert('กรุณาเลือกสถานะ'); return; }
+            if (ids.length === 0) { alert('กรุณาเลือกใบสั่งซื้อ'); return; }
+            if (!confirm('ต้องการอัปเดตสถานะใบสั่งซื้อที่เลือก?')) return;
+
+            fetch('/updatepostatus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids, status })
+            }).then(res => res.json()).then(data => {
+                if (data.success) { alert('อัปเดตสถานะสำเร็จ'); location.reload(); }
+            }).catch(err => alert('เกิดข้อผิดพลาด'));
+        }
+
+    </script>
+</body>
+
+</html>

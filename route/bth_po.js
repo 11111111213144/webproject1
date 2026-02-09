@@ -69,4 +69,45 @@ router.post('/addpo', isAuthenticated, isMember, (req, res) => {
     });
 });
 
+
+// Update PO Status (from select dropdown)
+router.post('/updatepostatus', isAuthenticated, isAdmin, (req, res) => {
+    const { ids, status } = req.body;
+    if (!ids || ids.length === 0 || !status) {
+        return res.redirect('/admin_main');
+    }
+    pool.query('UPDATE po_header SET po_status = ? WHERE po_Id IN (?)', [status, ids], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error updating PO status');
+        }
+
+        // ถ้าสถานะเป็น "รับของแล้ว" ให้อัปเดตคงคลัง
+        if (status === 'รับของแล้ว') {
+            const detailSql = `
+                SELECT pod.item_Id, pod.quantity 
+                FROM PO_Detail pod 
+                WHERE pod.po_Id IN (?)
+            `;
+
+            pool.query(detailSql, [ids], (err2, details) => {
+                if (err2) {
+                    console.log('Error fetching PO details:', err2);
+                    return res.json({ success: true, warning: 'PO updated but inventory not updated' });
+                }
+
+                // วนลูปอัปเดตคงคลังแต่ละ item
+                details.forEach(detail => {
+                    const updateInventorySql = 'UPDATE inventory SET remain = remain + ? WHERE item_Id = ?';
+                    pool.query(updateInventorySql, [detail.quantity, detail.item_Id], (err3) => {
+                        if (err3) console.log('Error updating inventory:', err3);
+                    });
+                });
+            });
+        }
+
+        res.json({ success: true });
+    });
+});
+
 module.exports = router;

@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="css/new_style.css">
 </head>
 
-<body>    
+<body>
     <header>
-        <%- include('navbar')%>
+        <%- include('navbar_admin')%>
     </header>
     <main>
         <h1>จัดการผู้ใช้</h1>
         <div class="filter-box">
-            <label for="del-btn">แบนผู้ใช้</label>
-            <button name="del-btn" class="btn"></button>
+            <label for="del-btn">ลบผู้ใช้</label>
+            <button name="del-btn" class="add-btn" onclick="deleteuser()">จัดการ</button>
         </div>
 
         <table class="table-box">
@@ -29,12 +29,23 @@
                     <th><input type="checkbox" id="selectAll"></th>
                 </tr>
             </thead>
-            <body>
+            <tbody>
+                <% all_user.forEach(user=> { %>
+                    <tr>
+                        <td>
+                            <%= user.userName %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= user.phone %>
+                        </td>
+                        <td><input type="checkbox" name="user_id" value="<%= user.userId %>"></td>
+                    </tr>
+                    <% }) %>
+            </tbody>
 
-            </body>
-            <tr>
-                <td></td>
-            </tr>
         </table>
         <!-- ดูรายชื่อสมาชิกทั้งหมด: ดูว่าใครสมัครมาบ้าง เบอร์โทรอะไร
 
@@ -43,6 +54,50 @@
 รีเซ็ตรหัสผ่าน: กรณี User ลืมรหัสและแจ้งมาทาง Admin (Option เสริม)
 
 ตั้งค่าสิทธิ์: แต่งตั้ง User คนอื่นให้เป็น Admin ช่วยงาน -->
+
     </main>
     <footer></footer>
+
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('input[name="user_id"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        function deleteuser() {
+            const checkboxes = document.querySelectorAll('input[name="user_id"]:checked');
+            const ids = [];
+            checkboxes.forEach(checkbox => {
+                ids.push(checkbox.value);
+            });
+            if (ids.length === 0) {
+                alert('กรุณาเลือกผู้ใช้');
+                return;
+            }
+            if (confirm('คุณต้องการลบผู้ใช้เหล่านี้หรือไม่?')) {
+                fetch('/deleteuser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ids }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('ลบผู้ใช้สำเร็จ');
+                            location.reload();
+                        } else {
+                            alert('เกิดข้อผิดพลาด');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาด');
+                    });
+            }
+        }
+    </script>
 </body>

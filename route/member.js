@@ -213,7 +213,13 @@ router.post('/verify', (req, res) => {
                 }, process.env.secret);
                 res.cookie('username', username, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-                res.redirect('/homepage?msg=Login Success');
+
+                // Redirect based on role
+                if (dbUser.role === 'admin') {
+                    res.redirect('/admin_main?msg=Login Success');
+                } else {
+                    res.redirect('/homepage?msg=Login Success');
+                }
             }
         }
     });
