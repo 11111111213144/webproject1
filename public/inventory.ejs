@@ -81,7 +81,7 @@
                             <%= inventory.total_price %>
                         </td>
                         <td><a class="material-symbols-outlined" style="text-decoration: none;"
-                                href="/edititem?item_Id=<%= inventory.item_Id %>">edit</a></td>
+                                href="/item_edits?item_Id=<%= inventory.item_Id %>">edit</a></td>
                         <td><input type="checkbox" class="checkbox" value="<%= inventory.item_Id %>"></td>
                     </tr>
                     <% }) %>
@@ -90,6 +90,7 @@
 
         <footer></footer>
         <script>
+
                 function deleteitem() {
                     const checkboxes = document.querySelectorAll('.checkbox:checked');
                     const ids = Array.from(checkboxes).map(cb => cb.value);
@@ -102,6 +103,8 @@
                     if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
                         return;
                     }
+
+                    
 
                     fetch('/deleteitem', {
                         method: 'POST',
