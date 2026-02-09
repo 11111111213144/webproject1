@@ -116,7 +116,7 @@ router.post('/deleteitem', isAuthenticated, isMember, (req, res) => {
     });
 });
 
-router.get('/edititem', isAuthenticated, isMember, (req, res) => {
+router.get('/item_edits', isAuthenticated, isMember, (req, res) => {
     const msg = req.query.msg || null;
     const item_Id = req.query.item_Id;
     pool.query('SELECT * FROM inventory WHERE item_Id = ?', [item_Id], (err, result) => {
