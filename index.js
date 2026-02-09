@@ -56,6 +56,10 @@ app.get('/makeplan', (req, res) => {
   res.render('makeplan');
 });
 
+app.get('/dev_mem', (req, res) => {
+  res.render('dev_mem');
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
