@@ -59,14 +59,14 @@ CREATE TABLE IF NOT EXISTS `plan_detail` (
   KEY `item_Id` (`item_Id`),
   CONSTRAINT `1` FOREIGN KEY (`plan_Id`) REFERENCES `plan_header` (`plan_Id`) ON DELETE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`item_Id`) REFERENCES `inventory` (`item_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.plan_detail: ~23 rows (approximately)
+-- Dumping data for table procurement_management_system.plan_detail: ~27 rows (approximately)
 DELETE FROM `plan_detail`;
 INSERT INTO `plan_detail` (`id`, `plan_Id`, `item_Id`, `quantity`) VALUES
-	(1, 1, 1, 50),
-	(2, 1, 2, 100),
-	(3, 1, 3, 20),
+	(1, 1, 1, 44),
+	(2, 1, 2, 94),
+	(3, 1, 3, 16),
 	(4, 1, 4, 10),
 	(5, 2, 1, 30),
 	(6, 2, 7, 5),
@@ -86,7 +86,11 @@ INSERT INTO `plan_detail` (`id`, `plan_Id`, `item_Id`, `quantity`) VALUES
 	(20, 8, 2, 50),
 	(21, 8, 1, 20),
 	(22, 9, 7, 2),
-	(23, 10, 9, 5);
+	(23, 10, 9, 5),
+	(24, 1, 1, 6),
+	(25, 1, 3, 102),
+	(26, 19, 17, 6),
+	(32, 1, 17, 100);
 
 -- Dumping structure for table procurement_management_system.plan_header
 CREATE TABLE IF NOT EXISTS `plan_header` (
@@ -96,9 +100,9 @@ CREATE TABLE IF NOT EXISTS `plan_header` (
   `plan_status` varchar(50) DEFAULT 'รออนุมัติ',
   `item_plan` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`plan_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.plan_header: ~15 rows (approximately)
+-- Dumping data for table procurement_management_system.plan_header: ~11 rows (approximately)
 DELETE FROM `plan_header`;
 INSERT INTO `plan_header` (`plan_Id`, `plan_name`, `plan_date`, `plan_status`, `item_plan`) VALUES
 	(1, 'แผนจัดซื้อประจำเดือน มกราคม', '2024-01-05', 'ไม่อนุมัติ', NULL),
@@ -111,11 +115,7 @@ INSERT INTO `plan_header` (`plan_Id`, `plan_name`, `plan_date`, `plan_status`, `
 	(8, 'แผนเตรียมงานสัมมนา', '2024-04-01', 'ร่างแผน', NULL),
 	(9, 'แผนจัดซื้อประจำเดือน เมษายน', '2024-04-05', 'ร่างแผน', NULL),
 	(10, 'แผนฉุกเฉิน (น้ำยาทำความสะอาด)', '2024-04-10', 'รออนุมัติ', NULL),
-	(11, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
-	(12, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
-	(13, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-10', 'รออนุมัติ', NULL),
-	(14, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-08', 'รออนุมัติ', NULL),
-	(17, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-04', 'รออนุมัติ', 'วัสดุ');
+	(19, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-09', 'รออนุมัติ', 'เวชภัณฑ์');
 
 -- Dumping structure for table procurement_management_system.po_detail
 CREATE TABLE IF NOT EXISTS `po_detail` (
@@ -130,14 +130,15 @@ CREATE TABLE IF NOT EXISTS `po_detail` (
   KEY `item_Id` (`item_Id`),
   CONSTRAINT `1` FOREIGN KEY (`po_Id`) REFERENCES `po_header` (`po_Id`) ON DELETE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`item_Id`) REFERENCES `inventory` (`item_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.po_detail: ~3 rows (approximately)
+-- Dumping data for table procurement_management_system.po_detail: ~4 rows (approximately)
 DELETE FROM `po_detail`;
 INSERT INTO `po_detail` (`id`, `po_Id`, `item_Id`, `quantity`, `agreed_price`, `ref_plan_detail_id`) VALUES
 	(1, 1, 1, 50, 120.00, 1),
 	(2, 1, 3, 20, 45.00, 3),
-	(3, 2, 2, 100, 10.00, 2);
+	(3, 2, 2, 100, 10.00, 2),
+	(7, 2, 3, 6, 45.06, NULL);
 
 -- Dumping structure for table procurement_management_system.po_header
 CREATE TABLE IF NOT EXISTS `po_header` (
@@ -147,15 +148,13 @@ CREATE TABLE IF NOT EXISTS `po_header` (
   `supplier_name` varchar(100) NOT NULL,
   `po_status` varchar(50) DEFAULT 'รอส่งใบสั่งซื้อ',
   PRIMARY KEY (`po_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.po_header: ~4 rows (approximately)
+-- Dumping data for table procurement_management_system.po_header: ~2 rows (approximately)
 DELETE FROM `po_header`;
 INSERT INTO `po_header` (`po_Id`, `po_number`, `po_date`, `supplier_name`, `po_status`) VALUES
 	(1, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอรับของ'),
-	(2, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว'),
-	(3, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอรับของ'),
-	(4, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว');
+	(2, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว');
 
 -- Dumping structure for table procurement_management_system.user
 CREATE TABLE IF NOT EXISTS `user` (
