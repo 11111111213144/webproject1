@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
+</head>
+
+<body>
+    <header>
+        <%- include('navbar.ejs') %>
+    </header>
+
+    <main>
+        <h1>เพิ่มใบสั่งซื้อ</h1>
+
+        <form action="">
+
+            <label for="type">ประเภท :</label>
+            <select name="type">
+                <option>วัสดุ</option>
+                <option>ครุภัณฑ์</option>
+                <option>เวชภัณฑ์</option>
+            </select>
+            <br><br>
+
+            <label for="date" min="today">วันที่ :</label>
+            <input type="date" name="date">
+            <br><br>
+
+            <label for="supplier">บริษัท/ร้านค้า :</label>
+            <input type="text" name="supplier" id="supplier" required>
+            <br><br>
+
+            <label for="amount">เลือกจำนวนรายการพัสดุ</label>
+            <input name="amount" id="">
+
+            <button type="submit" class="submit-btn">บันทึก</button>
+            <button type="reset" class="submit-btn">ลบรายการ</button>
+        </form>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>เลขใบสั่งซื้อ</th>
+                    <th>วันที่</th>
+                    <th>บริษัท/ร้านค้า</th>
+                    <th>สถานะ</th>
+                    <th><input type="checkbox" class="checkbox"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <th></th>
+            </tbody>
+        </table>
+
+    </main>
+    <footer>
+        <button type="submit" class="submit-btn" onclick="history.back()">ย้อนกลับ</button>
+    </footer>
+</body>
+
+</html>
