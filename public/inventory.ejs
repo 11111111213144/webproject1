@@ -51,7 +51,6 @@
                 </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
                 <% inventory.forEach((inventory, index)=> { %>
                     <tr>
                         <td>
@@ -82,55 +81,16 @@
                             <%= inventory.total_price %>
                         </td>
                         <td><a class="material-symbols-outlined" style="text-decoration: none;"
-                                href="/edititem?item_Id=<%= inventory.item_Id %>">edit</a></td>
+                                href="/item_edits?item_Id=<%= inventory.item_Id %>">edit</a></td>
                         <td><input type="checkbox" class="checkbox" value="<%= inventory.item_Id %>"></td>
                     </tr>
                     <% }) %>
-=======
-
-                <tr>
-
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td><a href="item_edits"><span class="material-icons edit-btn" >edit</span></a></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td>Lorem, ipsum.</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
->>>>>>> 8ea8c6ed5ef8b9e348f7fca3e31dbda2fe758c40
             </tbody>
         </table>
 
         <footer></footer>
         <script>
+
                 function deleteitem() {
                     const checkboxes = document.querySelectorAll('.checkbox:checked');
                     const ids = Array.from(checkboxes).map(cb => cb.value);
@@ -143,6 +103,8 @@
                     if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
                         return;
                     }
+
+                    
 
                     fetch('/deleteitem', {
                         method: 'POST',

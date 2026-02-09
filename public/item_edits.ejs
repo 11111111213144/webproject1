@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="css/new_style.css">
 
 </head>
-
 <body>
     <header>
-        <%- include('navbar.ejs') %>
     </header>
     <main class="item-edit-container">
         <div class="form-box edit-box">
@@ -38,13 +36,15 @@
                 <input type="text" id="Company_shop" name="Company_shop"><br><br>
 
                 <button type="submit" class="submit-btn">บันทึก</button>
-                
             </form>
         </div>
-        <footer >
-            <button type="submit" class="submit-btn">ย้อนกลับ</button>
-        </footer>
     </main>
+
+    <footer>
+        <button type="submit" class="submit-btn" onclick="history.back()">ย้อนกลับ</button>
+    </footer>
+
+
 </body>
 
 </html>
