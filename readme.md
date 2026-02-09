@@ -1,7 +1,7 @@
 # 📦 ระบบการจัดซื้อ
 ## Procurement Management System
 
-ระบบบริหารจัดการคลังสินค้าและการจัดซื้อ พัฒนาด้วย Node.js, Express และ MySQL
+ระบบการจัดซื้อ พัฒนาด้วย Node.js, Express และ MySQL
 
 ---
 
