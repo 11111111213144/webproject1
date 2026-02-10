@@ -69,7 +69,17 @@ npm install
 - เปิด MySQL/MariaDB
 - Import ไฟล์ `database/database.sql`
 
-### 4. รันโปรเจค
+### 4. ตั้งค่า Environment Variables
+สร้างไฟล์ `.env`:
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=your_password
+DB_NAME=procurement_management_system
+secret=your_jwt_secret
+```
+
+### 5. รันโปรเจค
 ```bash
 npm run dev
 ```
