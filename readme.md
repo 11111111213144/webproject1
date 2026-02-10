@@ -140,3 +140,36 @@ npm run sync
 ```
 
 ---
+
+
+
+
+
+
+การจัดระเบียบโครงสร้างไฟล์ 
+
+webproject1/
+├── .env                  # 🔐 เก็บความลับ! (DB Password, Secret Key) *ห้ามเอาขึ้น Git*
+├── package.json          # 📦 บัตรประชาชนโปรเจกต์ (บอกชื่อ, เวอร์ชั่น, Library ที่ใช้)
+├── README.md             # คู่มือเล่มนี้
+│
+├── public/               # 🌍 โซนของสาธารณะ (Static Files)
+│   ├── css/              # ไฟล์แต่งสวย
+│   ├── js/               # สคริปต์ที่รันบน Browser (เช่น Alert, คำนวณหน้าเว็บ)
+│   └── images/           # รูปภาพโลโก้, ไอคอน
+│
+├── views/                # 🖼️ โซนหน้าจอ (Frontend/Templates)
+│   ├── layouts/          # โครงร่างหลัก (Header, Footer ที่ใช้ร่วมกันทุกหน้า)
+│   ├── partials/         # ชิ้นส่วนย่อย (Navbar, Sidebar)
+│   ├── auth/             # หน้า Login, Register
+│   ├── admin/            # หน้าจอสำหรับแอดมิน (Dashboard, อนุมัติแผน)
+│   └── user/             # หน้าจอสำหรับผู้ใช้ทั่วไป (ขอซื้อ, ดูสต็อก)
+│
+└── src/                  # 🧠 โซนสมองและตรรกะ (Backend Logic)
+    ├── config/           # การตั้งค่าระบบ (เช่น เชื่อมต่อ Database)
+    ├── controllers/      # ผู้สั่งการ (รับคำสั่งจากหน้าเว็บ -> สั่ง Model -> ส่งผลลัพธ์กลับ)
+    ├── models/           # พนักงานคลังข้อมูล (Query SQL, ดึง/ลบ/แก้ไข Database)
+    ├── routes/           # ป้ายบอกทาง (กำหนดว่า URL ไหน ไปหา Controller คนไหน)
+    ├── middleware/       # ยามเฝ้าประตู (เช็ค Login, เช็คสิทธิ์ Admin)
+    ├── utils/            # เครื่องมือช่วย (เช่น ฟังก์ชันแปลงวันที่)
+    └── index.js          # 🚀 จุดเริ่มต้นของระบบ (Entry Point)

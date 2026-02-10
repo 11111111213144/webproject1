@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบการจัดซื้อจัดจ้าง</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <%- include('../../partials/navbar.ejs') %>
+    </header>
+
+    <main>
+        <h1>จัดการวัสดุ</h1>
+
+        <div class="filter-box">
+            <select class="add-btn" name="type" onchange="window.location.href='/inventory?type='+this.value;">
+                <option value="all" <%=type==='all' ? 'selected' : '' %>>ทั้งหมด</option>
+                <option value="วัสดุ" <%=type=='วัสดุ' ? 'selected' : '' %>>วัสดุ</option>
+                <option value="ครุภัณฑ์" <%=type==='ครุภัณฑ์' ? 'selected' : '' %>>ครุภัณฑ์</option>
+                <option value="เวชภัณฑ์" <%=type==='เวชภัณฑ์' ? 'selected' : '' %>>เวชภัณฑ์</option>
+            </select>
+            <button type="submit" class="add-btn"> <a href="/createitem">เพิ่มรายการ</a></button>
+            <button type="submit" class="add-btn" onclick="deleteitem()">ลบรายการ</button>
+
+        </div>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>รหัสพัสดุ</th>
+                    <th>ชื่อวัสดุ</th>
+                    <th>ประเภทพัสดุ</th>
+                    <th>ราคา</th>
+                    <th>จำนวนคงเหลือ</th>
+                    <th>หน่วยนับ</th>
+                    <th>บริษัท/ร้านค้า</th>
+                    <th>ราคารวม</th>
+                    <th>แก้ไขรายการ</th>
+                    <th><input type="checkbox" id="selectAll"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% inventory.forEach((inventory, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= inventory.item_Id %>
+                        </td>
+                        <td>
+                            <%= inventory.item_name %>
+                        </td>
+                        <td>
+                            <%= inventory.item_type %>
+                        </td>
+                        <td>
+                            <%= inventory.unit_price %>
+                        </td>
+                        <td>
+                            <%= inventory.remain %>
+                        </td>
+                        <td>
+                            <%= inventory.unit %>
+                        </td>
+                        <td>
+                            <%= inventory.Company_shop %>
+                        </td>
+                        <td>
+                            <%= inventory.total_price %>
+                        </td>
+                        <td><a class="material-symbols-outlined" style="text-decoration: none;"
+                                href="/item_edits?item_Id=<%= inventory.item_Id %>">edit</a></td>
+                        <td><input type="checkbox" class="checkbox" value="<%= inventory.item_Id %>"></td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+
+        <footer></footer>
+        <script>
+
+                function deleteitem() {
+                    const checkboxes = document.querySelectorAll('.checkbox:checked');
+                    const ids = Array.from(checkboxes).map(cb => cb.value);
+
+                    if (ids.length === 0) {
+                        alert('กรุณาเลือกรายการที่ต้องการลบ');
+                        return;
+                    }
+
+                    if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
+                        return;
+                    }
+
+                    
+
+                    fetch('/deleteitem', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ ids: ids })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('ลบรายการสำเร็จ');
+                                window.location.reload();
+                            } else {
+                                alert('เกิดข้อผิดพลาดในการลบ');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                        });
+                }
+            document.getElementById('selectAll').addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+        </script>
+    </main>
+</body>
+
+</html>

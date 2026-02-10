@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบการจัดซื้อจัดจ้าง</title>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/navbar')%>
+    </header>
+
+    <main>
+        <h1>ภาพรวม</h1>
+        <div class="main-card">
+
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">box</span>
+                    <p class="text-primary">พัสดุ</p>
+                </div>
+                <p>
+                    <%= amt_item%>
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        money_bag
+                    </span>
+                    <p class="text-primary">ราคารวม</p>
+
+                </div>
+                <p>
+                    <%= Number(total_money).toLocaleString('th-TH') %>
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        assignment
+                    </span>
+                    <p class="text-primary">แผนจัดซื้อ</p>
+                </div>
+                <p>
+                    <%= total_plan%>
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
+                    <p class="text-primary">ใบสั่งซื้อ</p>
+                </div>
+                <p class="value">
+                    <%= total_po %>
+                </p>
+            </div>
+        </div>
+        <div class="main-box">
+            <div class="box">
+                <h1>5 แผนจัดซื้อที่รอการอนุมัติ</h1>
+
+                <table class="table-box">
+                    <thead>
+                        <tr>
+                            <th>ลำดับที่</th>
+                            <th>ชื่อแผน</th>
+                            <th>เลขที่แผน</th>
+                            <th>วันที่</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let count1 = 1; %>
+                        <% plan_wait.forEach(item=> { %>
+                            <tr>
+                                <td><%= count1++ %></td>
+                                <td><%= item.plan_name %></td>
+                                <td><%= item.plan_Id %></td>
+                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH') %></td>
+                            </tr>
+                        <% }) %>
+                        <% for(let i = plan_wait.length; i < 5; i++) { %>
+                            <tr>
+                                <td><%= count1++ %></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="box">
+                <h1>5 แผนจัดซื้อที่อนุมัติแล้ว</h1>
+
+                <table class="table-box">
+                    <thead>
+                        <tr>
+                            <th>ลำดับที่</th>
+                            <th>ชื่อแผน</th>
+                            <th>เลขที่แผน</th>
+                            <th>วันที่</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let count2 = 1; %>
+                        <% plan_sucess.forEach(item=> { %>
+                            <tr>
+                                <td><%= count2++ %></td>
+                                <td><%= item.plan_name %></td>
+                                <td><%= item.plan_Id %></td>
+                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH') %></td>
+                            </tr>
+                            <% }) %>
+                        <% for(let i = plan_sucess.length; i < 5; i++) { %>
+                            <tr>
+                                <td><%= count2++ %></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="grid-container"></div>
+    <footer></footer>
+    <script src="js/scripts.js"></script>
+</body>

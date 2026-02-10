@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+
+<body>
+    <header>
+        <%- include('../../partials/navbar.ejs') %>
+    </header>
+
+    <main>
+        <h1>ทำแผนจัดซื้อ</h1>
+        <div class="filter-box">
+            <select class="add-btn" name="type" onchange="filterTable()">
+                <option value="all">ทั้งหมด</option>
+                <option value="วัสดุ">วัสดุ</option>
+                <option value="ครุภัณฑ์">ครุภัณฑ์</option>
+                <option value="เวชภัณฑ์">เวชภัณฑ์</option>
+            </select>
+            <button type="submit" class="add-btn"><a href="/plan_detail">เพิ่มรายการ</a></button>
+            <button type="submit" class="delete-btn" onclick="deletePlan()">ลบรายการ</button>
+        </div>
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>รหัสแผนงาน</th>
+                    <th>ชื่อแผนงาน</th>
+                    <th>วันที่</th>
+                    <th>ประเภท</th>
+                    <th>สถานะ</th>
+                    <th>ดูรายระเอียด</th>
+                    <th><input type="checkbox" id="selectAll"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% plan.forEach((plan, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= plan.plan_Id %>
+                        </td>
+                        <td>
+                            <%= plan.plan_name %>
+                        </td>
+                        <td>
+                            <%= plan.plan_date %>
+                        </td>
+                        <td>
+                            <%= plan.item_plan || plan.item_type %>
+                        </td>
+                        <td>
+                            <%= plan.plan_status %>
+                        </td>
+                        <td>
+                            <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>"
+                                class="btn btn-primary">ดูรายละเอียด</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="checkbox" value="<%= plan.plan_Id %>">
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+
+    </main>
+    <footer></footer>
+    <script>
+        function deletePlan() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const ids = [];
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    ids.push(checkbox.value);
+                }
+            });
+            if (ids.length === 0) {
+                alert('กรุณาเลือกแผนงาน');
+                return;
+            }
+            if (confirm('คุณต้องการลบแผนงานนี้หรือไม่')) {
+                fetch('/deleteplan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ids }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('ลบแผนงานสำเร็จ');
+                            location.reload();
+                        } else {
+                            alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                    });
+            }
+        }
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        function filterTable() {
+            const dropdown = document.querySelector('.filter-box select');
+            const filterValue = dropdown.value;
+            const rows = document.querySelectorAll('.table-box tbody tr');
+
+            rows.forEach(row => {
+                const typeCell = row.cells[4];
+                if (typeCell) {
+                    const typeText = typeCell.textContent.trim();
+                    if (filterValue === 'all' || typeText === filterValue) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

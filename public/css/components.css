@@ -1,0 +1,251 @@
+/* Filter Box */
+.filter-box {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background-color: #a8e6cf;
+    padding: 15px;
+    border-radius: 5px 5px 0 0;
+    gap: 10px;
+}
+
+.filter-box label {
+    display: grid;
+    align-items: center;
+    gap: 8px;
+    color: #000000;
+}
+
+.filter-box input {
+    padding: 8px 12px;
+    border: 1px solid #50cf89;
+    border-radius: 4px;
+}
+
+/* Tables */
+
+.table-box {
+    width: 100%;
+    margin: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+}
+
+.table-box thead tr {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.table-box th {
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    padding: 1rem 0.75rem;
+    text-align: left;
+}
+
+.table-box tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-box tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.table-box tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+
+.table-box td {
+    padding: 0.875rem 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.table-box td:first-child {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+
+
+/* Buttons */
+.add-btn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: #059669;
+}
+
+.edit-btn {
+    background-color: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #d97706;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.status-approved {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.status-rejected {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Alerts */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    color: #059669;
+    border: 1px solid #bbf7d0;
+}
+
+.alert-warning {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fed7aa;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    border: none;
+    background-color: #f1f5f9;
+    color: #64748b;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    background-color: #10b981;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-card {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .main-box {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .table-box {
+        font-size: 0.8em;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+}
