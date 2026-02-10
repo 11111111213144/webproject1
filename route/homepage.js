@@ -18,25 +18,22 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 
-
-
-router.get('/homepage', async (req, res) => {
+router.get('/homepage', isAuthenticated, async (req, res) => {
     try {
         const [totalitem] = await total_inventory();
         const [totalmoney] = await total_money();
         const [totalplan] = await total_plan();
         const [totalpo] = await total_po();
-        const [posuccess] = await po_sucess();
-        const [planRows] = await pool.promise().query('SELECT * FROM plan_header LIMIT 5');
+        const [planwait] = await plan_wait();
+        const [plansuccess] = await plan_sucess();
         
 res.render('homepage', {
             amt_item: totalitem[0].total || 0,
             total_money: totalmoney[0].total || 0,
             total_plan: totalplan[0].total || 0,
             total_po: totalpo[0].total || 0,
-po_sucess: posuccess,
-            plan: planRows
-
+            plan_wait: planwait,
+            plan_sucess: plansuccess,
         });
     } catch (err) {
         console.error('Homepage error:', err);

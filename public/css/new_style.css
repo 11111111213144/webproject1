@@ -385,20 +385,107 @@ main{
 
 /* homepage fix box */
 .main-box{
-    background-color:goldenrod ;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10rem;
-    margin: 0 auto;
-    gap: 10rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 0 2rem;
 }
 
 .main-box > .box{
-    
-    background-color: blue;
-    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.main-box > .p
+.main-box > .box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.main-box > .box:hover::before {
+    opacity: 1;
+}
+
+.main-box > .box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
+}
+
+.main-box > .box h1 {
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.main-box > .box:first-child h1::before {
+    content: '⏳';
+}
+
+.main-box > .box:last-child h1::before {
+    content: '✅';
+}
+
+.main-box > .box .table-box {
+    width: 100%;
+    margin: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.875rem;
+}
+
+.main-box > .box .table-box thead tr {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.main-box > .box .table-box th {
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    padding: 1rem 0.75rem;
+}
+
+.main-box > .box .table-box tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.main-box > .box .table-box tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.main-box > .box .table-box tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+
+.main-box > .box .table-box td {
+    padding: 0.875rem 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.main-box > .box .table-box td:first-child {
+    color: #1e293b;
+    font-weight: 600;
+}
