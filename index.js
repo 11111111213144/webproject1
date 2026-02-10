@@ -32,6 +32,8 @@ app.use('/', bth_create_planRouter);
 const bth_poRouter = require('./route/bth_po');
 app.use('/', bth_poRouter);
 
+const homepageRouter = require('./route/homepage');
+app.use('/', homepageRouter);
 
 app.set('views', `${__dirname}/public`);
 app.set('view engine', 'ejs');
@@ -44,10 +46,6 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
   res.render('member/login');
-});
-
-app.get('/homepage', (req, res) => {
-  res.render('homepage');
 });
 
 app.get('/checkorder', (req, res) => {

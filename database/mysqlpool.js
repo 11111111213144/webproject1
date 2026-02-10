@@ -40,11 +40,23 @@ async function delete_user(user_id) {
     return pool.promise().query(query, [user_id]);
 }
 
+async function plan_sucess() {
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "อนุมัติแล้ว"'
+    return pool.promise().query(query);
+}
+
+async function plan_wait() {
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "รออนุมัติ"'
+    return pool.promise().query(query);
+}
+
 module.exports = {
     pool,
     total_inventory,
     total_money,
     total_plan,
     total_po,
-    all_user
+    all_user,
+    plan_sucess,
+    plan_wait,
 };
