@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               12.1.2-MariaDB - MariaDB Server
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.15.0.7171
+-- HeidiSQL Version:             12.11.0.7065
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   PRIMARY KEY (`item_Id`),
   UNIQUE KEY `item_Id` (`item_Id`),
   UNIQUE KEY `item_name` (`item_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Dumping data for table procurement_management_system.inventory: ~11 rows (approximately)
 DELETE FROM `inventory`;
@@ -46,7 +46,8 @@ INSERT INTO `inventory` (`item_Id`, `item_type`, `item_name`, `unit`, `remain`, 
 	(8, 'ครุภัณฑ์', 'เก้าอี้สำนักงานมีล้อ', 'ตัว', 10, 2500.00, 'Index Living Mall'),
 	(9, 'วัสดุทำความสะอาด', 'น้ำยาถูพื้น (แกลลอน)', 'แกลลอน', 40, 180.00, 'Big C'),
 	(10, 'วัสดุทำความสะอาด', 'กระดาษทิชชู่ม้วนใหญ่ (แพ็ค)', 'แพ็ค', 100, 150.00, 'Makro'),
-	(17, 'เวชภัณฑ์', 'ยาบ้า', 'เม็ด', 7, 100.00, 'Thepeekai78');
+	(17, 'เวชภัณฑ์', 'ยาบ้า', 'เม็ด', 107, 100.00, 'Thepeekai78'),
+	(18, 'วัสดุ', 'คีย์บอร์ด wooting', 'ชิ้น', 7, 8000.00, 'Thepeekai78');
 
 -- Dumping structure for table procurement_management_system.plan_detail
 CREATE TABLE IF NOT EXISTS `plan_detail` (
@@ -59,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `plan_detail` (
   KEY `item_Id` (`item_Id`),
   CONSTRAINT `1` FOREIGN KEY (`plan_Id`) REFERENCES `plan_header` (`plan_Id`) ON DELETE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`item_Id`) REFERENCES `inventory` (`item_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.plan_detail: ~27 rows (approximately)
+-- Dumping data for table procurement_management_system.plan_detail: ~26 rows (approximately)
 DELETE FROM `plan_detail`;
 INSERT INTO `plan_detail` (`id`, `plan_Id`, `item_Id`, `quantity`) VALUES
 	(1, 1, 1, 44),
@@ -90,7 +91,8 @@ INSERT INTO `plan_detail` (`id`, `plan_Id`, `item_Id`, `quantity`) VALUES
 	(24, 1, 1, 6),
 	(25, 1, 3, 102),
 	(26, 19, 17, 6),
-	(32, 1, 17, 100);
+	(32, 1, 17, 100),
+	(33, 30, 18, 1);
 
 -- Dumping structure for table procurement_management_system.plan_header
 CREATE TABLE IF NOT EXISTS `plan_header` (
@@ -100,22 +102,23 @@ CREATE TABLE IF NOT EXISTS `plan_header` (
   `plan_status` varchar(50) DEFAULT 'รออนุมัติ',
   `item_plan` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`plan_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.plan_header: ~11 rows (approximately)
+-- Dumping data for table procurement_management_system.plan_header: ~12 rows (approximately)
 DELETE FROM `plan_header`;
 INSERT INTO `plan_header` (`plan_Id`, `plan_name`, `plan_date`, `plan_status`, `item_plan`) VALUES
 	(1, 'แผนจัดซื้อประจำเดือน มกราคม', '2024-01-05', 'ไม่อนุมัติ', NULL),
 	(2, 'แผนจัดซื้อประจำเดือน กุมภาพันธ์', '2024-02-01', 'อนุมัติแล้ว', NULL),
 	(3, 'แผนจัดซื้อด่วน (อุปกรณ์คอมพิวเตอร์)', '2024-02-10', 'อนุมัติแล้ว', NULL),
 	(4, 'แผนจัดซื้อประจำเดือน มีนาคม', '2024-03-01', 'รออนุมัติ', NULL),
-	(5, 'แผนซ่อมบำรุงสำนักงาน', '2024-03-15', 'อนุมัติ', NULL),
+	(5, 'แผนซ่อมบำรุงสำนักงาน', '2024-03-15', 'อนุมัติแล้ว', NULL),
 	(6, 'แผนจัดซื้อครุภัณฑ์ประจำปี', '2024-01-15', 'ไม่อนุมัติ', NULL),
 	(7, 'แผนจัดซื้อวัสดุสิ้นเปลือง Q1', '2024-01-20', 'อนุมัติแล้ว', NULL),
-	(8, 'แผนเตรียมงานสัมมนา', '2024-04-01', 'ร่างแผน', NULL),
-	(9, 'แผนจัดซื้อประจำเดือน เมษายน', '2024-04-05', 'ร่างแผน', NULL),
+	(8, 'แผนเตรียมงานสัมมนา', '2024-04-01', 'ไม่อนุมัติ', NULL),
+	(9, 'แผนจัดซื้อประจำเดือน เมษายน', '2024-04-05', 'อนุมัติแล้ว', NULL),
 	(10, 'แผนฉุกเฉิน (น้ำยาทำความสะอาด)', '2024-04-10', 'รออนุมัติ', NULL),
-	(19, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-09', 'รออนุมัติ', 'เวชภัณฑ์');
+	(19, 'แผนการจัดซื้อลูกเสือสำรอง', '2026-02-09', 'รออนุมัติ', 'เวชภัณฑ์'),
+	(30, 'แผนการจัดซื้อแป้นพิมพ์', '2026-02-10', 'รออนุมัติ', 'วัสดุ');
 
 -- Dumping structure for table procurement_management_system.po_detail
 CREATE TABLE IF NOT EXISTS `po_detail` (
@@ -130,15 +133,17 @@ CREATE TABLE IF NOT EXISTS `po_detail` (
   KEY `item_Id` (`item_Id`),
   CONSTRAINT `1` FOREIGN KEY (`po_Id`) REFERENCES `po_header` (`po_Id`) ON DELETE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`item_Id`) REFERENCES `inventory` (`item_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.po_detail: ~4 rows (approximately)
+-- Dumping data for table procurement_management_system.po_detail: ~5 rows (approximately)
 DELETE FROM `po_detail`;
 INSERT INTO `po_detail` (`id`, `po_Id`, `item_Id`, `quantity`, `agreed_price`, `ref_plan_detail_id`) VALUES
 	(1, 1, 1, 50, 120.00, 1),
 	(2, 1, 3, 20, 45.00, 3),
 	(3, 2, 2, 100, 10.00, 2),
-	(7, 2, 3, 6, 45.06, NULL);
+	(7, 2, 3, 6, 45.06, NULL),
+	(10, 7, 17, 100, 100.00, NULL),
+	(11, 8, 18, 1, 8000.00, NULL);
 
 -- Dumping structure for table procurement_management_system.po_header
 CREATE TABLE IF NOT EXISTS `po_header` (
@@ -148,13 +153,15 @@ CREATE TABLE IF NOT EXISTS `po_header` (
   `supplier_name` varchar(100) NOT NULL,
   `po_status` varchar(50) DEFAULT 'รอส่งใบสั่งซื้อ',
   PRIMARY KEY (`po_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Dumping data for table procurement_management_system.po_header: ~2 rows (approximately)
+-- Dumping data for table procurement_management_system.po_header: ~4 rows (approximately)
 DELETE FROM `po_header`;
 INSERT INTO `po_header` (`po_Id`, `po_number`, `po_date`, `supplier_name`, `po_status`) VALUES
-	(1, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอรับของ'),
-	(2, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว');
+	(1, 'PO-6701-001', '2024-01-10', 'Office Mate', 'รอส่งใบสั่งซื้อ'),
+	(2, 'PO-6701-002', '2024-01-11', 'ร้านสมใจ', 'รับของแล้ว'),
+	(7, 'PO-6701-00-3', '2026-02-10', 'thepeekai', 'รับของแล้ว'),
+	(8, 'PO-6701-004', '2026-02-10', 'thepeekai67', 'รับของแล้ว');
 
 -- Dumping structure for table procurement_management_system.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -171,12 +178,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `Lname` (`Lname`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Dumping data for table procurement_management_system.user: ~3 rows (approximately)
 DELETE FROM `user`;
 INSERT INTO `user` (`userId`, `userName`, `userPass`, `Fname`, `Lname`, `email`, `phone`, `role`) VALUES
-	(1, '่joe', '1234', 'สฟเเ', 'ฟฟดฟห', 'ovengoodgame@gmail.com', '08646411', 'member'),
+	(1, 'joe', '1234', 'สฟเเ', 'ฟฟดฟห', 'ovengoodgame@gmail.com', '08646411', 'member'),
 	(2, 'joe2', '1234', 'Suwannapom', 'Jailek', '1234@gmail.com ', '000000000', 'admin'),
 	(17, 'jon', '$2b$12$lCzgBtMcGKPZpnwvpYQequmZTLhUNEbSOP3Qltq.nr8KCnmoIXfAu', 'ศุภากิต ', 'จอมพลัง', 'wachirapatboonmee@gmail.com', '12355', 'member');
 
