@@ -30,10 +30,22 @@ async function total_po() {
     return pool.promise().query(query);
 }
 
+async function plan_sucess() {
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "อนุมัติแล้ว"'
+    return pool.promise().query(query);
+}
+
+async function plan_wait() {
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "รออนุมัติ"'
+    return pool.promise().query(query);
+}
+
 module.exports = {
     pool,
     total_inventory,
     total_money,
     total_plan,
-    total_po
+    total_po,
+    plan_sucess,
+    plan_wait,
 };

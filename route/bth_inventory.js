@@ -17,25 +17,6 @@ router.use(cookie());
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get('/homepage', async (req, res) => {
-    try {
-        const [totalitem] = await total_inventory();
-        const [totalmoney] = await total_money();
-        const [totalplan] = await total_plan();
-        const [totalpo] = await total_po();
-        
-        res.render('homepage', {
-            amt_item: totalitem[0].total || 0,
-            total_money: totalmoney[0].total || 0,
-            total_plan: totalplan[0].total || 0,
-            total_po: totalpo[0].total || 0,
-        });
-    } catch (err) {
-        console.error('Homepage error:', err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 router.get('/inventory', (req, res) => {
     const msg = req.query.msg || null;
     const type = req.query.type || 'all';

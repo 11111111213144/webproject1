@@ -9,36 +9,144 @@
     <link rel="stylesheet" href="css/new_style.css">
 </head>
 
-<body>    
+<body>
     <header>
         <%- include('navbar')%>
     </header>
+
     <main>
-        <div class="dashboard-container">
-            <div class="dashboard-card">
-                <h1>จำนวนพัสดุ</h1>
-                <h3><%= amt_item%> รายการ</h3>
+        <h1>ภาพรวม</h1>
+        <div class="main-card">
+
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">box</span>
+                    <p class="text-primary">พัสดุ</p>
+                </div>
+                <p>
+                    <%= amt_item%>
+                </p>
             </div>
-            <div class="dashboard-card">
-                <h1>รวมเป็นเงิน</h1>
-                <h3><%= total_money%> บาท</h3>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        money_bag
+                    </span>
+                    <p class="text-primary">ราคารวม</p>
+
+                </div>
+                <p>
+                    <%= Number(total_money).toLocaleString('th-TH') %>
+                </p>
             </div>
-            <div class="dashboard-card">
-                <h1>จำนวนแผนจัดซื้อ</h1>
-                <h3><%= total_plan%> แผนจัดซื้อ</h3>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        assignment
+                    </span>
+                    <p class="text-primary">แผนจัดซื้อ</p>
+                </div>
+                <p>
+                    <%= total_plan%>
+                </p>
             </div>
-            <div class="dashboard-card">
-                <h1>จำนวนใบสั่งซื้อ</h1>
-                <h3><%= total_po %> ใบสั่งซื้อ</h3>
+            <div class="card">
+                <div class="card-inner">
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
+                    <p class="text-primary">ใบสั่งซื้อ</p>
+                </div>
+                <p class="value">
+                    <%= total_po %>
+                </p>
             </div>
         </div>
-        <!-- ดูรายชื่อสมาชิกทั้งหมด: ดูว่าใครสมัครมาบ้าง เบอร์โทรอะไร
+        <div class="main-box">
+            <div class="box">
+                <h1>5 ใบสั่งซื้อที่รอการอนุมัติ</h1>
 
-แบน/ระงับบัญชี (Ban): ถ้า User ทำผิดกฎ หรือเป็นสแปม
+                <table class="table-box">
+                    <thead>
+                        <tr>
+                            <th>ลำดับที่</th>
+                            <th>เลขที่ใบสั่งซื้อ</th>
+                            <th>บริษัท/ร้านค้า</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i=0; i < 5; i++) { %>
+                            <% if(plan && plan[i]) { %>
+                                <tr>
+                                    <td>
+                                        <%= i + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= plan[i].plan_Id %>
+                                    </td>
+                                    <td>
+                                        <%= plan[i].plan_name %>
+                                    </td>
+                                </tr>
+                                <% } else { %>
+                                    <tr>
+                                        <td>
+                                            <%= i + 1 %>
+                                        </td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
+                    </tbody>
 
-รีเซ็ตรหัสผ่าน: กรณี User ลืมรหัสและแจ้งมาทาง Admin (Option เสริม)
+                </table>
+            </div>
 
-ตั้งค่าสิทธิ์: แต่งตั้ง User คนอื่นให้เป็น Admin ช่วยงาน -->
+
+            <div class="box">
+                <h1>5 ใบสั่งซื้อที่รอการอนุมัติ</h1>
+
+                <table class="table-box">
+                    <thead>
+                        <tr>
+                            <th>ลำดับที่</th>
+                            <th>เลขที่ใบสั่งซื้อ</th>
+                            <th>บริษัท/ร้านค้า</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i=0; i < 5; i++) { %>
+                            <% if(plan && plan[i]) { %>
+                                <tr>
+                                    <td>
+                                        <%= i + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= plan[i].plan_Id %>
+                                    </td>
+                                    <td>
+                                        <%= plan[i].plan_name %>
+                                    </td>
+                                </tr>
+                                <% } else { %>
+                                    <tr>
+                                        <td>
+                                            <%= i + 1 %>
+                                        </td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
     </main>
+
+    <div class="grid-container"></div>
     <footer></footer>
+    <script src="css/scripts.js"></script>
 </body>
