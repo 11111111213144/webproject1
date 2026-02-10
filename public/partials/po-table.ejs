@@ -1,0 +1,24 @@
+<table class="table-box">
+    <thead>
+        <tr>
+            <th>ลำดับ</th>
+            <th>เลขที่ใบสั่งซื้อ</th>
+            <th>รหัสผู้ขาย</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (data && data.length > 0) { %>
+            <% data.forEach(function(item, index) { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= item.po_number %></td>
+                    <td><%= item.supplier_name %></td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="3"><%= emptyMessage || 'ไม่มีรายการ' %></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
