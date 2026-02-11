@@ -60,7 +60,7 @@ git clone <repository-url>
 cd webproject
 ```
 
-### 2. ติดตั้ง Dependencies
+### 2. ติดตั้ง Library
 ```bash
 npm install
 ```
