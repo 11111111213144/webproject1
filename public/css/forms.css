@@ -1,0 +1,273 @@
+/* Form Styles for Inventory Pages */
+
+/* Main Form Container */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Form Box Container */
+.form-box {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+.edit-box {
+    margin-top: 20px;
+}
+
+/* Form Header */
+.form-box h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* Form Styles */
+.form-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Label Styles */
+.form-box label {
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Input Field Styles */
+.form-box input[type="text"],
+.form-box input[type="number"],
+.form-box input[type="date"],
+.form-box select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    font-family: 'Kanit', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.form-box input[type="text"]:focus,
+.form-box input[type="number"]:focus,
+.form-box input[type="date"]:focus,
+.form-box select:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-box input:hover,
+.form-box select:hover {
+    border-color: #3498db;
+}
+
+/* Select Dropdown Styling */
+.form-box select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* Form Row for two-column layout */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Button Container */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Footer Button Container */
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+footer .submit-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    margin: 0;
+}
+
+footer .submit-btn:hover {
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+}
+
+/* Remove duplicate footer styling */
+footer + footer {
+    display: none;
+}
+
+/* Form Validation */
+.form-box input:invalid,
+.form-box select:invalid {
+    border-color: #e74c3c;
+}
+
+.form-box input:valid,
+.form-box select:valid {
+    border-color: #27ae60;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        padding: 10px;
+    }
+    
+    .form-box {
+        padding: 25px;
+        margin: 10px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .submit-btn {
+        width: 100%;
+    }
+}
+
+/* Item Edit Container Specific Styles */
+.item-edit-container {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.item-edit-container .form-box {
+    background: white;
+    box-shadow: 0 15px 35px rgba(252, 182, 159, 0.3);
+}
+
+/* Animation for form appearance */
+.form-box {
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Field Focus Animations */
+.form-box input:focus,
+.form-box select:focus {
+    animation: fieldFocus 0.3s ease;
+}
+
+@keyframes fieldFocus {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Loading State */
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Success/Error Message Styling */
+.alert {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}

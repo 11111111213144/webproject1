@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>เพิ่มรายการวัสดุ</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/forms.css">
@@ -13,42 +13,57 @@
             alert("<%= msg %>");
             <% } %>
     </script>
-
 </head>
 
 <body>
     <header>
     </header>
     <main>
-        <h1>เพิ่มรายการวัสดุ</h1>
         <div class="form-box">
+            <h1>เพิ่มรายการวัสดุ</h1>
             <form action="/createitem" method="post">
-
-                <label for="item_name">ชื่อวัสดุ :</label>
-                <input type="text" id="item_name" name="item_name"><br><br>
+                <div class="form-group">
+                    <label for="item_name">ชื่อวัสดุ</label>
+                    <input type="text" id="item_name" name="item_name" required>
+                </div>
                 
-                <label for="item_type">ประเภท :</label>
-                <input type="text" id="item_type" name="item_type"><br><br>
+                <div class="form-group">
+                    <label for="item_type">ประเภท</label>
+                    <select id="item_type" name="item_type" required>
+                        <option value="">เลือกประเภท</option>
+                        <option value="วัสดุ">วัสดุ</option>
+                        <option value="ครุภัณฑ์">ครุภัณฑ์</option>
+                        <option value="เวชภัณฑ์">เวชภัณฑ์</option>
+                    </select>
+                </div>
 
-                <label for="unit_price">ราคา :</label>
-                <input type="text" id="unit_price" name="unit_price"><br><br>
+                <div class="form-group">
+                    <label for="unit_price">ราคา</label>
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" min="0" required>
+                </div>
 
-                <label for="unit">หน่วยนับ :</label>
-                <input type="text" id="unit" name="unit"><br><br>
+                <div class="form-group">
+                    <label for="unit">หน่วยนับ</label>
+                    <input type="text" id="unit" name="unit" required>
+                </div>
 
-                <label for="remain">จำนวนคงเหลือ :</label>
-                <input type="text" id="remain" name="remain"><br><br>
+                <div class="form-group">
+                    <label for="remain">จำนวนคงเหลือ</label>
+                    <input type="number" id="remain" name="remain" min="0" required>
+                </div>
 
-                <label for="Company_shop">บริษัท/ร้านค้า :</label>
-                <input type="text" id="Company_shop" name="Company_shop"><br><br>
+                <div class="form-group">
+                    <label for="Company_shop">บริษัท/ร้านค้า</label>
+                    <input type="text" id="Company_shop" name="Company_shop" required>
+                </div>
 
-                <button type="submit" class="submit-btn">บันทึก</button>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">บันทึก</button>
+                    <button type="button" class="submit-btn" onclick="history.back()" style="background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);">ย้อนกลับ</button>
+                </div>
             </form>
         </div>
     </main>
-    <footer>
-        <button type="submit" class="submit-btn" onclick="history.back()">ย้อนกลับ</button>
-    </footer>
 </body>
 
 </html>

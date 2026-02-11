@@ -110,13 +110,13 @@ router.get('/item_edits', isAuthenticated, isMember, (req, res) => {
 });
 
 router.post('/edititem', isAuthenticated, isMember, (req, res) => {
-    const { item_Id, item_name, item_type, unit_price, unit, remain, Company_shop } = req.body;
-    pool.query('UPDATE inventory SET item_name = ?, item_type = ?, unit_price = ?, unit = ?, remain = ?, Company_shop = ? WHERE item_Id = ?', [item_name, item_type, unit_price, unit, remain, Company_shop, item_Id], (err, result) => {
+    const { item_Id, item_name, item_type, unit_price, unit, remain } = req.body;
+    pool.query('UPDATE inventory SET item_name = ?, item_type = ?, unit_price = ?, unit = ?, remain = ? WHERE item_Id = ?', [item_name, item_type, unit_price, unit, remain, item_Id], (err, result) => {
         if (err) {
             console.log(err);
-            return res.redirect('/inventory');
+            return res.redirect('/inventory?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการแก้ไขข้อมูล'));
         }
-        res.redirect('/inventory');
+        res.redirect('/inventory?msg=' + encodeURIComponent('แก้ไขข้อมูลสำเร็จ'));
     });
 });
 
