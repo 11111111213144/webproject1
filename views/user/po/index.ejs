@@ -53,7 +53,7 @@
                             <%= po.supplier_name %>
                         </td>
                         <td>
-                            <%= po.po_date %>
+                            <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
                         </td>
                         <td>
                             <%= po.po_status %>

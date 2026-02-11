@@ -154,7 +154,7 @@
                             <% plans.forEach(function(plan) { %>
                                 <option value="<%= plan.plan_Id %>">
                                     <%= plan.plan_name %> - <%= plan.plan_date ? new
-                                            Date(plan.plan_date).toLocaleDateString('th-TH') : '' %> (สถานะ: <%=
+                                            Date(plan.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %> (สถานะ: <%=
                                                 plan.plan_status %>)
                                 </option>
                                 <% }); %>

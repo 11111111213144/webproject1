@@ -54,7 +54,7 @@
                 </div>
                 <div class="info-item">
                     <strong>วันที่:</strong>
-                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH') : '-' %>
+                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
                 </div>
             </div>
 

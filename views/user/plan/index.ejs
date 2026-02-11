@@ -54,7 +54,7 @@
                             <%= plan.plan_name %>
                         </td>
                         <td>
-                            <%= plan.plan_date %>
+                            <%= plan.plan_date ? new Date(plan.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
                         </td>
                         <td>
                             <%= plan.item_plan || plan.item_type %>

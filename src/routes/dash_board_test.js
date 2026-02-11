@@ -448,6 +448,321 @@ router.delete('/deletepo/:po_Id', (req, res) => {
     });
 });
 
+// Delete Multiple Plans
+router.delete('/deleteplans', (req, res) => {
+    console.log('DELETE /deleteplans called');
+    console.log('Request body:', req.body);
+    
+    let ids = [];
+    
+    // Handle different ways the body might be sent
+    if (req.body && req.body.ids) {
+        ids = req.body.ids;
+    } else if (req.query && req.query.ids) {
+        ids = JSON.parse(req.query.ids);
+    }
+    
+    console.log('Raw IDs:', ids);
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ success: false, message: 'ไม่มีรายการที่เลือก' });
+    }
+    
+    // Convert IDs to integers for safety
+    const planIds = ids.map(id => parseInt(id)).filter(id => !isNaN(id));
+    console.log('Processed plan IDs:', planIds);
+    
+    if (planIds.length === 0) {
+        return res.status(400).json({ success: false, message: 'รหัสแผนไม่ถูกต้อง' });
+    }
+    
+    // Use transaction to safely delete plans and their details
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log('Error getting connection:', err);
+            return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+        }
+        
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                console.log('Error starting transaction:', err);
+                return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+            }
+            
+            // First delete plan details
+            const deleteDetailsSQL = 'DELETE FROM Plan_Detail WHERE plan_Id IN (?)';
+            connection.query(deleteDetailsSQL, [planIds], (err, detailsResult) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        console.log('Error deleting plan details:', err);
+                        res.status(500).json({ success: false, message: 'ไม่สามารถลบรายละเอียดแผนได้' });
+                    });
+                }
+                
+                console.log('Deleted plan details:', detailsResult.affectedRows);
+                
+                // Then delete the plans
+                const deletePlansSQL = 'DELETE FROM Plan_Header WHERE plan_Id IN (?)';
+                connection.query(deletePlansSQL, [planIds], (err, plansResult) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            console.log('Error deleting plans:', err);
+                            res.status(500).json({ success: false, message: 'ไม่สามารถลบแผนได้' });
+                        });
+                    }
+                    
+                    connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                console.log('Error committing transaction:', err);
+                                res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+                            });
+                        }
+                        
+                        connection.release();
+                        console.log('Successfully deleted plans:', plansResult.affectedRows);
+                        
+                        res.json({ 
+                            success: true, 
+                            message: `ลบแผนจัดซื้อ ${plansResult.affectedRows} รายการสำเร็จ`,
+                            deletedCount: plansResult.affectedRows
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+// Delete Multiple POs
+router.delete('/deletepos', (req, res) => {
+    console.log('DELETE /deletepos called');
+    console.log('Request body:', req.body);
+    
+    let ids = [];
+    
+    // Handle different ways the body might be sent
+    if (req.body && req.body.ids) {
+        ids = req.body.ids;
+    } else if (req.query && req.query.ids) {
+        ids = JSON.parse(req.query.ids);
+    }
+    
+    console.log('Raw IDs:', ids);
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ success: false, message: 'ไม่มีรายการที่เลือก' });
+    }
+    
+    // Convert IDs to integers for safety
+    const poIds = ids.map(id => parseInt(id)).filter(id => !isNaN(id));
+    console.log('Processed PO IDs:', poIds);
+    
+    if (poIds.length === 0) {
+        return res.status(400).json({ success: false, message: 'รหัสใบสั่งซื้อไม่ถูกต้อง' });
+    }
+    
+    // Use transaction to safely delete POs and their details
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log('Error getting connection:', err);
+            return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+        }
+        
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                console.log('Error starting transaction:', err);
+                return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+            }
+            
+            // First delete PO details
+            const deleteDetailsSQL = 'DELETE FROM PO_Detail WHERE po_Id IN (?)';
+            connection.query(deleteDetailsSQL, [poIds], (err, detailsResult) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        console.log('Error deleting PO details:', err);
+                        res.status(500).json({ success: false, message: 'ไม่สามารถลบรายละเอียดใบสั่งซื้อได้' });
+                    });
+                }
+                
+                console.log('Deleted PO details:', detailsResult.affectedRows);
+                
+                // Then delete the POs
+                const deletePOsSQL = 'DELETE FROM PO_Header WHERE po_Id IN (?)';
+                connection.query(deletePOsSQL, [poIds], (err, posResult) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            console.log('Error deleting POs:', err);
+                            res.status(500).json({ success: false, message: 'ไม่สามารถลบใบสั่งซื้อได้' });
+                        });
+                    }
+                    
+                    connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                console.log('Error committing transaction:', err);
+                                res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+                            });
+                        }
+                        
+                        connection.release();
+                        console.log('Successfully deleted POs:', posResult.affectedRows);
+                        
+                        res.json({ 
+                            success: true, 
+                            message: `ลบใบสั่งซื้อ ${posResult.affectedRows} รายการสำเร็จ`,
+                            deletedCount: posResult.affectedRows
+                        });
+                    });
+                });
+            });
+        });
+        });
+});
+
+// Fallback POST routes for delete operations (if DELETE method doesn't work)
+router.post('/deleteplans', (req, res) => {
+    console.log('POST /deleteplans called (fallback)');
+    const { ids } = req.body;
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ success: false, message: 'ไม่มีรายการที่เลือก' });
+    }
+    
+    const planIds = ids.map(id => parseInt(id)).filter(id => !isNaN(id));
+    
+    if (planIds.length === 0) {
+        return res.status(400).json({ success: false, message: 'รหัสแผนไม่ถูกต้อง' });
+    }
+    
+    // Use transaction to safely delete plans and their details
+    pool.getConnection((err, connection) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+        }
+        
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+            }
+            
+            // First delete plan details
+            const deleteDetailsSQL = 'DELETE FROM Plan_Detail WHERE plan_Id IN (?)';
+            connection.query(deleteDetailsSQL, [planIds], (err, detailsResult) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ success: false, message: 'ไม่สามารถลบรายละเอียดแผนได้' });
+                    });
+                }
+                
+                // Then delete plans
+                const deletePlansSQL = 'DELETE FROM Plan_Header WHERE plan_Id IN (?)';
+                connection.query(deletePlansSQL, [planIds], (err, plansResult) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            res.status(500).json({ success: false, message: 'ไม่สามารถลบแผนได้' });
+                        });
+                    }
+                    
+                    connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+                            });
+                        }
+                        
+                        connection.release();
+                        res.json({ 
+                            success: true, 
+                            message: `ลบแผนจัดซื้อ ${plansResult.affectedRows} รายการสำเร็จ`,
+                            deletedCount: plansResult.affectedRows
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+router.post('/deletepos', (req, res) => {
+    console.log('POST /deletepos called (fallback)');
+    const { ids } = req.body;
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ success: false, message: 'ไม่มีรายการที่เลือก' });
+    }
+    
+    const poIds = ids.map(id => parseInt(id)).filter(id => !isNaN(id));
+    
+    if (poIds.length === 0) {
+        return res.status(400).json({ success: false, message: 'รหัสใบสั่งซื้อไม่ถูกต้อง' });
+    }
+    
+    // Use transaction to safely delete POs and their details
+    pool.getConnection((err, connection) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+        }
+        
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+            }
+            
+            // First delete PO details
+            const deleteDetailsSQL = 'DELETE FROM PO_Detail WHERE po_Id IN (?)';
+            connection.query(deleteDetailsSQL, [poIds], (err, detailsResult) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        res.status(500).json({ success: false, message: 'ไม่สามารถลบรายละเอียดใบสั่งซื้อได้' });
+                    });
+                }
+                
+                // Then delete POs
+                const deletePOsSQL = 'DELETE FROM PO_Header WHERE po_Id IN (?)';
+                connection.query(deletePOsSQL, [poIds], (err, posResult) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            res.status(500).json({ success: false, message: 'ไม่สามารถลบใบสั่งซื้อได้' });
+                        });
+                    }
+                    
+                    connection.commit(err => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                connection.release();
+                                res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดทางระบบ' });
+                            });
+                        }
+                        
+                        connection.release();
+                        res.json({ 
+                            success: true, 
+                            message: `ลบใบสั่งซื้อ ${posResult.affectedRows} รายการสำเร็จ`,
+                            deletedCount: posResult.affectedRows
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
 router.get('/homepage', (req, res) => {
     const amount_item = "SELECT COUNT(*) AS total FROM inventory";
     pool.query(amount_item, (err, result) => {

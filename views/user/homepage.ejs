@@ -85,7 +85,7 @@
                                 <td><%= count1++ %></td>
                                 <td><%= item.plan_name %></td>
                                 <td><%= item.plan_Id %></td>
-                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH') %></td>
+                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                             </tr>
                         <% }) %>
                         <% for(let i = plan_wait.length; i < 5; i++) { %>
@@ -120,7 +120,7 @@
                                 <td><%= count2++ %></td>
                                 <td><%= item.plan_name %></td>
                                 <td><%= item.plan_Id %></td>
-                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH') %></td>
+                                <td><%= new Date(item.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                             </tr>
                             <% }) %>
                         <% for(let i = plan_sucess.length; i < 5; i++) { %>
