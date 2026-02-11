@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+        <% } %>
+    </script>
 </head>
 
 <body>
     <header>
-        <%- include('../../partials/navbar.ejs') %>
+        <%- include('navbar.ejs') %>
     </header>
 
     <main>
@@ -26,7 +28,7 @@
                 <option value="เวชภัณฑ์">เวชภัณฑ์</option>
             </select>
             <button type="submit" class="add-btn"><a href="/plan_detail">เพิ่มรายการ</a></button>
-            <button type="button" class="add-btn" onclick="deletePlan()">ลบรายการ</button>
+            <button type="submit" class="delete-btn" onclick="deletePlan()">ลบรายการ</button>
         </div>
         <table class="table-box">
             <thead>
@@ -54,7 +56,7 @@
                             <%= plan.plan_name %>
                         </td>
                         <td>
-                            <%= plan.plan_date ? new Date(plan.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                            <%= plan.plan_date %>
                         </td>
                         <td>
                             <%= plan.item_plan || plan.item_type %>
@@ -63,8 +65,7 @@
                             <%= plan.plan_status %>
                         </td>
                         <td>
-                            <a style="text-decoration: none;"
-                                href="/dash_board_test/views/plan/details/<%= plan.plan_Id %>"
+                            <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>"
                                 class="btn btn-primary">ดูรายละเอียด</a>
                         </td>
                         <td>
@@ -78,41 +79,41 @@
     </main>
     <footer></footer>
     <script>
-        function deletePlan() {
-            const checkboxes = document.querySelectorAll('.checkbox');
-            const ids = [];
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    ids.push(checkbox.value);
+            function deletePlan() {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                const ids = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        ids.push(checkbox.value);
+                    }
+                });
+                if (ids.length === 0) {
+                    alert('กรุณาเลือกแผนงาน');
+                    return;
                 }
-            });
-            if (ids.length === 0) {
-                alert('กรุณาเลือกแผนงาน');
-                return;
-            }
-            if (confirm('คุณต้องการลบแผนงานนี้หรือไม่')) {
-                fetch('/deleteplan', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ ids }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('ลบแผนงานสำเร็จ');
-                            location.reload();
-                        } else {
-                            alert('เกิดข้อผิดพลาดในการลบแผนงาน');
-                        }
+                if (confirm('คุณต้องการลบแผนงานนี้หรือไม่')) {
+                    fetch('/deleteplan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ ids }),
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('เกิดข้อผิดพลาดในการลบแผนงาน');
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('ลบแผนงานสำเร็จ');
+                                location.reload();
+                            } else {
+                                alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                        });
+                }
             }
-        }
         document.getElementById('selectAll').addEventListener('change', function () {
             const checkboxes = document.querySelectorAll('.checkbox');
             checkboxes.forEach(checkbox => {

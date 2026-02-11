@@ -1,14 +1,14 @@
 const express = require('express');
-
+require('dotenv').config();
 const router = express.Router();
 
 const bodyParser = require('body-parser');
 const path = require('path')
-const { pool } = require('../models/mysqlpool');
+const { pool } = require('../database/mysqlpool');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookie = require('cookie-parser');
-const { url } = require('url');
+const { url } = require('inspector');
 const { isAuthenticated, isAdmin, isMember } = require('./auth');
 
 router.use(cookie());
@@ -37,7 +37,7 @@ router.get('/createplan', isAuthenticated, (req, res) => {
             console.log('Error fetching plan:', err.message);
             allPlan = [];
         }
-        res.render('user/plan/index', { plan: allPlan });
+        res.render('createplan_main', { plan: allPlan, msg: msg });
     });
 });
 
@@ -58,12 +58,10 @@ router.get('/plan_detail', isAuthenticated, (req, res) => {
     `;
     pool.query(sql, (err, result) => {
         if (err) {
-
-            
             console.log(err);
             return res.redirect('/homepage');
         }
-        res.render('user/plan/add', { plan: result });
+        res.render('plan_detail', { plan: result });
     });
 });
 
@@ -106,7 +104,7 @@ router.get('/admin_main', isAuthenticated, isAdmin, (req, res) => {
                 console.log(err2);
                 pos = [];
             }
-            res.render('admin/admin_main', { plans: plans, pos: pos, user: req.user });
+            res.render('admin_main', { plans: plans, pos: pos });
         });
     });
 });
@@ -123,92 +121,6 @@ router.post('/updateplanstatus', isAuthenticated, isAdmin, (req, res) => {
             return res.status(500).send('Error updating plan status');
         }
         res.json({ success: true });
-    });
-});
-
-// Add new plan page
-router.get('/addplan', isAuthenticated, (req, res) => {
-    const msg = req.query.msg || null;
-    const plan_Id = req.query.plan_Id || null;
-    
-    // Fetch inventory items for dropdown
-    const inventorySql = 'SELECT item_Id, item_name, remain, unit FROM Inventory WHERE remain > 0 ORDER BY item_name';
-    
-    pool.query(inventorySql, (err, inventoryItems) => {
-        if (err) {
-            console.log('Error fetching inventory:', err.message);
-            inventoryItems = [];
-        }
-        
-        // If plan_Id exists, fetch plan details
-        if (plan_Id) {
-            const detailSql = `
-                SELECT 
-                    pd.id AS plan_detail_Id,
-                    pd.plan_Id,
-                    pd.item_Id,
-                    pd.quantity,
-                    i.item_name,
-                    i.unit,
-                    i.unit_price,
-                    (pd.quantity * i.unit_price) AS total_price
-                FROM Plan_Detail pd
-                LEFT JOIN Inventory i ON pd.item_Id = i.item_Id
-                WHERE pd.plan_Id = ?
-                ORDER BY pd.id
-            `;
-            
-            pool.query(detailSql, [plan_Id], (err, planDetail) => {
-                if (err) {
-                    console.log('Error fetching plan details:', err.message);
-                    planDetail = [];
-                }
-                
-                res.render('user/plan/add', { 
-                    msg: msg, 
-                    plan_Id: plan_Id,
-                    inventoryItems: inventoryItems,
-                    planDetail: planDetail
-                });
-            });
-        } else {
-            res.render('user/plan/add', { 
-                msg: msg, 
-                inventoryItems: inventoryItems
-            });
-        }
-    });
-});
-
-// Edit plan page  
-router.get('/editplan/:id', isAuthenticated, (req, res) => {
-    const planId = req.params.id;
-    const sql = 'SELECT * FROM plan_header WHERE plan_Id = ?';
-    
-    pool.query(sql, [planId], (err, result) => {
-        if (err) {
-            console.log('Error fetching plan:', err.message);
-            return res.redirect('/createplan?msg=' + encodeURIComponent('Plan not found'));
-        }
-        if (result.length === 0) {
-            return res.redirect('/createplan?msg=' + encodeURIComponent('Plan not found'));
-        }
-        res.render('user/plan/edit', { plan: result[0] });
-    });
-});
-
-// Update plan
-router.post('/updateplan/:id', isAuthenticated, isMember, (req, res) => {
-    const planId = req.params.id;
-    const { plan_name, plan_date, item_plan } = req.body;
-    const sql = 'UPDATE plan_header SET plan_name = ?, plan_date = ?, item_plan = ? WHERE plan_Id = ?';
-    
-    pool.query(sql, [plan_name, plan_date, item_plan, planId], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.redirect(`/editplan/${planId}?msg=` + encodeURIComponent('Error updating plan'));
-        }
-        res.redirect('/createplan?msg=' + encodeURIComponent('Plan updated successfully'));
     });
 });
 

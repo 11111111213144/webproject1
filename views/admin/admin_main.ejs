@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>อนุมัติ (Admin)</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
     <style>
         .tabs {
             display: flex;
@@ -66,7 +68,7 @@
 
 <body>
     <header>
-        <%- include('../partials/navbar_admin') %>
+        <%- include('navbar_admin') %>
     </header>
     <main>
         <h1>อนุมัติ (Admin)</h1>
@@ -87,7 +89,6 @@
                     <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                 </select>
                 <button class="add-btn" onclick="updatePlanStatus()">บันทึก</button>
-                <button class="delete-btn" onclick="deleteSelectedPlans()" style="background:#dc3545;">ลบที่เลือก</button>
             </div>
             <table class="table-box">
                 <thead>
@@ -111,7 +112,7 @@
                                     <%= plan.plan_name %>
                                 </td>
                                 <td>
-                                    <%= plan.plan_date ? new Date(plan.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                                    <%= plan.plan_date ? new Date(plan.plan_date).toLocaleDateString('th-TH') : '-' %>
                                 </td>
                                 <td>
                                     <span class="status-badge 
@@ -123,15 +124,15 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/dash_board_test/views/plan/details/<%= plan.plan_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">รายละเอียด</a>
+                                    <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>" class="add-btn"
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="plan_id" value="<%= plan.plan_Id %>"></td>
                             </tr>
                             <% }) %>
                                 <% } else { %>
-                                     <tr>
-                                        <td colspan="7">ไม่มีแผนจัดซื้อ</td>
+                                    <tr>
+                                        <td colspan="6">ไม่มีแผนจัดซื้อ</td>
                                     </tr>
                                     <% } %>
                 </tbody>
@@ -150,7 +151,6 @@
                     <option value="ยกเลิก">ยกเลิก</option>
                 </select>
                 <button class="add-btn" onclick="updatePOStatus()">บันทึก</button>
-                <button class="delete-btn" onclick="deleteSelectedPOs()" style="background:#dc3545;">ลบที่เลือก</button>
             </div>
             <table class="table-box">
                 <thead>
@@ -178,7 +178,7 @@
                                     <%= po.supplier_name %>
                                 </td>
                                 <td>
-                                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH') : '-' %>
                                 </td>
                                 <td>
                                     <span class="status-badge 
@@ -190,15 +190,15 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/dash_board_test/views/admin/po/detail/<%= po.po_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">รายละเอียด</a>
+                                    <a href="/dash_board_test/po_detail_test/<%= po.po_Id %>" class="add-btn"
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="po_id" value="<%= po.po_Id %>"></td>
                             </tr>
                             <% }) %>
                                 <% } else { %>
-                                     <tr>
-                                        <td colspan="8">ไม่มีใบสั่งซื้อ</td>
+                                    <tr>
+                                        <td colspan="7">ไม่มีใบสั่งซื้อ</td>
                                     </tr>
                                     <% } %>
                 </tbody>
@@ -208,13 +208,13 @@
     <footer></footer>
 
     <script>
-        // Tab switching
-        function openTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
+            // Tab switching
+            function openTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(tabName).classList.add('active');
+                event.target.classList.add('active');
+            }
 
         // Select All - Plan
         document.getElementById('selectAllPlan').addEventListener('change', function () {
@@ -260,129 +260,6 @@
             }).then(res => res.json()).then(data => {
                 if (data.success) { alert('อัปเดตสถานะสำเร็จ'); location.reload(); }
             }).catch(err => alert('เกิดข้อผิดพลาด'));
-        }
-
-        // Delete Plan
-        function deletePlan(planId) {
-            if (!confirm('ต้องการลบแผนจัดซื้อนี้? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง')) return;
-
-            fetch('/dash_board_test/deleteplan/' + planId, {
-                method: 'DELETE'
-            }).then(res => res.json()).then(data => {
-                if (data.success) { 
-                    alert('ลบแผนจัดซื้อสำเร็จ'); 
-                    location.reload(); 
-                } else {
-                    alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
-                }
-            }).catch(err => alert('เกิดข้อผิดพลาด'));
-        }
-
-        // Delete PO
-        function deletePO(poId) {
-            if (!confirm('ต้องการลบใบสั่งซื้อนี้? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง')) return;
-
-            fetch('/dash_board_test/deletepo/' + poId, {
-                method: 'DELETE'
-            }).then(res => res.json()).then(data => {
-                if (data.success) { 
-                    alert('ลบใบสั่งซื้อสำเร็จ'); 
-                    location.reload(); 
-                } else {
-                    alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
-                }
-            }).catch(err => alert('เกิดข้อผิดพลาด'));
-        }
-
-        // Helper function to try DELETE then fallback to POST
-        function deleteWithFallback(url, ids, itemType) {
-            const requestData = { ids: ids };
-            
-            // Try DELETE method first
-            fetch(url, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
-            }).then(res => {
-                console.log('DELETE response status:', res.status);
-                return res.json();
-            }).then(data => {
-                console.log('DELETE response data:', data);
-                if (data.success) { 
-                    alert(`ลบ${itemType} ${data.deletedCount} รายการสำเร็จ`); 
-                    location.reload(); 
-                    return;
-                }
-                
-                // If DELETE fails, try POST method
-                console.log('DELETE failed, trying POST...');
-                fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
-                }).then(res => res.json()).then(data => {
-                    console.log('POST response data:', data);
-                    if (data.success) { 
-                        alert(`ลบ${itemType} ${data.deletedCount} รายการสำเร็จ`); 
-                        location.reload(); 
-                    } else {
-                        alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
-                    }
-                }).catch(err => {
-                    console.error('POST fetch error:', err);
-                    alert('เกิดข้อผิดพลาด: ' + err.message);
-                });
-            }).catch(err => {
-                console.error('DELETE fetch error, trying POST:', err);
-                
-                // If DELETE method fails completely, try POST
-                fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
-                }).then(res => res.json()).then(data => {
-                    console.log('POST response data:', data);
-                    if (data.success) { 
-                        alert(`ลบ${itemType} ${data.deletedCount} รายการสำเร็จ`); 
-                        location.reload(); 
-                    } else {
-                        alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
-                    }
-                }).catch(err => {
-                    console.error('POST fetch error:', err);
-                    alert('เกิดข้อผิดพลาด: ' + err.message);
-                });
-            });
-        }
-
-        // Delete Selected Plans
-        function deleteSelectedPlans() {
-            const ids = Array.from(document.querySelectorAll('input[name="plan_id"]:checked')).map(cb => cb.value);
-            
-            if (ids.length === 0) { 
-                alert('กรุณาเลือกแผนที่ต้องการลบ'); 
-                return; 
-            }
-            
-            if (!confirm(`ต้องการลบแผนจัดซื้อ ${ids.length} รายการที่เลือก? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง`)) return;
-
-            console.log('Deleting plans with IDs:', ids);
-            deleteWithFallback('/dash_board_test/deleteplans', ids, 'แผนจัดซื้อ');
-        }
-
-        // Delete Selected POs
-        function deleteSelectedPOs() {
-            const ids = Array.from(document.querySelectorAll('input[name="po_id"]:checked')).map(cb => cb.value);
-            
-            if (ids.length === 0) { 
-                alert('กรุณาเลือกใบสั่งซื้อที่ต้องการลบ'); 
-                return; 
-            }
-            
-            if (!confirm(`ต้องการลบใบสั่งซื้อ ${ids.length} รายการที่เลือก? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง`)) return;
-
-            console.log('Deleting POs with IDs:', ids);
-            deleteWithFallback('/dash_board_test/deletepos', ids, 'ใบสั่งซื้อ');
         }
 
     </script>
