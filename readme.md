@@ -31,26 +31,6 @@
 
 ---
 
-## 📁 โครงสร้างโปรเจค
-
-```
-webproject/
-├── database/           # Database files
-│   └── database.sql    # SQL Schema
-├── public/             # Views (EJS templates)
-│   ├── css/            # Stylesheets
-│   ├── test/           # Test pages
-│   └── *.ejs           # EJS templates
-├── route/              # Express routes
-│   ├── auth.js         # Authentication middleware
-│   ├── member.js       # User routes
-│   ├── bth_inventory.js # Inventory routes
-│   ├── bth_po.js       # Purchase Order routes
-│   └── bth_create_plan.js # Plan routes
-├── index.js            # Main entry point
-├── package.json        # Dependencies
-└── .env                # Environment variables
-```
 
 ---
 
