@@ -16,7 +16,7 @@
 <body>
 
     <header>
-        <%- include('navbar.ejs') %>
+        <%- include('navbar') %>
     </header>
 
     <main>
@@ -104,7 +104,7 @@
                         return;
                     }
 
-                    
+
 
                     fetch('/deleteitem', {
                         method: 'POST',

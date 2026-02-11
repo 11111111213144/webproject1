@@ -37,7 +37,7 @@ router.get('/createplan', isAuthenticated, (req, res) => {
             console.log('Error fetching plan:', err.message);
             allPlan = [];
         }
-        res.render('createplan_main', { plan: allPlan });
+        res.render('createplan_main', { plan: allPlan, msg: msg });
     });
 });
 

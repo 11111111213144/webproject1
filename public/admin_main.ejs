@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>อนุมัติ (Admin)</title>
     <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
     <style>
         .tabs {
             display: flex;
@@ -120,7 +125,7 @@
                                 </td>
                                 <td>
                                     <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="plan_id" value="<%= plan.plan_Id %>"></td>
                             </tr>
@@ -186,7 +191,7 @@
                                 </td>
                                 <td>
                                     <a href="/dash_board_test/po_detail_test/<%= po.po_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="po_id" value="<%= po.po_Id %>"></td>
                             </tr>
@@ -203,13 +208,13 @@
     <footer></footer>
 
     <script>
-        // Tab switching
-        function openTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
+            // Tab switching
+            function openTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(tabName).classList.add('active');
+                event.target.classList.add('active');
+            }
 
         // Select All - Plan
         document.getElementById('selectAllPlan').addEventListener('change', function () {

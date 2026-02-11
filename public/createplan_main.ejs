@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+        <% } %>
+    </script>
 </head>
 
 <body>
@@ -74,41 +79,41 @@
     </main>
     <footer></footer>
     <script>
-        function deletePlan() {
-            const checkboxes = document.querySelectorAll('.checkbox');
-            const ids = [];
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    ids.push(checkbox.value);
+            function deletePlan() {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                const ids = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        ids.push(checkbox.value);
+                    }
+                });
+                if (ids.length === 0) {
+                    alert('กรุณาเลือกแผนงาน');
+                    return;
                 }
-            });
-            if (ids.length === 0) {
-                alert('กรุณาเลือกแผนงาน');
-                return;
-            }
-            if (confirm('คุณต้องการลบแผนงานนี้หรือไม่')) {
-                fetch('/deleteplan', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ ids }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('ลบแผนงานสำเร็จ');
-                            location.reload();
-                        } else {
-                            alert('เกิดข้อผิดพลาดในการลบแผนงาน');
-                        }
+                if (confirm('คุณต้องการลบแผนงานนี้หรือไม่')) {
+                    fetch('/deleteplan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ ids }),
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('เกิดข้อผิดพลาดในการลบแผนงาน');
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('ลบแผนงานสำเร็จ');
+                                location.reload();
+                            } else {
+                                alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('เกิดข้อผิดพลาดในการลบแผนงาน');
+                        });
+                }
             }
-        }
         document.getElementById('selectAll').addEventListener('change', function () {
             const checkboxes = document.querySelectorAll('.checkbox');
             checkboxes.forEach(checkbox => {
