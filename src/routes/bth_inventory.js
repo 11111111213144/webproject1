@@ -70,16 +70,50 @@ router.get('/createitem', isAuthenticated, isMember, (req, res) => {
 });
 
 router.post('/createitem', isAuthenticated, isMember, (req, res) => {
-    const { item_name, item_type, unit_price, unit, remain, Company_shop } = req.body;
-    pool.query('INSERT INTO inventory (item_name, item_type, unit_price, unit, remain, Company_shop) VALUES (?, ?, ?, ?, ?, ?)', [item_name, item_type, unit_price, unit, remain, Company_shop], (err, result) => {
+    const { item_name, item_type, unit_price, unit, remain } = req.body;
+    
+    // ตรวจสอบข้อมูลที่จำเป็นต้องมี
+    if (!item_name || !item_type || !unit_price || !unit || remain === undefined || remain === null) {
+        return res.redirect('/createitem?msg=' + encodeURIComponent('กรุณากรอกข้อมูลให้ครบถ้วน'));
+    }
+    
+    // ตรวจสอบค่าที่เป็นตัวเลข
+    const unitPrice = parseFloat(unit_price);
+    const remainQty = parseInt(remain);
+    
+    if (isNaN(unitPrice) || unitPrice <= 0) {
+        return res.redirect('/createitem?msg=' + encodeURIComponent('ราคาต้องเป็นตัวเลขที่มากกว่า 0'));
+    }
+    
+    if (isNaN(remainQty) || remainQty < 0) {
+        return res.redirect('/createitem?msg=' + encodeURIComponent('จำนวนคงเหลือต้องเป็นตัวเลขที่ไม่ติดลบ'));
+    }
+    
+    // ตรวจสอบว่ามีชื่อวัสดุซ้ำหรือไม่
+    pool.query('SELECT item_name FROM inventory WHERE item_name = ?', [item_name], (err, checkResult) => {
         if (err) {
-            if (err.code === 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD') {
-                return res.redirect('/createitem?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการเพิ่มข้อมูล'));
-            }
-            console.log(err);
-            return res.redirect('/inventory?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการเพิ่มข้อมูล'));
+            console.log('Error checking duplicate item:', err);
+            return res.redirect('/createitem?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการตรวจสอบข้อมูล'));
         }
-        res.redirect('/inventory?msg=' + encodeURIComponent('เพิ่มข้อมูลสำเร็จ'));
+        
+        if (checkResult.length > 0) {
+            return res.redirect('/createitem?msg=' + encodeURIComponent('มีชื่อวัสดุนี้อยู่แล้ว กรุณาใช้ชื่ออื่น'));
+        }
+        
+        // เพิ่มข้อมูลใหม่
+        const sql = 'INSERT INTO inventory (item_name, item_type, unit_price, unit, remain) VALUES (?, ?, ?, ?, ?)';
+        pool.query(sql, [item_name, item_type, unitPrice, unit, remainQty], (err, result) => {
+            if (err) {
+                console.log('Error inserting item:', err);
+                if (err.code === 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD') {
+                    return res.redirect('/createitem?msg=' + encodeURIComponent('ข้อมูลบางช่องยาวเกินไป กรุณาตรวจสอบข้อมูล'));
+                }
+                return res.redirect('/inventory?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ' + err.message));
+            }
+            
+            console.log('Item added successfully:', { item_name, item_type, unit_price: unitPrice, unit, remain: remainQty });
+            res.redirect('/inventory?msg=' + encodeURIComponent('เพิ่มข้อมูลวัสดุสำเร็จ: ' + item_name));
+        });
     });
 });
 

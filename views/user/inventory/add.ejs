@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="th">
+<!DOCTYPE html><html lang="th">
 
 <head>
     <meta charset="UTF-8">
@@ -12,16 +11,87 @@
         <% if (locals.msg) { %>
             alert("<%= msg %>");
             <% } %>
+            
+        function validateForm() {
+            const item_name = document.getElementById('item_name').value.trim();
+            const item_type = document.getElementById('item_type').value;
+            const unit_price = document.getElementById('unit_price').value;
+            const unit = document.getElementById('unit').value.trim();
+            const remain = document.getElementById('remain').value;
+            
+            // ตรวจสอบช่องว่าง
+            if (!item_name) {
+                alert('กรุณากรอกชื่อวัสดุ');
+                return false;
+            }
+            
+            if (!item_type) {
+                alert('กรุณาเลือกประเภท');
+                return false;
+            }
+            
+            if (!unit_price || parseFloat(unit_price) <= 0) {
+                alert('กรุณากรอกราคาให้ถูกต้อง');
+                return false;
+            }
+            
+            if (!unit) {
+                alert('กรุณากรอกหน่วยนับ');
+                return false;
+            }
+            
+            if (remain === '' || parseInt(remain) < 0) {
+                alert('กรุณากรอกจำนวนคงเหลือให้ถูกต้อง');
+                return false;
+            }
+            
+            // ตรวจสอบความยาวของชื่อวัสดุ
+            if (item_name.length > 100) {
+                alert('ชื่อวัสดุต้องไม่เกิน 100 ตัวอักษร');
+                return false;
+            }
+            
+            // ตรวจสอบความยาวของหน่วย
+            if (unit.length > 20) {
+                alert('หน่วยนับต้องไม่เกิน 20 ตัวอักษร');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function handleSubmit(event) {
+            if (!validateForm()) {
+                event.preventDefault();
+                return false;
+            }
+            
+            // แสดง loading state
+            const submitBtn = document.querySelector('.submit-btn[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'กำลังบันทึก...';
+            }
+        }
+        
+        // เพิ่ม event listener เมื่อหน้าโหลดเสร็จ
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[action="/createitem"]');
+            if (form) {
+                form.addEventListener('submit', handleSubmit);
+            }
+        });
     </script>
 </head>
 
 <body>
     <header>
+        <%- include('../partials/navbar') %>
     </header>
     <main>
         <div class="form-box">
             <h1>เพิ่มรายการวัสดุ</h1>
-            <form action="/createitem" method="post">
+            <form action="/createitem" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="item_name">ชื่อวัสดุ</label>
                     <input type="text" id="item_name" name="item_name" required>
@@ -50,11 +120,6 @@
                 <div class="form-group">
                     <label for="remain">จำนวนคงเหลือ</label>
                     <input type="number" id="remain" name="remain" min="0" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="Company_shop">บริษัท/ร้านค้า</label>
-                    <input type="text" id="Company_shop" name="Company_shop" required>
                 </div>
 
                 <div class="form-actions">

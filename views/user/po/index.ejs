@@ -13,7 +13,6 @@
         alert("<%= msg %>");
             <% } %>
 </head>
-
 <body>
     <header>
         <%- include('../../partials/navbar.ejs') %>
@@ -22,8 +21,6 @@
         <h1>ใบสั่งซื้อ</h1>
 
         <div class="filter-box">
-            <input type="text" id="searchPO" class="search-input" placeholder="🔍 ค้นหาเลขใบสั่งซื้อ..."
-                oninput="searchPO()">
             <button type="button" class="add-btn"><a href="po_add">เพิ่มรายการ</a></button>
             <button type="button" class="add-btn" onclick="deleteitem()">ลบรายการ</button>
         </div>
