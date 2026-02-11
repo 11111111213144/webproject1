@@ -301,6 +301,58 @@ router.get('/views/plan/po/detail/:po_Id', (req, res) => {
     });
 });
 
+// Admin PO Detail Route
+router.get('/views/admin/po/detail/:po_Id', (req, res) => {
+    const po_Id = req.params.po_Id;
+    const sqlDetails = `
+        SELECT 
+            pod.id AS po_detail_Id,
+            ph.po_number,
+            ph.supplier_name,
+            ph.po_date,
+            pod.item_Id,
+            i.item_name,
+            pod.quantity,
+            i.unit,
+            i.unit_price,
+            pod.agreed_price,
+            (pod.quantity * pod.agreed_price) AS total_price,
+            pl.plan_name
+        FROM 
+            PO_Header ph
+        JOIN 
+            PO_Detail pod ON ph.po_Id = pod.po_Id
+        JOIN 
+            Inventory i ON pod.item_Id = i.item_Id
+        LEFT JOIN 
+            Plan_Detail pd ON pod.ref_plan_detail_id = pd.id
+        LEFT JOIN 
+            Plan_Header pl ON pd.plan_Id = pl.plan_Id
+        WHERE 
+            ph.po_Id = ?
+    `;
+    pool.query(sqlDetails, [po_Id], (err, poDetails) => {
+        if (err) {
+            console.log('Error fetching PO details:', err.message);
+            return res.redirect('/admin/admin_main');
+        }
+
+        // Fetch PO Header info
+        pool.query('SELECT * FROM PO_Header WHERE po_Id = ?', [po_Id], (err, poHeader) => {
+            if (err) {
+                console.log('Error fetching PO header:', err.message);
+                poHeader = [];
+            }
+
+            res.render('admin/po_detail', {
+                poDetails: poDetails,
+                poHeader: poHeader.length > 0 ? poHeader[0] : null,
+                po_Id: po_Id
+            });
+        });
+    });
+});
+
 // Add PO Detail
 router.post('/add_po_detail', (req, res) => {
     const { po_Id, item_Id, quantity, agreed_price } = req.body;
@@ -333,6 +385,68 @@ router.post('/deleteitem_po_detail', (req, res) => {
 
 
 
+
+// Delete Plan (and related details due to CASCADE)
+router.delete('/deleteplan/:plan_Id', (req, res) => {
+    const plan_Id = req.params.plan_Id;
+    
+    // Check if plan exists
+    pool.query('SELECT plan_Id FROM Plan_Header WHERE plan_Id = ?', [plan_Id], (err, result) => {
+        if (err) {
+            console.log('Error checking plan:', err.message);
+            return res.json({ success: false, message: 'เกิดข้อผิดพลาดในการตรวจสอบแผน' });
+        }
+        
+        if (result.length === 0) {
+            return res.json({ success: false, message: 'ไม่พบแผนที่ต้องการลบ' });
+        }
+        
+        // Delete plan (CASCADE will delete related details)
+        pool.query('DELETE FROM Plan_Header WHERE plan_Id = ?', [plan_Id], (err, deleteResult) => {
+            if (err) {
+                console.log('Error deleting plan:', err.message);
+                return res.json({ success: false, message: 'ไม่สามารถลบแผนได้' });
+            }
+            
+            if (deleteResult.affectedRows === 0) {
+                return res.json({ success: false, message: 'ไม่สามารถลบแผนได้' });
+            }
+            
+            res.json({ success: true, message: 'ลบแผนจัดซื้อสำเร็จ' });
+        });
+    });
+});
+
+// Delete PO (and related details due to CASCADE)
+router.delete('/deletepo/:po_Id', (req, res) => {
+    const po_Id = req.params.po_Id;
+    
+    // Check if PO exists
+    pool.query('SELECT po_Id FROM PO_Header WHERE po_Id = ?', [po_Id], (err, result) => {
+        if (err) {
+            console.log('Error checking PO:', err.message);
+            return res.json({ success: false, message: 'เกิดข้อผิดพลาดในการตรวจสอบใบสั่งซื้อ' });
+        }
+        
+        if (result.length === 0) {
+            return res.json({ success: false, message: 'ไม่พบใบสั่งซื้อที่ต้องการลบ' });
+        }
+        
+        // Delete PO (CASCADE will delete related details)
+        pool.query('DELETE FROM PO_Header WHERE po_Id = ?', [po_Id], (err, deleteResult) => {
+            if (err) {
+                console.log('Error deleting PO:', err.message);
+                return res.json({ success: false, message: 'ไม่สามารถลบใบสั่งซื้อได้' });
+            }
+            
+            if (deleteResult.affectedRows === 0) {
+                return res.json({ success: false, message: 'ไม่สามารถลบใบสั่งซื้อได้' });
+            }
+            
+            res.json({ success: true, message: 'ลบใบสั่งซื้อสำเร็จ' });
+        });
+    });
+});
 
 router.get('/homepage', (req, res) => {
     const amount_item = "SELECT COUNT(*) AS total FROM inventory";

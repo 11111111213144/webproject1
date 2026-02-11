@@ -20,7 +20,7 @@ router.use(bodyParser.json());
 router.get('/dev_mem', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const [users] = await all_user();
-        res.render('admin/dev_mem', { all_user: users });
+        res.render('admin/dev_mem', { all_user: users, user: req.user });
     } catch (err) {
         console.error('Dev_mem error:', err);
         res.status(500).send('Internal Server Error');

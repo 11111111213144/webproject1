@@ -58,6 +58,8 @@ router.get('/plan_detail', isAuthenticated, (req, res) => {
     `;
     pool.query(sql, (err, result) => {
         if (err) {
+
+            
             console.log(err);
             return res.redirect('/homepage');
         }
@@ -104,7 +106,7 @@ router.get('/admin_main', isAuthenticated, isAdmin, (req, res) => {
                 console.log(err2);
                 pos = [];
             }
-            res.render('admin/admin_main', { plans: plans, pos: pos });
+            res.render('admin/admin_main', { plans: plans, pos: pos, user: req.user });
         });
     });
 });

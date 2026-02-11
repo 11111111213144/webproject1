@@ -96,6 +96,7 @@
                         <th>วันที่</th>
                         <th>สถานะ</th>
                         <th>รายละเอียด</th>
+                        <th>ลบ</th>
                         <th><input type="checkbox" id="selectAllPlan"></th>
                     </tr>
                 </thead>
@@ -123,14 +124,18 @@
                                 </td>
                                 <td>
                                     <a href="/dash_board_test/views/plan/details/<%= plan.plan_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">รายละเอียด</a>
+                                </td>
+                                <td>
+                                    <button onclick="deletePlan(<%= plan.plan_Id %>)" class="delete-btn"
+                                        style="padding:5px 10px; font-size:12px; background:#dc3545;">ลบ</button>
                                 </td>
                                 <td><input type="checkbox" name="plan_id" value="<%= plan.plan_Id %>"></td>
                             </tr>
                             <% }) %>
                                 <% } else { %>
-                                    <tr>
-                                        <td colspan="6">ไม่มีแผนจัดซื้อ</td>
+                                     <tr>
+                                        <td colspan="7">ไม่มีแผนจัดซื้อ</td>
                                     </tr>
                                     <% } %>
                 </tbody>
@@ -159,6 +164,7 @@
                         <th>วันที่</th>
                         <th>สถานะ</th>
                         <th>รายละเอียด</th>
+                        <th>ลบ</th>
                         <th><input type="checkbox" id="selectAllPO"></th>
                     </tr>
                 </thead>
@@ -188,15 +194,19 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/dash_board_test/views/plan/po/detail/<%= po.po_Id %>" class="add-btn"
-                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">ดู</a>
+                                    <a href="/dash_board_test/views/admin/po/detail/<%= po.po_Id %>" class="add-btn"
+                                        style="text-decoration:none; padding:5px 10px; font-size:12px;">รายละเอียด</a>
+                                </td>
+                                <td>
+                                    <button onclick="deletePO(<%= po.po_Id %>)" class="delete-btn"
+                                        style="padding:5px 10px; font-size:12px; background:#dc3545;">ลบ</button>
                                 </td>
                                 <td><input type="checkbox" name="po_id" value="<%= po.po_Id %>"></td>
                             </tr>
                             <% }) %>
                                 <% } else { %>
-                                    <tr>
-                                        <td colspan="7">ไม่มีใบสั่งซื้อ</td>
+                                     <tr>
+                                        <td colspan="8">ไม่มีใบสั่งซื้อ</td>
                                     </tr>
                                     <% } %>
                 </tbody>
@@ -257,6 +267,38 @@
                 body: JSON.stringify({ ids, status })
             }).then(res => res.json()).then(data => {
                 if (data.success) { alert('อัปเดตสถานะสำเร็จ'); location.reload(); }
+            }).catch(err => alert('เกิดข้อผิดพลาด'));
+        }
+
+        // Delete Plan
+        function deletePlan(planId) {
+            if (!confirm('ต้องการลบแผนจัดซื้อนี้? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง')) return;
+
+            fetch('/deleteplan/' + planId, {
+                method: 'DELETE'
+            }).then(res => res.json()).then(data => {
+                if (data.success) { 
+                    alert('ลบแผนจัดซื้อสำเร็จ'); 
+                    location.reload(); 
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
+                }
+            }).catch(err => alert('เกิดข้อผิดพลาด'));
+        }
+
+        // Delete PO
+        function deletePO(poId) {
+            if (!confirm('ต้องการลบใบสั่งซื้อนี้? การลบจะทำการลบข้อมูลทั้งหมดที่เกี่ยวข้อง')) return;
+
+            fetch('/deletepo/' + poId, {
+                method: 'DELETE'
+            }).then(res => res.json()).then(data => {
+                if (data.success) { 
+                    alert('ลบใบสั่งซื้อสำเร็จ'); 
+                    location.reload(); 
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่สามารถลบได้'));
+                }
             }).catch(err => alert('เกิดข้อผิดพลาด'));
         }
 
