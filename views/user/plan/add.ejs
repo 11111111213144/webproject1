@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+
+            // Select all checkboxes functionality
+            document.getElementById('selectAll').addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+
+        // Delete selected items function
+        function deleteSelectedItems() {
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
+                return;
+            }
+
+            fetch('/dash_board_test/deleteitem_plan_detail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('ลบรายการสำเร็จ');
+                        window.location.reload();
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการลบ');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+    </header>
+
+    <main>
+        <h1>สร้างแผนงานใหม่</h1>
+
+        <!-- Plan Creation Form -->
+        <form action="/addplan" method="post" class="mb-4">
+            <h3>สร้างแผนงานใหม่</h3>
+            <label for="plan_name">ชื่อแผนงาน :</label>
+            <input type="text" name="plan_name" required>
+            <br><br>
+
+            <label for="plan_date">วันที่ :</label>
+            <input type="date" name="plan_date" required>
+            <br><br>
+
+            <label for="item_plan">ประเภทแผน :</label>
+            <select name="item_plan" required>
+                <option value="">-- เลือกประเภท --</option>
+                <option value="วัสดุ">วัสดุ</option>
+                <option value="ครุภัณฑ์">ครุภัณฑ์</option>
+                <option value="เวชภัณฑ์">เวชภัณฑ์</option>
+            </select>
+            <br><br>
+
+            <button type="submit" class="submit-btn">สร้างแผนงาน</button>
+        </form>
+
+        <!-- Add Item to Plan Form -->
+        <% if (locals.plan_Id) { %>
+            <hr>
+            <h3>เพิ่มรายการสินค้าในแผนงาน</h3>
+            <form action="/dash_board_test/add_plan_detail" method="post" class="mb-3">
+                <input type="hidden" name="plan_Id" value="<%= plan_Id %>">
+
+                <label for="item_Id">เลือกสินค้า :</label>
+                <select name="item_Id" class="form-select" required style="width: 300px; margin-bottom: 10px;">
+                    <option value="">-- เลือกสินค้า --</option>
+                    <% inventoryItems.forEach(item=> { %>
+                        <option value="<%= item.item_Id %>">
+                            <%= item.item_name %> (คงเหลือ: <%= item.remain %>
+                                    <%= item.unit %>)
+                        </option>
+                        <% }) %>
+                </select>
+                <br>
+
+                <label for="quantity">จำนวน :</label>
+                <input type="number" name="quantity" placeholder="จำนวน" required min="1" style="margin-bottom: 10px;">
+                <br>
+
+                <button type="submit" class="submit-btn">เพิ่มรายการ</button>
+                <button type="reset" class="submit-btn">ล้างฟอร์ม</button>
+            </form>
+            <% } %>
+
+                <% if (locals.planDetail && planDetail.length> 0) { %>
+                    <table class="table-box">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>รายการสินค้า</th>
+                                <th>จำนวน</th>
+                                <th>หน่วยนับ</th>
+                                <th>ราคาต่อหน่วย</th>
+                                <th>ราคารวม</th>
+                                <th>จัดการ</th>
+                                <th><input type="checkbox" id="selectAll"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% planDetail.forEach((item, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= item.item_name %>
+                                    </td>
+                                    <td>
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit_price ? item.unit_price.toLocaleString() : '-' %>
+                                    </td>
+                                    <td>
+                                        <%= item.total_price ? item.total_price.toLocaleString() : '-' %>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#updateModal" data-id="<%= item.plan_detail_Id %>"
+                                            data-quantity="<%= item.quantity %>">แก้ไข</button>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="checkbox" class="checkbox"
+                                            value="<%= item.plan_detail_Id %>">
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 10px;">
+                        <button type="button" class="submit-btn"
+                            onclick="deleteSelectedItems()">ลบรายการที่เลือก</button>
+                    </div>
+                    <% } else if (locals.plan_Id) { %>
+                        <div class="alert alert-warning">ยังไม่มีรายการสินค้าในแผนงานนี้</div>
+                        <% } %>
+
+    </main>
+    <footer>
+        <button type="submit" class="submit-btn" onclick="history.back()">ย้อนกลับ</button>
+    </footer>
+</body>
+
+</html>

@@ -22,6 +22,11 @@
     border-radius: 4px;
 }
 
+.filter-box a {
+    text-decoration: none;
+    color: white;
+}
+
 /* Tables */
 
 .table-box {
@@ -59,6 +64,11 @@
 
 .table-box tbody tr:nth-of-type(odd) {
     background-color: #fcfcfc;
+}
+
+td a{
+    text-decoration: none;
+    color: inherit;
 }
 
 .table-box td {

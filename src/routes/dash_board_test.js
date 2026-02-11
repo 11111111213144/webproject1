@@ -95,7 +95,7 @@ router.get('/', (req, res) => {
     }
 });
 
-router.get('/plan_detail_test/:plan_Id', (req, res) => {
+router.get('/views/plan/details/:plan_Id', (req, res) => {
     const plan_Id = req.params.plan_Id;
 
     // 1. Fetch Plan Header
@@ -138,7 +138,7 @@ router.get('/plan_detail_test/:plan_Id', (req, res) => {
                     inventoryItems = [];
                 }
 
-                res.render('99test/plan_detail_test', {
+                res.render('user/plan/detail', {
                     planHeader: planHeader,
                     planDetail: planDetail,
                     inventoryItems: inventoryItems,
@@ -169,9 +169,9 @@ router.post('/add_plan_detail', (req, res) => {
     pool.query(sql, [plan_Id, item_Id, quantity], (err, result) => {
         if (err) {
             console.log(err);
-            return res.redirect('/dash_board_test/plan_detail_test/' + plan_Id + '?msg=' + encodeURIComponent('Error adding item'));
+            return res.redirect('/dash_board_test/views/plan/details/' + plan_Id + '?msg=' + encodeURIComponent('Error adding item'));
         }
-        res.redirect('/dash_board_test/plan_detail_test/' + plan_Id);
+        res.redirect('/dash_board_test/views/plan/details/' + plan_Id);
     });
 });
 
@@ -200,10 +200,10 @@ router.post('/update_plan_detail', (req, res) => {
         if (err) {
             console.log(err);
             // If plan_Id is missing, fallback to dashboard
-            const redirectUrl = plan_Id ? `/dash_board_test/plan_detail_test/${plan_Id}` : '/dash_board_test';
+const redirectUrl = plan_Id ? `/dash_board_test/views/plan/details/${plan_Id}` : '/dash_board_test';
             return res.redirect(`${redirectUrl}?status=error&msg=` + encodeURIComponent('ไม่สามารถอัปเดตข้อมูลได้'));
         }
-        const redirectUrl = plan_Id ? `/dash_board_test/plan_detail_test/${plan_Id}` : '/dash_board_test';
+        const redirectUrl = plan_Id ? `/dash_board_test/views/plan/details/${plan_Id}` : '/dash_board_test';
         res.redirect(`${redirectUrl}?status=success&msg=` + encodeURIComponent('อัปเดตข้อมูลสำเร็จ'));
     });
 });
@@ -232,7 +232,7 @@ router.post('/deleteitem_plan_detail', (req, res) => {
     });
 });
 
-router.get('/po_detail_test/:po_Id', (req, res) => {
+router.get('/views/plan/po/detail/:po_Id', (req, res) => {
     const po_Id = req.params.po_Id;
     const sqlDetails = `
         SELECT 
@@ -288,7 +288,7 @@ router.get('/po_detail_test/:po_Id', (req, res) => {
                         suppliers = [];
                     }
 
-                    res.render('99test/po_detail_test', {
+                    res.render('user/po/detail', {
                         poDetails: poDetails,
                         poHeader: poHeader.length > 0 ? poHeader[0] : null,
                         inventoryItems: inventoryItems,
@@ -308,9 +308,9 @@ router.post('/add_po_detail', (req, res) => {
     pool.query(sql, [po_Id, item_Id, quantity, agreed_price], (err, result) => {
         if (err) {
             console.log(err);
-            return res.redirect('/dash_board_test/po_detail_test/' + po_Id + '?msg=' + encodeURIComponent('Error adding item'));
+            return res.redirect('/dash_board_test/views/plan/po/detail/' + po_Id + '?msg=' + encodeURIComponent('Error adding item'));
         }
-        res.redirect('/dash_board_test/po_detail_test/' + po_Id + '?msg=' + encodeURIComponent('เพิ่มรายการสำเร็จ'));
+        res.redirect('/dash_board_test/views/plan/po/detail/' + po_Id + '?msg=' + encodeURIComponent('เพิ่มรายการสำเร็จ'));
     });
 });
 

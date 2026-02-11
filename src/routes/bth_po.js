@@ -22,7 +22,7 @@ router.get('/makepo', isAuthenticated, (req, res) => {
             console.error(err);
             res.status(500).send('Error retrieving po_header data');
         } else {
-            res.render('user/po/makepo', { po: results });
+            res.render('user/po/index', { po: results });
         }
     });
 });
@@ -46,13 +46,50 @@ router.post('/deletepo', isAuthenticated, isMember, (req, res) => {
 });
 
 
-router.get('/po_add', isAuthenticated, isMember, (req, res) => {
-    pool.query('SELECT * FROM po_header', (err, results) => {
+router.get('/po_add', (req, res) => {
+    // Get existing PO data
+    pool.query('SELECT * FROM po_header', (err, poResults) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Error retrieving po_header data');
         }
-        res.render('user/po/create_po', { po: results });
+
+        // Get plan headers for selection - only show plans with status "รออนุมัติ"
+        const planQuery = `
+            SELECT plan_Id, plan_name, plan_date, plan_status 
+            FROM Plan_Header 
+            WHERE plan_status = 'อนุมัติแล้ว'
+            ORDER BY plan_date DESC
+        `;
+
+        pool.query(planQuery, (err, planResults) => {
+            if (err) {
+                console.error('Error fetching plan headers:', err);
+                planResults = []; // Continue with empty plans if error
+            }
+
+            console.log('Plans found:', planResults.length); // Debug line
+            if (planResults.length > 0) {
+                planResults.forEach(plan => {
+                    console.log(`Plan: ${plan.plan_Id} - ${plan.plan_name} - Status: ${plan.plan_status}`);
+                });
+            } else {
+                console.log('No plans found in Plan_Header table');
+                // Try a simpler query to see if table exists and has any data
+                pool.query('SELECT COUNT(*) as count FROM Plan_Header', (err2, countResult) => {
+                    if (err2) {
+                        console.error('Error counting plans:', err2);
+                    } else {
+                        console.log('Plan_Header table has', countResult[0].count, 'records');
+                    }
+                });
+            }
+
+            res.render('user/po/add', {
+                po: poResults,
+                plans: planResults
+            });
+        });
     });
 });
 
@@ -102,6 +139,7 @@ router.post('/updatepostatus', isAuthenticated, isAdmin, (req, res) => {
                     pool.query(updateInventorySql, [detail.quantity, detail.item_Id], (err3) => {
                         if (err3) console.log('Error updating inventory:', err3);
                     });
+
                 });
             });
         }
@@ -109,5 +147,148 @@ router.post('/updatepostatus', isAuthenticated, isAdmin, (req, res) => {
         res.json({ success: true });
     });
 });
+
+// Get plan details for selected plan
+router.get('/get_plan_details/:plan_Id', isAuthenticated, (req, res) => {
+    const plan_Id = req.params.plan_Id;
+
+    const planDetailQuery = `
+        SELECT 
+            d.id AS plan_detail_Id,
+            d.plan_Id,
+            d.item_Id,
+            i.item_name, 
+            d.quantity, 
+            i.unit,
+            i.unit_price,
+            (d.quantity * i.unit_price) AS total_price
+        FROM Plan_Detail d
+        JOIN Inventory i ON d.item_Id = i.item_Id
+        WHERE d.plan_Id = ?
+    `;
+
+    pool.query(planDetailQuery, [plan_Id], (err, planDetails) => {
+        if (err) {
+            console.error('Error fetching plan details:', err);
+            return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        res.json({
+            success: true,
+            planDetails: planDetails
+        });
+    });
+});
+
+// PO Edit Page
+router.get('/editpo/:id', isAuthenticated, (req, res) => {
+    const poId = req.params.id;
+    const sql = 'SELECT * FROM po_header WHERE po_Id = ?';
+
+    pool.query(sql, [poId], (err, result) => {
+        if (err) {
+            console.log('Error fetching PO:', err.message);
+            return res.redirect('/makepo?msg=' + encodeURIComponent('PO not found'));
+        }
+        if (result.length === 0) {
+            return res.redirect('/makepo?msg=' + encodeURIComponent('PO not found'));
+        }
+        res.render('user/po/edit', { po: result[0] });
+    });
+});
+
+// Update PO
+router.post('/updatepo/:id', isAuthenticated, isMember, (req, res) => {
+    const poId = req.params.id;
+    const { po_number, supplier_name, po_date } = req.body;
+    const sql = 'UPDATE po_header SET po_number = ?, supplier_name = ?, po_date = ? WHERE po_Id = ?';
+
+    pool.query(sql, [po_number, supplier_name, po_date, poId], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.redirect(`/editpo/${poId}?msg=` + encodeURIComponent('Error updating PO'));
+        }
+        res.redirect('/makepo?msg=' + encodeURIComponent('PO updated successfully'));
+    });
+});
+
+// PO Detail Page
+router.get('/podetail/:id', isAuthenticated, (req, res) => {
+    const poId = req.params.id;
+
+    // Get PO header
+    const headerSql = 'SELECT * FROM po_header WHERE po_Id = ?';
+
+    pool.query(headerSql, [poId], (err, headerResult) => {
+        if (err) {
+            console.log('Error fetching PO header:', err.message);
+            return res.redirect('/makepo?msg=' + encodeURIComponent('PO not found'));
+        }
+        if (headerResult.length === 0) {
+            return res.redirect('/makepo?msg=' + encodeURIComponent('PO not found'));
+        }
+
+        const po = headerResult[0];
+
+        // Get PO details with item information
+        const detailSql = `
+            SELECT 
+                h.po_Id,
+                h.po_number,
+                h.po_date,
+                h.supplier_name,
+                i.item_name,
+                d.quantity,
+                d.agreed_price,
+                (d.quantity * IFNULL(d.agreed_price, 0)) AS total_line_price
+            FROM po_header h
+            INNER JOIN po_detail d ON h.po_Id = d.po_Id
+            INNER JOIN inventory i ON d.item_Id = i.item_Id
+            WHERE h.po_Id = ?
+            ORDER BY d.id ASC
+        `;
+
+        pool.query(detailSql, [poId], (err, detailResult) => {
+            if (err) {
+                console.error('Error fetching PO details:', err);
+                detailResult = [];
+            }
+
+            console.log('=== BTH PO Detail Debug ===');
+            console.log('PO ID:', poId);
+            console.log('Detail Query Result:', detailResult);
+            console.log('Number of items:', detailResult ? detailResult.length : 0);
+            console.log('=============================');
+
+            // Also fetch ALL items summary as requested by user
+            const allItemsSql = `
+                SELECT 
+                    h.po_Id,
+                    h.po_number,
+                    h.po_date,
+                    h.supplier_name,
+                    i.item_name,
+                    d.quantity,
+                    d.agreed_price,
+                    (d.quantity * d.agreed_price) AS total_line_price
+                FROM po_header h
+                JOIN po_detail d ON h.po_Id = d.po_Id
+                JOIN inventory i ON d.item_Id = i.item_Id
+                ORDER BY h.po_Id ASC
+            `;
+
+            pool.query(allItemsSql, (err, allResults) => {
+                res.render('user/po/detail', {
+                    po: po,
+                    poDetails: detailResult || [],
+                    poItems: allResults || []
+                });
+            });
+        });
+    });
+});
+
+// PO Report function has been merged into PO Detail page.
+// The data for the summary table is now fetched within the /podetail/:id route.
 
 module.exports = router;

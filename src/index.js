@@ -35,6 +35,10 @@ app.use('/', bth_create_planRouter);
 const bth_poRouter = require('./routes/bth_po');
 app.use('/', bth_poRouter);
 
+const poRouter = require('./routes/po');
+app.use('/po', poRouter);
+app.use('/user/po', poRouter);
+
 const homepageRouter = require('./routes/homepage');
 app.use('/', homepageRouter);
 
@@ -57,6 +61,8 @@ app.get('/checkorder', (req, res) => {
 app.get('/makepo', (req, res) => {
   res.render('makepo');
 });
+
+
 
 
 app.listen(port, () => {

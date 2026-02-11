@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/components.css">
 </head>
 
@@ -25,7 +26,7 @@
                 <option value="เวชภัณฑ์">เวชภัณฑ์</option>
             </select>
             <button type="submit" class="add-btn"><a href="/plan_detail">เพิ่มรายการ</a></button>
-            <button type="submit" class="delete-btn" onclick="deletePlan()">ลบรายการ</button>
+            <button type="button" class="add-btn" onclick="deletePlan()">ลบรายการ</button>
         </div>
         <table class="table-box">
             <thead>
@@ -62,7 +63,8 @@
                             <%= plan.plan_status %>
                         </td>
                         <td>
-                            <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>"
+                            <a style="text-decoration: none;"
+                                href="/dash_board_test/views/plan/details/<%= plan.plan_Id %>"
                                 class="btn btn-primary">ดูรายละเอียด</a>
                         </td>
                         <td>
