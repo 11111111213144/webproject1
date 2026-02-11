@@ -1,0 +1,22 @@
+<nav class="navbar">
+    <!-- Debug Info -->
+    <!-- User: <%= typeof user !== 'undefined' ? JSON.stringify(user) : 'undefined' %> -->
+    
+    <% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
+        <ul>
+            <li><a href="/dev_mem">จัดการสมาชิก(Admin)</a></li>
+            <li><a href="/admin_main">อนุมัติ(Admin)</a></li>
+            <li><a href="/member/logout">ออกจากระบบ</a></li>
+        </ul>
+    <% } else if (typeof user !== 'undefined' && user) { %>
+        <ul>
+            <li><span style="color: #ff6b6b;">Role: <%= user.role %> (Not Admin)</span></li>
+            <li><a href="/member/logout">ออกจากระบบ</a></li>
+        </ul>
+    <% } else { %>
+        <ul>
+            <li><span style="color: #ff6b6b;">Not logged in</span></li>
+            <li><a href="/member/logout">ออกจากระบบ</a></li>
+        </ul>
+    <% } %>
+</nav>

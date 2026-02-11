@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดใบสั่งซื้อ (Admin)</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+
+        .alert-info-custom {
+            padding: 15px;
+            background-color: #e1f5fe;
+            color: #01579b;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/navbar_admin') %>
+    </header>
+    <main class="item-edit-container">
+        <div class="form-box" style="max-width: 1000px;">
+            <h1 style="text-align: center; margin-bottom: 30px;">รายงานข้อมูลใบสั่งซื้อ (Admin)</h1>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>เลขที่ใบสั่งซื้อ:</strong>
+                    <%= poHeader.po_number %>
+                </div>
+                <div class="info-item">
+                    <strong>ชื่อผู้ขาย:</strong>
+                    <%= poHeader.supplier_name %>
+                </div>
+                <div class="info-item">
+                    <strong>วันที่:</strong>
+                    <%= poHeader.po_date ? new Date(poHeader.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h2 style="margin-bottom: 20px;">สรุปรายงานสินค้าทั้งหมดในใบสั่งซื้อ</h2>
+                <% if (poDetails && poDetails.length > 0) { %>
+                    <table class="table-box">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>สินค้า</th>
+                                <th>จำนวน</th>
+                                <th>หน่วย</th>
+                                <th>ราคาตกลง</th>
+                                <th>รวมรายรายการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% let count = 1; %>
+                            <% poDetails.forEach(item => { %>
+                                <tr>
+                                    <td>
+                                        <%= count++ %>
+                                    </td>
+                                    <td>
+                                        <%= item.item_name %>
+                                    </td>
+                                    <td>
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit %>
+                                    </td>
+                                    <td>
+                                        <%= item.agreed_price ? item.agreed_price.toLocaleString() : '0.00' %>
+                                    </td>
+                                    <td>
+                                        <%= item.total_price ? item.total_price.toLocaleString() : '0.00' %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <div class="alert-info-custom">ไม่พบข้อมูลสินค้าสรุป</div>
+                        <% } %>
+            </div>
+
+            <div class="form-actions" style="margin-top: 40px;">
+                <a href="/admin_main" class="submit-btn"
+                    style="text-decoration: none; text-align: center; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); width: 100%;">กลับหน้าอนุมัติ</a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

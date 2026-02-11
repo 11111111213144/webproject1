@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างใบสั่งซื้อใหม่</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+        <% } %>
+
+            // Select all checkboxes functionality
+            document.addEventListener('DOMContentLoaded', function () {
+                const selectAllCheckbox = document.getElementById('selectAll');
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.addEventListener('change', function () {
+                        const checkboxes = document.querySelectorAll('.checkbox');
+                        checkboxes.forEach(checkbox => {
+                            checkbox.checked = this.checked;
+                        });
+                    });
+                }
+            });
+
+        // Delete selected POs function
+        function deleteSelectedPOs() {
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (!confirm('คุณต้องการลบใบสั่งซื้อที่เลือกหรือไม่?')) {
+                return;
+            }
+
+            fetch('/po/deletepo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('ลบรายการสำเร็จ');
+                        window.location.reload();
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการลบ');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                });
+        }
+
+        // Add item to PO function
+        function addItemToPO(poId) {
+            window.location.href = '/po/add-item/' + poId;
+        }
+
+        // View PO details function
+        function viewPODetails(poId) {
+            window.location.href = '/po/detail/' + poId;
+        }
+
+        // Load plan details when plan is selected
+        function loadPlanDetails(planId) {
+            const detailsSection = document.getElementById('plan_details_section');
+            const detailsBody = document.getElementById('plan_details_body');
+
+            if (!planId) {
+                detailsSection.style.display = 'none';
+                return;
+            }
+
+            fetch('/po/get_plan_details/' + planId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        detailsBody.innerHTML = '';
+
+                        if (data.planDetails.length === 0) {
+                            detailsBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">ไม่มีรายการในแผนนี้</td></tr>';
+                        } else {
+                            data.planDetails.forEach((item, index) => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${item.item_name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.unit}</td>
+                                    <td>${item.unit_price ? item.unit_price.toLocaleString() : '0.00'}</td>
+                                    <td>${item.total_price ? item.total_price.toLocaleString() : '0.00'}</td>
+                                `;
+                                detailsBody.appendChild(row);
+                            });
+                        }
+
+                        detailsSection.style.display = 'block';
+                    } else {
+                        alert('ไม่สามารถโหลดข้อมูลรายการได้');
+                        detailsSection.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล');
+                    detailsSection.style.display = 'none';
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+    </header>
+    <main class="item-edit-container">
+        <div class="form-box" style="max-width: 800px;">
+            <h1 style="text-align: center; margin-bottom: 30px;">สร้างใบสั่งซื้อใหม่</h1>
+
+            <!-- PO Creation Form -->
+            <form action="/po/addpo" method="post" class="mb-4">
+
+                <div class="form-group">
+                    <label for="po_number">เลขที่ใบสั่งซื้อ</label>
+                    <input type="text" id="po_number" name="po_number" placeholder="PO-XXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="po_date">วันที่</label>
+                    <input type="date" id="po_date" name="po_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="supplier_name">ชื่อผู้จัดจำหน่าย/บริษัท</label>
+                    <input type="text" id="supplier_name" name="supplier_name" placeholder="ชื่อบริษัทหรือร้านค้า"
+                        required>
+                </div>
+
+                <!-- Plan Header Selection -->
+                <div class="form-group">
+                    <label for="plan_header">เลือกแผนจัดซื้อ (ไม่จำเป็น)</label>
+                    <select name="plan_header" id="plan_header" onchange="loadPlanDetails(this.value)">
+                        <option value="">-- เลือกแผนจัดซื้อ --</option>
+                        <% if (locals.plans && plans.length> 0) { %>
+                            <% plans.forEach(function(plan) { %>
+                                <option value="<%= plan.plan_Id %>">
+                                    <%= plan.plan_name %> - <%= plan.plan_date ? new
+                                            Date(plan.plan_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %> (สถานะ: <%=
+                                                plan.plan_status %>)
+                                </option>
+                                <% }); %>
+                                    <% } else { %>
+                                        <option value="" disabled>ไม่มีแผนจัดซื้อในระบบ</option>
+                                        <% } %>
+                    </select>
+                </div>
+
+                <!-- Plan Details Preview -->
+                <div id="plan_details_section" style="display: none; margin-top: 30px;">
+                    <h3 style="margin-bottom: 20px;">รายการที่จะถูกโอนไปยังใบสั่งซื้อ:</h3>
+                    <table class="table-box">
+                        <thead>
+                            <tr>
+                                <th>รายการ</th>
+                                <th>จำนวน</th>
+                                <th>หน่วย</th>
+                                <th>ราคาต่อหน่วย</th>
+                                <th>ราคารวม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plan_details_body">
+                            <!-- Plan details will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions" style="margin-top: 30px;">
+                    <button type="submit" class="submit-btn" style="width: 100%;">สร้างใบสั่งซื้อ</button>
+                    <button type="reset" class="submit-btn"
+                        style="background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); width: 100%;">ล้างฟอร์ม</button>
+                </div>
+            </form>
+
+            <div class="form-actions" style="margin-top: 20px;">
+                <button type="button" class="submit-btn" onclick="history.back()"
+                    style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); width: 100%;">ย้อนกลับ</button>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

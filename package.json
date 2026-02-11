@@ -1,11 +1,12 @@
 {
   "name": "webproject",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
+  "main": "src/index.js",
+"scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "sync": "browser-sync start --proxy \"localhost:3000\" --files \"views/**/*.ejs,public/**/*.*\""
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "sync": "browser-sync start --proxy \"localhost:3000\" --files \"public/**/*.ejs,public/**/*.*\""
   },
   "keywords": [],
   "author": "",

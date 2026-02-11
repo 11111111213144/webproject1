@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดแผนงาน</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        /* Custom Modal Styles */
+        .modal-custom {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content-custom {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            text-align: center;
+        }
+    </style>
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+        <% } %>
+
+            // Modal Functions
+            function openUpdateModal(id, quantity) {
+                document.getElementById('modal_plan_detail_Id').value = id;
+                document.getElementById('modal_quantity').value = quantity;
+                document.getElementById('updateModal').style.display = 'flex';
+            }
+
+        function closeUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+        }
+
+        function deleteitem() {
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
+                return;
+            }
+
+            fetch('/dash_board_test/deleteitem_plan_detail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('ลบรายการสำเร็จ');
+                        window.location.reload();
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการลบ');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAll = document.getElementById('selectAll');
+            if (selectAll) {
+                selectAll.addEventListener('change', function () {
+                    const checkboxes = document.querySelectorAll('.checkbox');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+    </header>
+
+    <main class="item-edit-container">
+        <div class="form-box" style="max-width: 900px;">
+            <h1 style="text-align: center; margin-bottom: 30px;">รายละเอียดแผนงาน</h1>
+            <h3>แผนงาน: <%= planHeader.plan_name %>
+            </h3>
+            <hr style="margin: 20px 0;">
+
+            <!-- Add Item Form -->
+            <form action="/dash_board_test/add_plan_detail" method="post" class="mb-4">
+                <input type="hidden" name="plan_Id" value="<%= plan_Id %>">
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="item_Id">เลือกสินค้า</label>
+                    <select id="item_Id" name="item_Id" required>
+                        <option value="">-- เลือกสินค้า --</option>
+                        <% inventoryItems.forEach(item=> { %>
+                            <option value="<%= item.item_Id %>">
+                                <%= item.item_name %> (คงเหลือ: <%= item.remain %>
+                                        <%= item.unit %>)
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="quantity">จำนวน</label>
+                    <input type="number" id="quantity" name="quantity" placeholder="จำนวน" required min="1">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn"
+                        style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);">เพิ่มรายการ</button>
+                    <button type="button" class="submit-btn"
+                        style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);"
+                        onclick="deleteitem()">ลบรายการที่เลือก</button>
+                </div>
+            </form>
+
+            <% if (planDetail.length> 0) { %>
+                <div style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 20px;">รายการในแผนงาน</h3>
+                    <table class="table-box">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>รายการสินค้า</th>
+                                <th>จำนวน</th>
+                                <th>หน่วยนับ</th>
+                                <th>ราคาต่อหน่วย</th>
+                                <th>ราคารวม</th>
+                                <th>จัดการ</th>
+                                <th><input type="checkbox" name="selectAll" id="selectAll"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% planDetail.forEach((item, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= item.item_name %>
+                                    </td>
+                                    <td>
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit %>
+                                    </td>
+                                    <td>
+                                        <%= item.unit_price.toLocaleString() %>
+                                    </td>
+                                    <td>
+                                        <%= item.total_price.toLocaleString() %>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="submit-btn"
+                                            style="padding: 5px 15px; font-size: 12px; margin: 0; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);"
+                                            onclick="openUpdateModal('<%= item.plan_detail_Id %>', '<%= item.quantity %>')">แก้ไข</button>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="checkbox" class="checkbox"
+                                            value="<%= item.plan_detail_Id %>">
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } else { %>
+                    <div class="alert-box" style="margin-top: 30px;">ยังไม่มีรายการสินค้าในแผนงานนี้</div>
+                    <% } %>
+
+                        <div class="form-actions" style="margin-top: 40px;">
+                            <button onclick="history.back()" class="submit-btn"
+                                style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); width: 100%;">กลับหน้าทำแผนจัดซื้อ</button>
+                        </div>
+        </div>
+    </main>
+
+    <!-- Custom Modal -->
+    <div id="updateModal" class="modal-custom">
+        <div class="modal-content-custom">
+            <h2 style="margin-top: 0;">แก้ไขรายการสินค้า</h2>
+            <form action="/dash_board_test/update_plan_detail" method="post">
+                <input type="hidden" name="plan_Id" value="<%= plan_Id %>">
+                <input type="hidden" name="plan_detail_Id" id="modal_plan_detail_Id">
+
+                <div class="form-group">
+                    <label>จำนวน :</label>
+                    <input type="number" name="quantity" id="modal_quantity" required min="1"
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="submit-btn">บันทึก</button>
+                    <button type="button" class="submit-btn" onclick="closeUpdateModal()"
+                        style="background: #95a5a6;">ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

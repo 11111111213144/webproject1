@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบการจัดซื้อจัดจ้าง</title>
+
+<<<<<<< HEAD:public/dev_mem.ejs
+    <link rel="stylesheet" href="css/new_style.css">
+    <script>
+        <% if (locals.msg) { %>
+            alert("<%= msg %>");
+            <% } %>
+    </script>
+=======
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/components.css">
+>>>>>>> 2d50af386ed086be6a929adf3d17e9a0ac913f53:views/admin/dev_mem.ejs
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/navbar_admin')%>
+    </header>
+    <main>
+        <h1>จัดการผู้ใช้</h1>
+        <div class="filter-box">
+            <button name="del-btn" class="add-btn" onclick="deleteuser()">ลบผู้ใช้</button>
+        </div>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ชื่อผู้ใช้</th>
+                    <th>อีเมลล์</th>
+                    <th>เบอร์</th>
+                    <th><input type="checkbox" id="selectAll"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% all_user.forEach(user=> { %>
+                    <tr>
+                        <td>
+                            <%= user.userName %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= user.phone %>
+                        </td>
+                        <td><input type="checkbox" name="user_id" value="<%= user.userId %>"></td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+
+        </table>
+    </main>
+    <footer></footer>
+
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('input[name="user_id"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        function deleteuser() {
+            const checkboxes = document.querySelectorAll('input[name="user_id"]:checked');
+            const ids = [];
+            checkboxes.forEach(checkbox => {
+                ids.push(checkbox.value);
+            });
+            if (ids.length === 0) {
+                alert('กรุณาเลือกผู้ใช้');
+                return;
+            }
+            if (confirm('คุณต้องการลบผู้ใช้เหล่านี้หรือไม่?')) {
+                fetch('/deleteuser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ids }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('ลบผู้ใช้สำเร็จ');
+                            location.reload();
+                        } else {
+                            alert('เกิดข้อผิดพลาด');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาด');
+                    });
+            }
+        }
+    </script>
+</body>

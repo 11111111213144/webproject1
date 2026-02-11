@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบสั่งซื้อ</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <% if (locals.msg) { %>
+        alert("<%= msg %>");
+            <% } %>
+</head>
+<body>
+    <header>
+        <%- include('../../partials/navbar.ejs') %>
+    </header>
+    <main>
+        <h1>ใบสั่งซื้อ</h1>
+
+        <div class="filter-box">
+            <button type="button" class="add-btn"><a href="po_add">เพิ่มรายการ</a></button>
+            <button type="button" class="add-btn" onclick="deleteitem()">ลบรายการ</button>
+        </div>
+
+        <table class="table-box">
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>เลขใบสั่งซื้อ</th>
+                    <th>บริษัท/ร้านค้า</th>
+                    <th>วันที่สั่งซื้อ</th>
+                    <th>สถานะ</th>
+                    <th></th>
+                    <th><input type="checkbox" id="selectAll"></th>
+                </tr>
+            </thead>
+            <tbody id="poTableBody">
+                <% po.forEach((po, index)=> { %>
+                    <tr data-po-number="<%= po.po_number %>">
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td class="po-number">
+                            <%= po.po_number %>
+                        </td>
+                        <td>
+                            <%= po.supplier_name %>
+                        </td>
+                        <td>
+                            <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                        </td>
+                        <td>
+                            <%= po.po_status %>
+                        </td>
+                        <td>
+                            <a href="/podetail/<%= po.po_Id %>" class="btn btn-primary">ดูรายละเอียด</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="checkbox" value="<%= po.po_Id %>">
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+
+    </main>
+    <script>
+        // Search PO by po_number
+        function searchPO() {
+            const searchValue = document.getElementById('searchPO').value.toLowerCase();
+            const rows = document.querySelectorAll('#poTableBody tr');
+
+            rows.forEach(row => {
+                const poNumber = row.getAttribute('data-po-number').toLowerCase();
+                if (poNumber.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Delete selected items
+        function deleteitem() {
+            const checkboxes = document.querySelectorAll('.checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('กรุณาเลือกรายการที่ต้องการลบ');
+                return;
+            }
+
+            if (!confirm('คุณต้องการลบรายการที่เลือกหรือไม่?')) {
+                return;
+            }
+
+            fetch('/deletepo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('ลบรายการสำเร็จ');
+                        window.location.reload();
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการลบ');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                });
+        }
+
+        // Select All checkbox
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    </script>
+</body>
+
+</html>
