@@ -7,12 +7,14 @@
 
 ## 👥 สมาชิกกลุ่ม
 
-| ลำดับ | ชื่อ-นามสกุล | รหัสนิสิต |
-|:---:|------------|:--------:|
-| 1 | นายธนภัทร บุญน้อม | 67021769 |
-| 2 | นายสหรัฐ กันยะมี | 67022287 |
-| 3 | นายสุวรรณภูมิ อินต๊ะยศ | 67022401 |
-| 4 | นายวชิรภัทร บุญมี | 67024931 |
+| ลำดับ | ชื่อ-นามสกุล | รหัสนิสิต | หน้าที่รับผิดชอบ |
+|:---:|------------|:--------:|----------|
+| 1 | นายธนภัทร บุญน้อม | 67021769 |Front-end|
+| 2 | นายปฏิพัทธ์ เรือนทราย | 67021882 |Front-end|
+| 3 | นายสหรัฐ กันยะมี | 67022287 |Back-end|
+| 4 | นายสุวรรณภูมิ อินต๊ะยศ | 67022401 |Front-end|
+| 5 | นายวชิรภัทร บุญมี | 67024931 |Back-end|
+
 
 ---
 
@@ -60,7 +62,7 @@ git clone <repository-url>
 cd webproject
 ```
 
-### 2. ติดตั้ง Dependencies
+### 2. ติดตั้ง Library
 ```bash
 npm install
 ```
@@ -69,7 +71,17 @@ npm install
 - เปิด MySQL/MariaDB
 - Import ไฟล์ `database/database.sql`
 
-### 4. รันโปรเจค
+### 4. ตั้งค่า Environment Variables
+สร้างไฟล์ `.env`:
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=your_password
+DB_NAME=procurement_management_system
+secret=your_jwt_secret
+```
+
+### 5. รันโปรเจค
 ```bash
 npm run dev
 ```
@@ -127,6 +139,9 @@ npm run dev
 | `po_header` | หัวใบสั่งซื้อ |
 | `po_detail` | รายละเอียดใบสั่งซื้อ |
 
+<img width="1307" height="857" alt="Untitled (2)" src="https://github.com/user-attachments/assets/b38a88db-5f10-40e4-b9bc-e654812f7dc7" />
+
+
 ---
 
 ## 🚀 Scripts
@@ -140,36 +155,3 @@ npm run sync
 ```
 
 ---
-
-
-
-
-
-
-การจัดระเบียบโครงสร้างไฟล์ 
-
-webproject1/
-├── .env                  # 🔐 เก็บความลับ! (DB Password, Secret Key) *ห้ามเอาขึ้น Git*
-├── package.json          # 📦 บัตรประชาชนโปรเจกต์ (บอกชื่อ, เวอร์ชั่น, Library ที่ใช้)
-├── README.md             # คู่มือเล่มนี้
-│
-├── public/               # 🌍 โซนของสาธารณะ (Static Files)
-│   ├── css/              # ไฟล์แต่งสวย
-│   ├── js/               # สคริปต์ที่รันบน Browser (เช่น Alert, คำนวณหน้าเว็บ)
-│   └── images/           # รูปภาพโลโก้, ไอคอน
-│
-├── views/                # 🖼️ โซนหน้าจอ (Frontend/Templates)
-│   ├── layouts/          # โครงร่างหลัก (Header, Footer ที่ใช้ร่วมกันทุกหน้า)
-│   ├── partials/         # ชิ้นส่วนย่อย (Navbar, Sidebar)
-│   ├── auth/             # หน้า Login, Register
-│   ├── admin/            # หน้าจอสำหรับแอดมิน (Dashboard, อนุมัติแผน)
-│   └── user/             # หน้าจอสำหรับผู้ใช้ทั่วไป (ขอซื้อ, ดูสต็อก)
-│
-└── src/                  # 🧠 โซนสมองและตรรกะ (Backend Logic)
-    ├── config/           # การตั้งค่าระบบ (เช่น เชื่อมต่อ Database)
-    ├── controllers/      # ผู้สั่งการ (รับคำสั่งจากหน้าเว็บ -> สั่ง Model -> ส่งผลลัพธ์กลับ)
-    ├── models/           # พนักงานคลังข้อมูล (Query SQL, ดึง/ลบ/แก้ไข Database)
-    ├── routes/           # ป้ายบอกทาง (กำหนดว่า URL ไหน ไปหา Controller คนไหน)
-    ├── middleware/       # ยามเฝ้าประตู (เช็ค Login, เช็คสิทธิ์ Admin)
-    ├── utils/            # เครื่องมือช่วย (เช่น ฟังก์ชันแปลงวันที่)
-    └── index.js          # 🚀 จุดเริ่มต้นของระบบ (Entry Point)

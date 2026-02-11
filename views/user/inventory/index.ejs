@@ -52,35 +52,39 @@
                 </tr>
             </thead>
             <tbody>
-                <% inventory.forEach((inventory, index)=> { %>
+                <% inventory.slice(0, 5).forEach((item, index)=> { %>
                     <tr>
                         <td>
                             <%= index + 1 %>
                         </td>
                         <td>
-                            <%= inventory.item_Id %>
+                            <%= item.item_Id %>
                         </td>
                         <td>
-                            <%= inventory.item_name %>
+                            <%= item.item_name %>
                         </td>
                         <td>
-                            <%= inventory.item_type %>
+                            <%= item.item_type %>
                         </td>
                         <td>
-                            <%= inventory.unit_price %>
+                            <%= item.unit_price %>
                         </td>
                         <td>
-                            <%= inventory.remain %>
+                            <%= item.remain %>
                         </td>
                         <td>
-                            <%= inventory.unit %>
+                            <%= item.unit %>
                         </td>
                         <td>
-                            <%= inventory.total_price %>
+                            <%= item.total_price %>
                         </td>
-                        <td><a class="material-symbols-outlined" style="text-decoration: none;"
-                                href="/item_edits?item_Id=<%= inventory.item_Id %>">edit</a></td>
-                        <td><input type="checkbox" class="checkbox" value="<%= inventory.item_Id %>"></td>
+                        <td>
+                            <a class="material-symbols-outlined" style="text-decoration: none;"
+                                href="/item_edits?item_Id=<%= item.item_Id %>">edit</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="checkbox" value="<%= item.item_Id %>">
+                        </td>
                     </tr>
                     <% }) %>
             </tbody>
@@ -102,7 +106,7 @@
                         return;
                     }
 
-                    
+
 
                     fetch('/deleteitem', {
                         method: 'POST',

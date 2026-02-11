@@ -53,11 +53,18 @@ router.get('/inventory', isAuthenticated, (req, res) => {
         params.push(type + '%');
     }
 
+    sql += ' LIMIT 5';
+
+    console.log('SQL Query:', sql);
+    console.log('Params:', params);
+
     pool.query(sql, params, (err, result) => {
         if (err) {
-            console.log(err);
-            return res.redirect('/');
+            console.log('Database error:', err);
+            return res.redirect('/?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการดึงข้อมูล'));
         }
+        console.log('Result count:', result.length);
+        console.log('First item:', result[0]);
         res.render('user/inventory/index', { inventory: result, msg: msg, type: type });
     });
 });
@@ -71,35 +78,35 @@ router.get('/createitem', isAuthenticated, isMember, (req, res) => {
 
 router.post('/createitem', isAuthenticated, isMember, (req, res) => {
     const { item_name, item_type, unit_price, unit, remain } = req.body;
-    
+
     // ตรวจสอบข้อมูลที่จำเป็นต้องมี
     if (!item_name || !item_type || !unit_price || !unit || remain === undefined || remain === null) {
         return res.redirect('/createitem?msg=' + encodeURIComponent('กรุณากรอกข้อมูลให้ครบถ้วน'));
     }
-    
+
     // ตรวจสอบค่าที่เป็นตัวเลข
     const unitPrice = parseFloat(unit_price);
     const remainQty = parseInt(remain);
-    
+
     if (isNaN(unitPrice) || unitPrice <= 0) {
         return res.redirect('/createitem?msg=' + encodeURIComponent('ราคาต้องเป็นตัวเลขที่มากกว่า 0'));
     }
-    
+
     if (isNaN(remainQty) || remainQty < 0) {
         return res.redirect('/createitem?msg=' + encodeURIComponent('จำนวนคงเหลือต้องเป็นตัวเลขที่ไม่ติดลบ'));
     }
-    
+
     // ตรวจสอบว่ามีชื่อวัสดุซ้ำหรือไม่
     pool.query('SELECT item_name FROM inventory WHERE item_name = ?', [item_name], (err, checkResult) => {
         if (err) {
             console.log('Error checking duplicate item:', err);
             return res.redirect('/createitem?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการตรวจสอบข้อมูล'));
         }
-        
+
         if (checkResult.length > 0) {
             return res.redirect('/createitem?msg=' + encodeURIComponent('มีชื่อวัสดุนี้อยู่แล้ว กรุณาใช้ชื่ออื่น'));
         }
-        
+
         // เพิ่มข้อมูลใหม่
         const sql = 'INSERT INTO inventory (item_name, item_type, unit_price, unit, remain) VALUES (?, ?, ?, ?, ?)';
         pool.query(sql, [item_name, item_type, unitPrice, unit, remainQty], (err, result) => {
@@ -110,7 +117,7 @@ router.post('/createitem', isAuthenticated, isMember, (req, res) => {
                 }
                 return res.redirect('/inventory?msg=' + encodeURIComponent('เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ' + err.message));
             }
-            
+
             console.log('Item added successfully:', { item_name, item_type, unit_price: unitPrice, unit, remain: remainQty });
             res.redirect('/inventory?msg=' + encodeURIComponent('เพิ่มข้อมูลวัสดุสำเร็จ: ' + item_name));
         });

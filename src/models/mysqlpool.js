@@ -42,12 +42,12 @@ async function delete_user(user_id) {
 }
 
 async function plan_sucess() {
-    const query = 'SELECT * FROM plan_header WHERE plan_status = "อนุมัติแล้ว"'
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "อนุมัติแล้ว" LIMIT 5'
     return pool.promise().query(query);
 }
 
 async function plan_wait() {
-    const query = 'SELECT * FROM plan_header WHERE plan_status = "รออนุมัติ"'
+    const query = 'SELECT * FROM plan_header WHERE plan_status = "รออนุมัติ" LIMIT 5'
     return pool.promise().query(query);
 }
 
