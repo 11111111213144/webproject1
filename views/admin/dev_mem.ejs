@@ -5,19 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบการจัดซื้อจัดจ้าง</title>
-
-<<<<<<< HEAD:public/dev_mem.ejs
-    <link rel="stylesheet" href="css/new_style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/main.css">
     <script>
         <% if (locals.msg) { %>
             alert("<%= msg %>");
             <% } %>
     </script>
-=======
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/components.css">
->>>>>>> 2d50af386ed086be6a929adf3d17e9a0ac913f53:views/admin/dev_mem.ejs
 </head>
 
 <body>
@@ -61,12 +56,12 @@
     <footer></footer>
 
     <script>
-        document.getElementById('selectAll').addEventListener('change', function () {
-            const checkboxes = document.querySelectorAll('input[name="user_id"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
+            document.getElementById('selectAll').addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('input[name="user_id"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
             });
-        });
 
         function deleteuser() {
             const checkboxes = document.querySelectorAll('input[name="user_id"]:checked');

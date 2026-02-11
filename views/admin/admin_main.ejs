@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>อนุมัติ (Admin)</title>
-    <link rel="stylesheet" href="../../css/new_style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/main.css">
     <script>
         <% if (locals.msg) { %>
             alert("<%= msg %>");
@@ -124,7 +126,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/dash_board_test/plan_detail_test/<%= plan.plan_Id %>" class="add-btn"
+                                    <a href="/dash_board_test/views/plan/details/<%= plan.plan_Id %>" class="add-btn"
                                         style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="plan_id" value="<%= plan.plan_Id %>"></td>
@@ -190,7 +192,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/dash_board_test/po_detail_test/<%= po.po_Id %>" class="add-btn"
+                                    <a href="/podetail/<%= po.po_Id %>" class="add-btn"
                                         style="text-decoration:none; padding:5px 10px; font-size:12px;">ดูรายละเอียด</a>
                                 </td>
                                 <td><input type="checkbox" name="po_id" value="<%= po.po_Id %>"></td>

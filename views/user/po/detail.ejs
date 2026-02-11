@@ -54,7 +54,8 @@
                 </div>
                 <div class="info-item">
                     <strong>วันที่:</strong>
-                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-' %>
+                    <%= po.po_date ? new Date(po.po_date).toLocaleDateString('th-TH', { year: 'numeric' , month: 'long'
+                        , day: 'numeric' }) : '-' %>
                 </div>
             </div>
 
@@ -72,26 +73,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% let count = 1; %>
-                            <% poItems.forEach(item=> { %>
-                                <tr>
-                                    <td>
-                                        <%= count++ %>
-                                    </td>
-                                    <td>
-                                        <%= item.item_name %>
-                                    </td>
-                                    <td>
-                                        <%= item.quantity %>
-                                    </td>
-                                    <td>
-                                        <%= item.agreed_price ? item.agreed_price.toLocaleString() : '0.00' %>
-                                    </td>
-                                    <td>
-                                        <%= item.total_line_price ? item.total_line_price.toLocaleString() : '0.00' %>
-                                    </td>
-                                </tr>
-                                <% }); %>
+                            <% let count=1; %>
+                                <% poItems.forEach(item=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= count++ %>
+                                        </td>
+                                        <td>
+                                            <%= item.item_name %>
+                                        </td>
+                                        <td>
+                                            <%= item.quantity %>
+                                        </td>
+                                        <td>
+                                            <%= item.agreed_price ? item.agreed_price.toLocaleString() : '0.00' %>
+                                        </td>
+                                        <td>
+                                            <%= item.total_line_price ? item.total_line_price.toLocaleString() : '0.00'
+                                                %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
                         </tbody>
                     </table>
                     <% } else { %>
@@ -100,7 +102,7 @@
             </div>
 
             <div class="form-actions" style="margin-top: 40px;">
-                <a href="/makepo" class="submit-btn"
+                <a class="submit-btn" onclick="history.back()"
                     style="text-decoration: none; text-align: center; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); width: 100%;">กลับหน้าสารบัญใบสั่งซื้อ</a>
             </div>
         </div>
