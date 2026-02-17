@@ -49,7 +49,7 @@ npm install
 
 ### 3. สร้าง Database
 - เปิด MySQL/MariaDB
-- Import ไฟล์ `src/models/database.sql`
+- Import ไฟล์ `src/config/database.sql`
 
 ### 4. ตั้งค่า Environment Variables
 สร้างไฟล์ `.env`:
